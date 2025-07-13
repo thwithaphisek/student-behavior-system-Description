@@ -63,6 +63,8 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
         .nav-btn:hover {
@@ -73,6 +75,21 @@
         .nav-btn.active {
             background: linear-gradient(45deg, #764ba2, #667eea);
             transform: translateY(-2px);
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
         }
 
         .page {
@@ -95,6 +112,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .page h2 {
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -114,7 +139,8 @@
             border: 2px solid #e9ecef;
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background-color: #fff;
         }
 
         .form-group input:focus,
@@ -123,11 +149,13 @@
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
         }
 
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
+            font-family: inherit;
         }
 
         .btn {
@@ -141,11 +169,19 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-success {
@@ -156,11 +192,21 @@
             background: linear-gradient(45deg, #dc3545, #fd7e14);
         }
 
+        .btn-info {
+            background: linear-gradient(45deg, #17a2b8, #6f42c1);
+        }
+
         .alert {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
             font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .alert-success {
@@ -179,6 +225,12 @@
             background-color: #d1ecf1;
             border: 1px solid #bee5eb;
             color: #0c5460;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
         }
 
         .table {
@@ -202,15 +254,28 @@
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .table tr:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+            transition: all 0.2s ease;
+        }
+
+        .table tr:nth-child(even) {
             background-color: #f8f9fa;
         }
 
         .login-form {
             max-width: 400px;
             margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
         }
 
         .status-card {
@@ -220,6 +285,12 @@
             margin: 10px 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
         .loading {
@@ -249,8 +320,63 @@
         }
 
         .action-buttons button {
-            padding: 6px 12px;
+            padding: 8px 16px;
             font-size: 14px;
+            border-radius: 20px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 300px;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
         }
 
         @media (max-width: 768px) {
@@ -277,6 +403,22 @@
             .action-buttons {
                 flex-direction: column;
             }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100%); }
         }
     </style>
 </head>
@@ -298,119 +440,132 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="studentId">รหัสนักเรียน *</label>
-                        <input type="text" id="studentId" required placeholder="เช่น S001234">
+                        <input type="text" id="studentId" required placeholder="เช่น S001234" maxlength="20">
                     </div>
                     <div class="form-group">
                         <label for="studentNo">เลขที่ *</label>
-                        <input type="text" id="studentNo" required placeholder="เช่น 15">
+                        <input type="number" id="studentNo" required placeholder="เช่น 15" min="1" max="50">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="fullName">ชื่อ-นามสกุล *</label>
-                    <input type="text" id="fullName" required placeholder="เช่น นายสมชาย ใจดี">
+                    <input type="text" id="fullName" required placeholder="เช่น นายสมชาย ใจดี" maxlength="100">
                 </div>
                 
                 <div class="form-group">
                     <label for="classroom">ห้องเรียน *</label>
                     <select id="classroom" required>
                         <option value="">กรุณาเลือกห้องเรียน</option>
-                        <option value="1/1">1/1</option>
-                        <option value="1/2">1/2</option>
-                        <option value="1/3">1/3</option>
-                        <option value="1/4">1/4</option>
-                        <option value="1/5">1/5</option>
-                        <option value="1/6">1/6</option>
-                        <option value="1/7">1/7</option>
-                        <option value="1/8">1/8</option>
-                        <option value="1/9">1/9</option>
-                        <option value="1/10">1/10</option>
-                        <option value="1/11">1/11</option>
-                        <option value="1/12">1/12</option>
-                        <option value="2/1">2/1</option>
-                        <option value="2/2">2/2</option>
-                        <option value="2/3">2/3</option>
-                        <option value="2/4">2/4</option>
-                        <option value="2/5">2/5</option>
-                        <option value="2/6">2/6</option>
-                        <option value="2/7">2/7</option>
-                        <option value="2/8">2/8</option>
-                        <option value="2/9">2/9</option>
-                        <option value="2/10">2/10</option>
-                        <option value="3/1">3/1</option>
-                        <option value="3/2">3/2</option>
-                        <option value="3/3">3/3</option>
-                        <option value="3/4">3/4</option>
-                        <option value="3/5">3/5</option>
-                        <option value="3/6">3/6</option>
-                        <option value="3/7">3/7</option>
-                        <option value="3/8">3/8</option>
-                        <option value="3/9">3/9</option>
-                        <option value="3/10">3/10</option>
-                        <option value="4/1">4/1</option>
-                        <option value="4/2">4/2</option>
-                        <option value="4/3">4/3</option>
-                        <option value="4/4">4/4</option>
-                        <option value="4/5">4/5</option>
-                        <option value="4/6">4/6</option>
-                        <option value="4/7">4/7</option>
-                        <option value="4/8">4/8</option>
-                        <option value="4/9">4/9</option>
-                        <option value="4/10">4/10</option>
-                        <option value="4/11">4/11</option>
-                        <option value="4/12">4/12</option>
-                        <option value="5/1">5/1</option>
-                        <option value="5/2">5/2</option>
-                        <option value="5/3">5/3</option>
-                        <option value="5/4">5/4</option>
-                        <option value="5/5">5/5</option>
-                        <option value="5/6">5/6</option>
-                        <option value="5/7">5/7</option>
-                        <option value="5/8">5/8</option>
-                        <option value="5/9">5/9</option>
-                        <option value="5/10">5/10</option>
-                        <option value="5/11">5/11</option>
-                        <option value="5/12">5/12</option>
-                        <option value="6/1">6/1</option>
-                        <option value="6/2">6/2</option>
-                        <option value="6/3">6/3</option>
-                        <option value="6/4">6/4</option>
-                        <option value="6/5">6/5</option>
-                        <option value="6/6">6/6</option>
-                        <option value="6/7">6/7</option>
-                        <option value="6/8">6/8</option>
-                        <option value="6/9">6/9</option>
-                        <option value="6/10">6/10</option>
-                        <option value="6/11">6/11</option>
-                        <option value="6/12">6/12</option>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 1">
+                            <option value="1/1">1/1</option>
+                            <option value="1/2">1/2</option>
+                            <option value="1/3">1/3</option>
+                            <option value="1/4">1/4</option>
+                            <option value="1/5">1/5</option>
+                            <option value="1/6">1/6</option>
+                            <option value="1/7">1/7</option>
+                            <option value="1/8">1/8</option>
+                            <option value="1/9">1/9</option>
+                            <option value="1/10">1/10</option>
+                            <option value="1/11">1/11</option>
+                            <option value="1/12">1/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 2">
+                            <option value="2/1">2/1</option>
+                            <option value="2/2">2/2</option>
+                            <option value="2/3">2/3</option>
+                            <option value="2/4">2/4</option>
+                            <option value="2/5">2/5</option>
+                            <option value="2/6">2/6</option>
+                            <option value="2/7">2/7</option>
+                            <option value="2/8">2/8</option>
+                            <option value="2/9">2/9</option>
+                            <option value="2/10">2/10</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 3">
+                            <option value="3/1">3/1</option>
+                            <option value="3/2">3/2</option>
+                            <option value="3/3">3/3</option>
+                            <option value="3/4">3/4</option>
+                            <option value="3/5">3/5</option>
+                            <option value="3/6">3/6</option>
+                            <option value="3/7">3/7</option>
+                            <option value="3/8">3/8</option>
+                            <option value="3/9">3/9</option>
+                            <option value="3/10">3/10</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 4">
+                            <option value="4/1">4/1</option>
+                            <option value="4/2">4/2</option>
+                            <option value="4/3">4/3</option>
+                            <option value="4/4">4/4</option>
+                            <option value="4/5">4/5</option>
+                            <option value="4/6">4/6</option>
+                            <option value="4/7">4/7</option>
+                            <option value="4/8">4/8</option>
+                            <option value="4/9">4/9</option>
+                            <option value="4/10">4/10</option>
+                            <option value="4/11">4/11</option>
+                            <option value="4/12">4/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 5">
+                            <option value="5/1">5/1</option>
+                            <option value="5/2">5/2</option>
+                            <option value="5/3">5/3</option>
+                            <option value="5/4">5/4</option>
+                            <option value="5/5">5/5</option>
+                            <option value="5/6">5/6</option>
+                            <option value="5/7">5/7</option>
+                            <option value="5/8">5/8</option>
+                            <option value="5/9">5/9</option>
+                            <option value="5/10">5/10</option>
+                            <option value="5/11">5/11</option>
+                            <option value="5/12">5/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 6">
+                            <option value="6/1">6/1</option>
+                            <option value="6/2">6/2</option>
+                            <option value="6/3">6/3</option>
+                            <option value="6/4">6/4</option>
+                            <option value="6/5">6/5</option>
+                            <option value="6/6">6/6</option>
+                            <option value="6/7">6/7</option>
+                            <option value="6/8">6/8</option>
+                            <option value="6/9">6/9</option>
+                            <option value="6/10">6/10</option>
+                            <option value="6/11">6/11</option>
+                            <option value="6/12">6/12</option>
+                        </optgroup>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="behavior">พฤติกรรมความดี *</label>
-                    <textarea id="behavior" required placeholder="อธิบายพฤติกรรมความดีที่นักเรียนได้แสดงออก เช่น ช่วยเหลือเพื่อน, ทำความสะอาดห้องเรียน, มีสัมมาคารวะ"></textarea>
+                    <textarea id="behavior" required placeholder="อธิบายพฤติกรรมความดีที่นักเรียนได้แสดงออก เช่น ช่วยเหลือเพื่อน, ทำความสะอาดห้องเรียน, มีสัมมาคารวะ, เข้าแถวตรงเวลา, ส่งงานครบถ้วน" maxlength="500"></textarea>
+                    <small style="color: #6c757d;">เหลือ <span id="behaviorCount">500</span> ตัวอักษร</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="score">คะแนน *</label>
                     <select id="score" required>
                         <option value="">เลือกคะแนน</option>
-                        <option value="1">1 คะแนน</option>
-                        <option value="2">2 คะแนน</option>
-                        <option value="3">3 คะแนน</option>
-                        <option value="4">4 คะแนน</option>
-                        <option value="5">5 คะแนน</option>
+                        <option value="1">1 คะแนน - พฤติกรรมดีเล็กน้อย</option>
+                        <option value="2">2 คะแนน - พฤติกรรมดีปานกลาง</option>
+                        <option value="3">3 คะแนน - พฤติกรรมดีมาก</option>
+                        <option value="4">4 คะแนน - พฤติกรรมดีมากเป็นพิเศษ</option>
+                        <option value="5">5 คะแนน - พฤติกรรมดีเป็นแบบอย่าง</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="teacherName">ลงชื่อครู / บุคลากร *</label>
-                    <input type="text" id="teacherName" required placeholder="เช่น อาจารย์สมหญิง ใจดี">
+                    <input type="text" id="teacherName" required placeholder="เช่น อาจารย์สมหญิง ใจดี" maxlength="100">
                 </div>
                 
                 <button type="submit" class="btn">
                     <span id="submitLoading" style="display: none;" class="loading"></span>
-                    ส่งข้อมูล
+                    <span id="submitText">ส่งข้อมูล</span>
                 </button>
             </form>
             
@@ -420,14 +575,14 @@
         <!-- หน้าตรวจสอบสถานะ -->
         <div id="status" class="page">
             <h2>🔍 ตรวจสอบสถานะการดำเนินการ</h2>
-            <div class="form-group">
-                <label for="searchStudentId">รหัสนักเรียน</label>
-                <input type="text" id="searchStudentId" placeholder="กรอกรหัสนักเรียนเพื่อค้นหา">
+            
+            <div class="search-container">
+                <input type="text" id="searchStudentId" placeholder="กรอกรหัสนักเรียนเพื่อค้นหา (เช่น S001234)">
+                <button onclick="searchStatus()" class="btn">
+                    <span id="searchLoading" style="display: none;" class="loading"></span>
+                    <span id="searchText">🔍 ค้นหา</span>
+                </button>
             </div>
-            <button onclick="searchStatus()" class="btn">
-                <span id="searchLoading" style="display: none;" class="loading"></span>
-                ค้นหา
-            </button>
             
             <div id="statusResults"></div>
         </div>
@@ -441,21 +596,38 @@
                         <label for="adminPassword">รหัสผ่าน</label>
                         <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน">
                     </div>
-                    <button onclick="adminLogin()" class="btn">เข้าสู่ระบบ</button>
+                    <button onclick="adminLogin()" class="btn" style="width: 100%;">
+                        <span id="loginLoading" style="display: none;" class="loading"></span>
+                        <span id="loginText">เข้าสู่ระบบ</span>
+                    </button>
                 </div>
                 <div id="loginMessage"></div>
             </div>
 
             <div id="adminPanel" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                     <h2>⚙️ จัดการข้อมูลระบบ</h2>
-                    <button onclick="adminLogout()" class="btn btn-danger">ออกจากระบบ</button>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="exportData()" class="btn btn-info">📊 ส่งออกข้อมูล</button>
+                        <button onclick="adminLogout()" class="btn btn-danger">🚪 ออกจากระบบ</button>
+                    </div>
                 </div>
                 
-                <button onclick="loadAllData()" class="btn">
-                    <span id="loadLoading" style="display: none;" class="loading"></span>
-                    โหลดข้อมูลทั้งหมด
-                </button>
+                <div id="adminStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button onclick="loadAllData()" class="btn">
+                        <span id="loadLoading" style="display: none;" class="loading"></span>
+                        <span id="loadText">📋 โหลดข้อมูลทั้งหมด</span>
+                    </button>
+                    <select id="statusFilter" onchange="filterByStatus()" class="form-control" style="padding: 8px; border-radius: 20px; border: 2px solid #e9ecef;">
+                        <option value="">📋 ทุกสถานะ</option>
+                        <option value="รอดำเนินการ">⏳ รอดำเนินการ</option>
+                        <option value="อยู่ระหว่างตรวจสอบ">🔍 อยู่ระหว่างตรวจสอบ</option>
+                        <option value="อนุมัติ">✅ อนุมัติ</option>
+                        <option value="ไม่อนุมัติ">❌ ไม่อนุมัติ</option>
+                    </select>
+                </div>
                 
                 <div id="adminData"></div>
             </div>
@@ -469,6 +641,56 @@
 
         let currentPage = 'register';
         let isAdminLoggedIn = false;
+        let allAdminData = []; // เก็บข้อมูลทั้งหมดสำหรับการกรอง
+
+        // ฟังก์ชันแสดงการแจ้งเตือน
+        function showNotification(message, type = 'success') {
+            // ลบการแจ้งเตือนเก่า
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+            });
+
+            // สร้างการแจ้งเตือนใหม่
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} notification`;
+            notification.innerHTML = message;
+            
+            document.body.appendChild(notification);
+            
+            // ลบอัตโนมัติหลัง 5 วินาที
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('fade-out');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // ฟังก์ชันตรวจสอบการเชื่อมต่อ
+        async function checkConnection() {
+            if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+                showNotification(`
+                    <strong>⚠️ กรุณาตั้งค่า Google Apps Script ก่อนใช้งาน</strong><br>
+                    1. แทนที่ YOUR_SCRIPT_ID ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
+                    2. Deploy Google Apps Script เป็น Web App<br>
+                    3. ตั้งค่า Permissions ให้ Anyone can access
+                `, 'warning');
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=test`, {
+                    method: 'GET'
+                });
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                console.error('Connection check failed:', error);
+                return false;
+            }
+        }
 
         // ฟังก์ชันเปลี่ยนหน้า
         function showPage(pageId) {
@@ -501,24 +723,35 @@
             
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const loading = document.getElementById('submitLoading');
+            const submitText = document.getElementById('submitText');
             const messageDiv = document.getElementById('registerMessage');
             
             // แสดง loading
             loading.style.display = 'inline-block';
+            submitText.textContent = 'กำลังส่งข้อมูล...';
             submitBtn.disabled = true;
             messageDiv.innerHTML = '';
+            
+            // ตรวจสอบการเชื่อมต่อ
+            const isConnected = await checkConnection();
+            if (!isConnected) {
+                loading.style.display = 'none';
+                submitText.textContent = 'ส่งข้อมูล';
+                submitBtn.disabled = false;
+                return;
+            }
             
             // เก็บข้อมูลจากฟอร์ม
             const formData = {
                 action: 'submit',
-                studentId: document.getElementById('studentId').value,
-                studentNo: document.getElementById('studentNo').value,
-                fullName: document.getElementById('fullName').value,
+                studentId: document.getElementById('studentId').value.trim(),
+                studentNo: document.getElementById('studentNo').value.trim(),
+                fullName: document.getElementById('fullName').value.trim(),
                 classroom: document.getElementById('classroom').value,
-                behavior: document.getElementById('behavior').value,
+                behavior: document.getElementById('behavior').value.trim(),
                 score: document.getElementById('score').value,
-                teacherName: document.getElementById('teacherName').value,
-                timestamp: new Date().toLocaleString('th-TH'),
+                teacherName: document.getElementById('teacherName').value.trim(),
+                timestamp: new Date().toLocaleString('th-TH', {timeZone: 'Asia/Bangkok'}),
                 status: 'รอดำเนินการ'
             };
             
@@ -538,33 +771,52 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    messageDiv.innerHTML = '<div class="alert alert-success">✅ บันทึกข้อมูลเรียบร้อยแล้ว!</div>';
+                    showNotification('✅ บันทึกข้อมูลเรียบร้อยแล้ว!', 'success');
                     document.getElementById('registerForm').reset();
+                    // Reset character counter
+                    document.getElementById('behaviorCount').textContent = '500';
                 } else {
-                    messageDiv.innerHTML = `<div class="alert alert-danger">❌ เกิดข้อผิดพลาด: ${result.message}</div>`;
+                    showNotification(`❌ เกิดข้อผิดพลาด: ${result.message}`, 'danger');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                messageDiv.innerHTML = `<div class="alert alert-danger">❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้<br><small>กรุณาตรวจสอบการตั้งค่า Google Apps Script URL</small></div>`;
+                showNotification('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้<br><small>กรุณาตรวจสอบการตั้งค่า Google Apps Script URL</small>', 'danger');
             }
             
             // ซ่อน loading
             loading.style.display = 'none';
+            submitText.textContent = 'ส่งข้อมูล';
             submitBtn.disabled = false;
+        });
+
+        // ฟังก์ชันนับตัวอักษรใน textarea
+        document.getElementById('behavior').addEventListener('input', function() {
+            const maxLength = 500;
+            const currentLength = this.value.length;
+            const remaining = maxLength - currentLength;
+            document.getElementById('behaviorCount').textContent = remaining;
+            
+            if (remaining < 50) {
+                document.getElementById('behaviorCount').style.color = '#dc3545';
+            } else {
+                document.getElementById('behaviorCount').style.color = '#6c757d';
+            }
         });
 
         // ฟังก์ชันค้นหาสถานะ
         async function searchStatus() {
             const studentId = document.getElementById('searchStudentId').value.trim();
             const loading = document.getElementById('searchLoading');
+            const searchText = document.getElementById('searchText');
             const resultsDiv = document.getElementById('statusResults');
             
             if (!studentId) {
-                resultsDiv.innerHTML = '<div class="alert alert-danger">กรุณากรอกรหัสนักเรียน</div>';
+                showNotification('กรุณากรอกรหัสนักเรียน', 'warning');
                 return;
             }
             
             loading.style.display = 'inline-block';
+            searchText.textContent = 'กำลังค้นหา...';
             resultsDiv.innerHTML = '';
             
             try {
@@ -573,23 +825,48 @@
                 
                 if (result.success && result.data && result.data.length > 0) {
                     let html = '<h3>📋 ผลการค้นหา</h3>';
-                    result.data.forEach(record => {
-                        if (record.status === 'รอดำเนินการ' || record.status === 'อยู่ระหว่างตรวจสอบ') {
+                    let foundRecords = result.data.filter(record => 
+                        record.status === 'รอดำเนินการ' || 
+                        record.status === 'อยู่ระหว่างตรวจสอบ' ||
+                        record.status === 'อนุมัติ' ||
+                        record.status === 'ไม่อนุมัติ'
+                    );
+
+                    if (foundRecords.length > 0) {
+                        foundRecords.forEach(record => {
+                            const statusIcon = {
+                                'รอดำเนินการ': '⏳',
+                                'อยู่ระหว่างตรวจสอบ': '🔍',
+                                'อนุมัติ': '✅',
+                                'ไม่อนุมัติ': '❌'
+                            };
+
+                            const statusColor = {
+                                'รอดำเนินการ': '#ffa500',
+                                'อยู่ระหว่างตรวจสอบ': '#17a2b8',
+                                'อนุมัติ': '#28a745',
+                                'ไม่อนุมัติ': '#dc3545'
+                            };
+
                             html += `
                                 <div class="status-card">
-                                    <h4>🎯 ${record.fullName} (${record.classroom})</h4>
-                                    <p><strong>พฤติกรรม:</strong> ${record.behavior}</p>
-                                    <p><strong>คะแนน:</strong> ${record.score} คะแนน</p>
-                                    <p><strong>ครูผู้บันทึก:</strong> ${record.teacherName}</p>
-                                    <p><strong>วันที่บันทึก:</strong> ${record.timestamp}</p>
-                                    <p><strong>สถานะ:</strong> <span style="color: #ffa500; font-weight: bold;">${record.status}</span></p>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <h4>🎯 ${record.fullName || 'ไม่ระบุ'} (${record.classroom || 'ไม่ระบุ'})</h4>
+                                        <span style="color: ${statusColor[record.status] || '#6c757d'}; font-weight: bold;">
+                                            ${statusIcon[record.status] || '❓'} ${record.status || 'ไม่ระบุ'}
+                                        </span>
+                                    </div>
+                                    <p><strong>🎯 พฤติกรรม:</strong> ${record.behavior || 'ไม่ระบุ'}</p>
+                                    <p><strong>⭐ คะแนน:</strong> ${record.score || 'ไม่ระบุ'} คะแนน</p>
+                                    <p><strong>👨‍🏫 ครูผู้บันทึก:</strong> ${record.teacherName || 'ไม่ระบุ'}</p>
+                                    <p><strong>📅 วันที่บันทึก:</strong> ${record.timestamp || 'ไม่ระบุ'}</p>
+                                    ${record.rejectReason ? `<p><strong>❌ เหตุผลที่ไม่อนุมัติ:</strong> <span style="color: #dc3545;">${record.rejectReason}</span></p>` : ''}
+                                    ${record.updatedBy && record.updatedAt ? `<p><strong>📝 อัปเดตล่าสุด:</strong> ${record.updatedBy} เมื่อ ${record.updatedAt}</p>` : ''}
                                 </div>
                             `;
-                        }
-                    });
-                    
-                    if (html === '<h3>📋 ผลการค้นหา</h3>') {
-                        html += '<div class="alert alert-info">ไม่พบข้อมูลที่อยู่ในสถานะ "รอดำเนินการ" หรือ "อยู่ระหว่างตรวจสอบ"</div>';
+                        });
+                    } else {
+                        html += '<div class="alert alert-info">ไม่พบข้อมูลในสถานะที่แสดงได้</div>';
                     }
                     
                     resultsDiv.innerHTML = html;
@@ -598,25 +875,42 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
+                showNotification('เกิดข้อผิดพลาดในการค้นหาข้อมูล', 'danger');
                 resultsDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการค้นหาข้อมูล</div>';
             }
             
             loading.style.display = 'none';
+            searchText.textContent = '🔍 ค้นหา';
         }
 
         // ฟังก์ชัน login ผู้ดูแลระบบ
-        function adminLogin() {
+        async function adminLogin() {
             const password = document.getElementById('adminPassword').value;
             const messageDiv = document.getElementById('loginMessage');
+            const loading = document.getElementById('loginLoading');
+            const loginText = document.getElementById('loginText');
+            
+            loading.style.display = 'inline-block';
+            loginText.textContent = 'กำลังตรวจสอบ...';
+            
+            // จำลองการตรวจสอบ
+            await new Promise(resolve => setTimeout(resolve, 1000));
             
             if (password === 'admin1234') {
                 isAdminLoggedIn = true;
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 messageDiv.innerHTML = '';
+                showNotification('เข้าสู่ระบบสำเร็จ', 'success');
+                
+                // โหลดข้อมูลทันที
+                loadAllData();
             } else {
                 messageDiv.innerHTML = '<div class="alert alert-danger">รหัสผ่านไม่ถูกต้อง</div>';
             }
+            
+            loading.style.display = 'none';
+            loginText.textContent = 'เข้าสู่ระบบ';
         }
 
         // ฟังก์ชัน logout ผู้ดูแลระบบ
@@ -626,85 +920,167 @@
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminData').innerHTML = '';
+            document.getElementById('adminStats').innerHTML = '';
+            allAdminData = [];
+            showNotification('ออกจากระบบแล้ว', 'info');
+        }
+
+        // ฟังก์ชันสร้างสถิติ
+        function generateStats(data) {
+            const stats = {
+                total: data.length,
+                pending: data.filter(r => r.status === 'รอดำเนินการ').length,
+                approved: data.filter(r => r.status === 'อนุมัติ').length,
+                rejected: data.filter(r => r.status === 'ไม่อนุมัติ').length,
+                reviewing: data.filter(r => r.status === 'อยู่ระหว่างตรวจสอบ').length
+            };
+
+            const statsHtml = `
+                <div class="stats-card">
+                    <div class="stats-number">${stats.total}</div>
+                    <div>📊 ทั้งหมด</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" style="color: #ffa500;">${stats.pending}</div>
+                    <div>⏳ รอดำเนินการ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" style="color: #17a2b8;">${stats.reviewing}</div>
+                    <div>🔍 ตรวจสอบ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" style="color: #28a745;">${stats.approved}</div>
+                    <div>✅ อนุมัติ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" style="color: #dc3545;">${stats.rejected}</div>
+                    <div>❌ ไม่อนุมัติ</div>
+                </div>
+            `;
+
+            document.getElementById('adminStats').innerHTML = statsHtml;
         }
 
         // ฟังก์ชันโหลดข้อมูลทั้งหมดสำหรับผู้ดูแลระบบ
         async function loadAllData() {
             const loading = document.getElementById('loadLoading');
+            const loadText = document.getElementById('loadText');
             const dataDiv = document.getElementById('adminData');
             
             loading.style.display = 'inline-block';
+            loadText.textContent = 'กำลังโหลด...';
             
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getAll`);
                 const result = await response.json();
                 
                 if (result.success && result.data && result.data.length > 0) {
-                    let html = `
-                        <h3>📊 ข้อมูลทั้งหมด (${result.data.length} รายการ)</h3>
-                        <div style="overflow-x: auto;">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>รหัสนักเรียน</th>
-                                        <th>ชื่อ-นามสกุล</th>
-                                        <th>ห้อง</th>
-                                        <th>พฤติกรรม</th>
-                                        <th>คะแนน</th>
-                                        <th>ครูผู้บันทึก</th>
-                                        <th>วันที่</th>
-                                        <th>สถานะ</th>
-                                        <th>การดำเนินการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                    `;
-                    
-                    result.data.forEach((record, index) => {
-                        const statusColor = record.status === 'อนุมัติ' ? '#28a745' : 
-                                          record.status === 'ไม่อนุมัติ' ? '#dc3545' : '#ffa500';
-                        
-                        html += `
-                            <tr>
-                                <td>${record.studentId}</td>
-                                <td>${record.fullName}</td>
-                                <td>${record.classroom}</td>
-                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.behavior}">${record.behavior}</td>
-                                <td>${record.score}</td>
-                                <td>${record.teacherName}</td>
-                                <td style="font-size: 12px;">${record.timestamp}</td>
-                                <td style="color: ${statusColor}; font-weight: bold;">${record.status}</td>
-                                <td>
-                                    ${record.status === 'รอดำเนินการ' || record.status === 'อยู่ระหว่างตรวจสอบ' ? `
-                                        <div class="action-buttons">
-                                            <button class="btn btn-success" onclick="updateStatus(${index}, 'อนุมัติ')">✅ อนุมัติ</button>
-                                            <button class="btn btn-danger" onclick="rejectRecord(${index})">❌ ไม่อนุมัติ</button>
-                                        </div>
-                                    ` : `
-                                        <span style="color: #6c757d;">ดำเนินการแล้ว</span>
-                                        ${record.rejectReason ? `<br><small style="color: #dc3545;">เหตุผล: ${record.rejectReason}</small>` : ''}
-                                    `}
-                                </td>
-                            </tr>
-                        `;
-                    });
-                    
-                    html += '</tbody></table></div>';
-                    dataDiv.innerHTML = html;
+                    allAdminData = result.data; // เก็บข้อมูลสำหรับการกรอง
+                    generateStats(result.data);
+                    displayAdminData(result.data);
                 } else {
                     dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลในระบบ</div>';
+                    document.getElementById('adminStats').innerHTML = '';
                 }
             } catch (error) {
                 console.error('Error:', error);
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'danger');
                 dataDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
             }
             
             loading.style.display = 'none';
+            loadText.textContent = '📋 โหลดข้อมูลทั้งหมด';
+        }
+
+        // ฟังก์ชันแสดงข้อมูลผู้ดูแลระบบ
+        function displayAdminData(data) {
+            const dataDiv = document.getElementById('adminData');
+            
+            let html = `
+                <h3>📊 ข้อมูลทั้งหมด (${data.length} รายการ)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัสนักเรียน</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>พฤติกรรม</th>
+                                <th>คะแนน</th>
+                                <th>ครูผู้บันทึก</th>
+                                <th>วันที่</th>
+                                <th>สถานะ</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.forEach((record, displayIndex) => {
+                const statusColor = {
+                    'อนุมัติ': '#28a745',
+                    'ไม่อนุมัติ': '#dc3545',
+                    'อยู่ระหว่างตรวจสอบ': '#17a2b8',
+                    'รอดำเนินการ': '#ffa500'
+                }[record.status] || '#6c757d';
+                
+                const actualRowIndex = record.rowIndex !== undefined ? record.rowIndex : displayIndex;
+                
+                html += `
+                    <tr id="row-${actualRowIndex}">
+                        <td>${record.studentId || '-'}</td>
+                        <td>${record.fullName || '-'}</td>
+                        <td>${record.classroom || '-'}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.behavior || ''}">${record.behavior || '-'}</td>
+                        <td>${record.score || '-'}</td>
+                        <td>${record.teacherName || '-'}</td>
+                        <td style="font-size: 12px;">${record.timestamp || '-'}</td>
+                        <td style="color: ${statusColor}; font-weight: bold;">${record.status || 'รอดำเนินการ'}</td>
+                        <td>
+                            ${record.status === 'รอดำเนินการ' || record.status === 'อยู่ระหว่างตรวจสอบ' ? `
+                                <div class="action-buttons">
+                                    <button class="btn btn-success" onclick="updateStatus(${actualRowIndex}, 'อนุมัติ')" data-row="${actualRowIndex}">✅ อนุมัติ</button>
+                                    <button class="btn btn-danger" onclick="rejectRecord(${actualRowIndex})" data-row="${actualRowIndex}">❌ ไม่อนุมัติ</button>
+                                </div>
+                            ` : `
+                                <span style="color: #6c757d;">ดำเนินการแล้ว</span>
+                                ${record.rejectReason ? `<br><small style="color: #dc3545;">เหตุผล: ${record.rejectReason}</small>` : ''}
+                                ${record.updatedBy ? `<br><small style="color: #6c757d;">โดย: ${record.updatedBy}</small>` : ''}
+                                ${record.updatedAt ? `<br><small style="color: #6c757d;">เมื่อ: ${record.updatedAt}</small>` : ''}
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></div>';
+            dataDiv.innerHTML = html;
+        }
+
+        // ฟังก์ชันกรองข้อมูลตามสถานะ
+        function filterByStatus() {
+            const selectedStatus = document.getElementById('statusFilter').value;
+            
+            if (!selectedStatus) {
+                displayAdminData(allAdminData);
+            } else {
+                const filteredData = allAdminData.filter(record => record.status === selectedStatus);
+                displayAdminData(filteredData);
+            }
         }
 
         // ฟังก์ชันอัปเดตสถานะ
         async function updateStatus(rowIndex, newStatus, rejectReason = '') {
             try {
+                console.log('Updating status for rowIndex:', rowIndex, 'newStatus:', newStatus);
+                
+                // แสดง loading ในปุ่ม
+                const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.innerHTML = '⏳ กำลังดำเนินการ...';
+                });
+                
                 const updateData = {
                     action: 'updateStatus',
                     rowIndex: rowIndex,
@@ -713,6 +1089,8 @@
                     updatedBy: 'ผู้ดูแลระบบ',
                     updatedAt: new Date().toLocaleString('th-TH')
                 };
+                
+                console.log('Sending update data:', updateData);
                 
                 // ส่งข้อมูลแบบ URL-encoded เพื่อหลีกเลี่ยง CORS
                 const params = new URLSearchParams();
@@ -727,16 +1105,32 @@
                 });
                 
                 const result = await response.json();
+                console.log('Update result:', result);
                 
                 if (result.success) {
+                    showNotification(`✅ ${newStatus === 'อนุมัติ' ? 'อนุมัติ' : 'ไม่อนุมัติ'}เรียบร้อยแล้ว`, 'success');
+                    
                     // โหลดข้อมูลใหม่
-                    loadAllData();
+                    await loadAllData();
                 } else {
-                    alert('เกิดข้อผิดพลาดในการอัปเดตสถานะ: ' + result.message);
+                    showNotification('เกิดข้อผิดพลาดในการอัปเดตสถานะ: ' + result.message, 'danger');
+                    
+                    // เปิดปุ่มกลับ
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅ อนุมัติ' : '❌ ไม่อนุมัติ';
+                    });
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                console.error('Update status error:', error);
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + error.message, 'danger');
+                
+                // เปิดปุ่มกลับ
+                const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅ อนุมัติ' : '❌ ไม่อนุมัติ';
+                });
             }
         }
 
@@ -745,7 +1139,53 @@
             const reason = prompt('กรุณาระบุเหตุผลในการไม่อนุมัติ:');
             if (reason && reason.trim()) {
                 updateStatus(rowIndex, 'ไม่อนุมัติ', reason.trim());
+            } else if (reason === '') {
+                showNotification('กรุณาระบุเหตุผลในการไม่อนุมัติ', 'warning');
             }
+        }
+
+        // ฟังก์ชันส่งออกข้อมูล
+        function exportData() {
+            if (!allAdminData || allAdminData.length === 0) {
+                showNotification('ไม่มีข้อมูลให้ส่งออก กรุณาโหลดข้อมูลก่อน', 'warning');
+                return;
+            }
+
+            // สร้างข้อมูล CSV
+            const headers = ['วันที่', 'รหัสนักเรียน', 'เลขที่', 'ชื่อ-นามสกุล', 'ห้องเรียน', 'พฤติกรรม', 'คะแนน', 'ครูผู้บันทึก', 'สถานะ', 'เหตุผล', 'ผู้อัปเดต', 'วันที่อัปเดต'];
+            
+            let csvContent = headers.join(',') + '\n';
+            
+            allAdminData.forEach(record => {
+                const row = [
+                    record.timestamp || '',
+                    record.studentId || '',
+                    record.studentNo || '',
+                    `"${(record.fullName || '').replace(/"/g, '""')}"`,
+                    record.classroom || '',
+                    `"${(record.behavior || '').replace(/"/g, '""')}"`,
+                    record.score || '',
+                    `"${(record.teacherName || '').replace(/"/g, '""')}"`,
+                    record.status || '',
+                    `"${(record.rejectReason || '').replace(/"/g, '""')}"`,
+                    `"${(record.updatedBy || '').replace(/"/g, '""')}"`,
+                    record.updatedAt || ''
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            // ดาวน์โหลดไฟล์
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `student_behavior_data_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('ส่งออกข้อมูลเรียบร้อยแล้ว', 'success');
         }
 
         // เพิ่ม Enter key support สำหรับการค้นหา
@@ -762,19 +1202,17 @@
             }
         });
 
-        // แสดงข้อความแนะนำเมื่อโหลดหน้า
+        // ตรวจสอบการเชื่อมต่อเมื่อโหลดหน้า
         window.addEventListener('load', function() {
-            if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
-                document.getElementById('registerMessage').innerHTML = `
-                    <div class="alert alert-info">
-                        <strong>⚠️ กรุณาตั้งค่า Google Apps Script ก่อนใช้งาน</strong><br>
-                        1. แทนที่ <code>YOUR_SCRIPT_ID</code> ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
-                        2. Deploy Google Apps Script เป็น Web App<br>
-                        3. ตั้งค่า Permissions ให้ Anyone can access
-                    </div>
-                `;
-            }
+            checkConnection();
         });
+
+        // เพิ่มการทำงานแบบ Progressive Web App
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // ไม่ลงทะเบียน service worker เพื่อหลีกเลี่ยงปัญหา cache
+            });
+        }
     </script>
 </body>
 </html>
