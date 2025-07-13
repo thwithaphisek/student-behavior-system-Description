@@ -465,7 +465,7 @@
     <script>
         // กำหนด URL ของ Google Apps Script Web App
         // แทนที่ URL นี้ด้วย URL ของ Google Apps Script ที่คุณ deploy
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtsN84Kk0Oz4gCx9x7N2mn9Xwr90fZ_jU3Kt7ypFXRDOen8Mh1pLz9ERE_-RzgGTGwDA/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
         let currentPage = 'register';
         let isAdminLoggedIn = false;
@@ -523,13 +523,13 @@
             };
             
             try {
+                // ใช้ FormData แทน JSON เพื่อหลีกเลี่ยง CORS preflight
+                const formDataToSend = new FormData();
+                formDataToSend.append('data', JSON.stringify(formData));
+                
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
+                    body: formDataToSend
                 });
                 
                 const result = await response.json();
@@ -711,13 +711,13 @@
                     updatedAt: new Date().toLocaleString('th-TH')
                 };
                 
+                // ใช้ FormData แทน JSON เพื่อหลีกเลี่ยง CORS preflight
+                const formDataToSend = new FormData();
+                formDataToSend.append('data', JSON.stringify(updateData));
+                
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updateData)
+                    body: formDataToSend
                 });
                 
                 const result = await response.json();
