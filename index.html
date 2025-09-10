@@ -1637,7 +1637,7 @@
         }
 
         // ฟังก์ชันจัดการฟอร์มนักเรียนเข้าค่าย
-        document.getElementById('campForm').addEventListener('submit', function(e) {
+        document.getElementById('campForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const loading = document.getElementById('campSubmitLoading');
@@ -1646,41 +1646,65 @@
             loading.style.display = 'inline-block';
             submitText.textContent = 'กำลังบันทึก...';
             
-            // จำลองการบันทึกข้อมูล
-            setTimeout(() => {
-                const editId = this.dataset.editId;
+            try {
+                const editRowIndex = this.dataset.editRowIndex;
+                const createdAt = this.dataset.createdAt;
+                
                 const formData = {
                     studentId: document.getElementById('campStudentId').value.trim(),
                     fullName: document.getElementById('campFullName').value.trim(),
                     classroom: document.getElementById('campClassroom').value,
                     status: document.getElementById('campStatus').value,
                     follow: document.getElementById('campFollow').value,
-                    note: document.getElementById('campNote').value.trim(),
-                    createdAt: new Date().toLocaleString('th-TH')
+                    note: document.getElementById('campNote').value.trim()
                 };
                 
-                if (editId) {
+                let requestData;
+                
+                if (editRowIndex) {
                     // แก้ไขข้อมูล
-                    const index = campData.findIndex(s => s.id === parseInt(editId));
-                    if (index !== -1) {
-                        campData[index] = { ...campData[index], ...formData };
-                        showNotification('แก้ไขข้อมูลเรียบร้อยแล้ว', 'success');
-                    }
-                    delete this.dataset.editId;
+                    requestData = {
+                        action: 'updateCampStudent',
+                        rowIndex: parseInt(editRowIndex),
+                        createdAt: createdAt,
+                        ...formData
+                    };
                 } else {
                     // เพิ่มข้อมูลใหม่
-                    const newId = Math.max(...campData.map(s => s.id), 0) + 1;
-                    campData.push({ id: newId, ...formData });
-                    showNotification('เพิ่มนักเรียนเรียบร้อยแล้ว', 'success');
+                    requestData = {
+                        action: 'addCampStudent',
+                        ...formData
+                    };
                 }
                 
-                displayCampData(campData);
-                generateCampStats(campData);
-                closeCampModal();
+                const params = new URLSearchParams();
+                params.append('data', JSON.stringify(requestData));
                 
-                loading.style.display = 'none';
-                submitText.textContent = 'บันทึก';
-            }, 1000);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification(editRowIndex ? 'แก้ไขข้อมูลเรียบร้อยแล้ว' : 'เพิ่มนักเรียนเรียบร้อยแล้ว', 'success');
+                    await loadCampData(); // โหลดข้อมูลใหม่
+                    closeCampModal();
+                } else {
+                    showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
+                }
+                
+            } catch (error) {
+                console.error('Error saving camp data:', error);
+                showNotification('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'danger');
+            }
+            
+            loading.style.display = 'none';
+            submitText.textContent = 'บันทึก';
         });
 
         // เพิ่ม Enter key support สำหรับการค้นหา
