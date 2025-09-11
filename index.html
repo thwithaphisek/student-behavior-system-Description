@@ -1471,63 +1471,63 @@ async function loadCampData() {
 
         // ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย
         function displayCampData(data) {
-            const dataDiv = document.getElementById('campData');
-            
-            if (!data || data.length === 0) {
-                dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลนักเรียนเข้าค่าย</div>';
-                return;
-            }
-            
-            let html = `
-                <h3>📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
-                <div style="overflow-x: auto;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th style="width: 60px;">ลำดับ</th>
-                                <th>เลขประจำตัว</th>
-                                <th>ชื่อ - นามสกุล</th>
-                                <th>ห้องเรียน</th>
-                                <th>สถานะ</th>
-                                <th>ติดตาม</th>
-                                <th>หมายเหตุ</th>
-                                <th style="width: 120px;">การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-            
-            data.forEach((record, index) => {
-                html += `
+    const dataDiv = document.getElementById('campData');
+    
+    if (!data || data.length === 0) {
+        dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลนักเรียนเข้าค่าย</div>';
+        return;
+    }
+    
+    let html = `
+        <h3>📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td style="text-align: center; font-weight: bold;">${index + 1}</td>
-                        <td>${record.studentId}</td>
-                        <td>${record.fullName}</td>
-                        <td>${record.classroom}</td>
-                        <td>
-                            <span class="status-badge status-${record.status}">
-                                ${record.status}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="status-badge follow-${record.follow}">
-                                ${record.follow}
-                            </span>
-                        </td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || ''}">${record.note || '-'}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-warning" onclick="editCampStudent(${record.id})" style="padding: 6px 12px; font-size: 12px;">✏️</button>
-                                <button class="btn btn-danger" onclick="deleteCampStudent(${record.id})" style="padding: 6px 12px; font-size: 12px;">🗑️</button>
-                            </div>
-                        </td>
+                        <th style="width: 60px;">ลำดับ</th>
+                        <th>เลขประจำตัว</th>
+                        <th>ชื่อ - นามสกุล</th>
+                        <th>ห้องเรียน</th>
+                        <th>สถานะ</th>
+                        <th>ติดตาม</th>
+                        <th>หมายเหตุ</th>
+                        <th style="width: 120px;">การจัดการ</th>
                     </tr>
-                `;
-            });
-            
-            html += '</tbody></table></div>';
-            dataDiv.innerHTML = html;
-        }
+                </thead>
+                <tbody>
+    `;
+    
+    data.forEach((record, index) => {
+        html += `
+            <tr>
+                <td style="text-align: center; font-weight: bold;">${index + 1}</td>
+                <td>${record.studentId}</td>
+                <td>${record.fullName}</td>
+                <td>${record.classroom}</td>
+                <td>
+                    <span class="status-badge status-${record.status}">
+                        ${record.status}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge follow-${record.follow}">
+                        ${record.follow}
+                    </span>
+                </td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || ''}">${record.note || '-'}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning" onclick="editCampStudent(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px;">✏️</button>
+                        <button class="btn btn-danger" onclick="deleteCampStudent(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px;">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table></div>';
+    dataDiv.innerHTML = html;
+}
 
         // ฟังก์ชันกรองข้อมูลนักเรียนเข้าค่าย
         function filterCampData() {
@@ -1548,43 +1548,114 @@ async function loadCampData() {
         }
 
         // ฟังก์ชันเปิด Modal เพิ่มนักเรียน
-        function addCampStudent() {
-            document.getElementById('campModal').style.display = 'flex';
-            document.getElementById('campForm').reset();
-        }
-
+function addCampStudent() {
+    document.getElementById('campModal').style.display = 'flex';
+    document.getElementById('campForm').reset();
+    // รีเซ็ตข้อมูลการแก้ไข
+    delete document.getElementById('campForm').dataset.editRowIndex;
+    delete document.getElementById('campForm').dataset.createdAt;
+    document.querySelector('#campModal h3').textContent = '➕ เพิ่มนักเรียนเข้าค่าย';
+}
         // ฟังก์ชันปิด Modal
         function closeCampModal() {
             document.getElementById('campModal').style.display = 'none';
         }
 
         // ฟังก์ชันแก้ไขนักเรียนเข้าค่าย
-        function editCampStudent(id) {
-            const student = campData.find(s => s.id === id);
-            if (student) {
-                document.getElementById('campStudentId').value = student.studentId;
-                document.getElementById('campFullName').value = student.fullName;
-                document.getElementById('campClassroom').value = student.classroom;
-                document.getElementById('campStatus').value = student.status;
-                document.getElementById('campFollow').value = student.follow;
-                document.getElementById('campNote').value = student.note || '';
-                
-                // เก็บ ID สำหรับการอัปเดต
-                document.getElementById('campForm').dataset.editId = id;
-                
-                document.getElementById('campModal').style.display = 'flex';
-            }
-        }
+function editCampStudent(rowIndex) {
+    console.log('Editing student with rowIndex:', rowIndex);
+    const student = campData.find(s => s.rowIndex === rowIndex);
+    console.log('Found student:', student);
+    
+    if (student) {
+        document.getElementById('campStudentId').value = student.studentId || '';
+        document.getElementById('campFullName').value = student.fullName || '';
+        document.getElementById('campClassroom').value = student.classroom || '';
+        document.getElementById('campStatus').value = student.status || '';
+        document.getElementById('campFollow').value = student.follow || '';
+        document.getElementById('campNote').value = student.note || '';
+        
+        // เก็บ rowIndex สำหรับการอัปเดต
+        document.getElementById('campForm').dataset.editRowIndex = rowIndex;
+        document.getElementById('campForm').dataset.createdAt = student.createdAt;
+        
+        document.getElementById('campModal').style.display = 'flex';
+        document.querySelector('#campModal h3').textContent = '✏️ แก้ไขข้อมูลนักเรียน';
+    } else {
+        console.error('Student not found with rowIndex:', rowIndex);
+        showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการแก้ไข', 'danger');
+    }
+}
 
         // ฟังก์ชันลบนักเรียนเข้าค่าย
-        function deleteCampStudent(id) {
-            if (confirm('คุณต้องการลบข้อมูลนักเรียนคนนี้หรือไม่?')) {
-                campData = campData.filter(s => s.id !== id);
-                displayCampData(campData);
-                generateCampStats(campData);
+async function deleteCampStudent(rowIndex) {
+    console.log('Attempting to delete student with rowIndex:', rowIndex);
+    
+    // ตรวจสอบข้อมูลก่อนลบ
+    const student = campData.find(s => s.rowIndex === rowIndex);
+    if (!student) {
+        showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการลบ', 'danger');
+        return;
+    }
+    
+    const confirmMessage = `คุณต้องการลบข้อมูลนักเรียนคนนี้หรือไม่?\n\nชื่อ: ${student.fullName}\nรหัส: ${student.studentId}`;
+    
+    if (confirm(confirmMessage)) {
+        try {
+            // แสดง loading
+            const deleteButtons = document.querySelectorAll(`button[onclick*="deleteCampStudent(${rowIndex})"]`);
+            deleteButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerHTML = '🗑️ กำลังลบ...';
+            });
+            
+            const deleteData = {
+                action: 'deleteCampStudent',
+                rowIndex: rowIndex
+            };
+            
+            console.log('Sending delete request:', deleteData);
+            
+            const params = new URLSearchParams();
+            params.append('data', JSON.stringify(deleteData));
+            
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            });
+            
+            const result = await response.json();
+            console.log('Delete response:', result);
+            
+            if (result.success) {
                 showNotification('ลบข้อมูลเรียบร้อยแล้ว', 'success');
+                await loadCampData(); // โหลดข้อมูลใหม่
+            } else {
+                showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
+                
+                // เปิดปุ่มกลับ
+                deleteButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = '🗑️';
+                });
             }
+        } catch (error) {
+            console.error('Error deleting camp student:', error);
+            showNotification('เกิดข้อผิดพลาดในการลบข้อมูล: ' + error.message, 'danger');
+            
+            // เปิดปุ่มกลับ
+            const deleteButtons = document.querySelectorAll(`button[onclick*="deleteCampStudent(${rowIndex})"]`);
+            deleteButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.innerHTML = '🗑️';
+            });
         }
+    }
+}
+
 
         // ฟังก์ชันส่งออกข้อมูลนักเรียนเข้าค่าย
         function exportCampData() {
@@ -1744,5 +1815,6 @@ async function loadCampData() {
     </script>
 </body>
 </html>
+
 
 
