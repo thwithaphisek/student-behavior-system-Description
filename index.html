@@ -1392,48 +1392,38 @@
 
         // ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย
         async function loadCampData() {
-            try {
-                // จำลองข้อมูลนักเรียนเข้าค่าย (ในการใช้งานจริงจะดึงจาก Google Sheets)
-                campData = [
-                    {
-                        id: 1,
-                        studentId: 'S001234',
-                        fullName: 'นายสมชาย ใจดี',
-                        classroom: '1/1',
-                        status: 'เข้าค่าย',
-                        follow: 'กำลังดำเนินการ',
-                        note: 'ติดต่อผู้ปกครองแล้ว',
-                        createdAt: new Date().toLocaleString('th-TH')
-                    },
-                    {
-                        id: 2,
-                        studentId: 'S005678',
-                        fullName: 'นางสาวสมใส เรียนดี',
-                        classroom: '2/3',
-                        status: 'จิตอาสา',
-                        follow: 'ดำเนินการแล้ว',
-                        note: 'เข้าร่วมกิจกรรมแล้ว',
-                        createdAt: new Date().toLocaleString('th-TH')
-                    },
-                    {
-                        id: 3,
-                        studentId: 'S009876',
-                        fullName: 'นายสมศักดิ์ มั่นใจ',
-                        classroom: '3/2',
-                        status: 'เข้าค่าย',
-                        follow: 'ติดตามผล',
-                        note: 'รอผลจากการปรึกษาผู้ปกครอง',
-                        createdAt: new Date().toLocaleString('th-TH')
-                    }
-                ];
-                
-                generateCampStats(campData);
-                displayCampData(campData);
-            } catch (error) {
-                console.error('Error loading camp data:', error);
-                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย', 'danger');
+    try {
+        console.log('Loading camp data from Google Sheets...');
+        
+        const response = await fetch(`${SCRIPT_URL}?action=getCampData`);
+        const result = await response.json();
+        
+        console.log('Camp data response:', result);
+        
+        if (result.success) {
+            campData = result.data || [];
+            console.log('Loaded camp data:', campData);
+            generateCampStats(campData);
+            displayCampData(campData);
+            
+            if (campData.length === 0) {
+                showNotification('ไม่มีข้อมูลนักเรียนเข้าค่าย กรุณาเพิ่มข้อมูลใหม่', 'info');
             }
+        } else {
+            console.error('Error loading camp data:', result.message);
+            showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย: ' + result.message, 'danger');
+            campData = [];
+            generateCampStats(campData);
+            displayCampData(campData);
         }
+    } catch (error) {
+        console.error('Error loading camp data:', error);
+        showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error.message, 'danger');
+        campData = [];
+        generateCampStats(campData);
+        displayCampData(campData);
+    }
+}
 
         // ฟังก์ชันสร้างสถิตินักเรียนเข้าค่าย
         function generateCampStats(data) {
@@ -1742,3 +1732,4 @@
     </script>
 </body>
 </html>
+
