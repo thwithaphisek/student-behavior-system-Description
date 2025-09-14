@@ -450,7 +450,37 @@
             background-color: #6c757d;
             color: white;
         }
+.grade-filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
+.grade-filter-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #667eea;
+    background-color: white;
+    color: #667eea;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.grade-filter-btn:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.grade-filter-btn.active {
+    background-color: #667eea;
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -661,36 +691,46 @@
         </div>
 
         <!-- หน้านักเรียนเข้าค่าย (ใหม่) -->
-        <div id="camp" class="page">
-            <h2>🏕️ นักเรียนที่ต้องเข้าค่าย</h2>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียน</button>
-                    <button onclick="exportCampData()" class="btn btn-info">📤 ส่งออกข้อมูล</button>
-                </div>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
-                        <option value="">🏕️ ทุกสถานะ</option>
-                        <option value="เข้าค่าย">เข้าค่าย</option>
-                        <option value="จิตอาสา">จิตอาสา</option>
-                        <option value="อื่นๆ">อื่นๆ</option>
-                    </select>
-                    <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
-                        <option value="">📋 ทุกการติดตาม</option>
-                        <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                        <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-                        <option value="ติดตามผล">ติดตามผล</option>
-                        <option value="รอดำเนินการ">รอดำเนินการ</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="campStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-            
-            <div id="campData"></div>
+       <div id="camp" class="page">
+    <h2>🏕️ นักเรียนที่ต้องเข้าค่าย</h2>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียน</button>
+            <button onclick="exportCampData()" class="btn btn-info">📤 ส่งออกข้อมูล</button>
         </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
+                <option value="">🏕️ ทุกสถานะ</option>
+                <option value="เข้าค่าย">เข้าค่าย</option>
+                <option value="จิตอาสา">จิตอาสา</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+            </select>
+            <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
+                <option value="">📋 ทุกการติดตาม</option>
+                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                <option value="ติดตามผล">ติดตามผล</option>
+                <option value="รอดำเนินการ">รอดำเนินการ</option>
+            </select>
+        </div>
+    </div>
 
+    <!-- เพิ่มปุ่มกรองตามชั้นเรียน -->
+    <div class="grade-filter-container">
+        <button class="grade-filter-btn active" onclick="filterByGrade('all')">ทั้งหมด</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('1')">ม.1</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('2')">ม.2</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('3')">ม.3</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('4')">ม.4</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('5')">ม.5</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('6')">ม.6</button>
+    </div>
+
+    <div id="campStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+    
+    <div id="campData"></div>
+</div>
         <!-- หน้าผู้ดูแลระบบ -->
         <div id="admin" class="page">
             <div id="loginSection">
@@ -886,7 +926,20 @@
         let isAdminLoggedIn = false;
         let allAdminData = []; // เก็บข้อมูลทั้งหมดสำหรับการกรอง
         let campData = []; // เก็บข้อมูลนักเรียนเข้าค่าย
-
+	let currentGradeFilter = 'all';
+	// ฟังก์ชันกรองตามชั้นเรียน
+function filterByGrade(grade) {
+    currentGradeFilter = grade;
+    
+    // อัปเดต active state ของปุ่ม
+    document.querySelectorAll('.grade-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // กรองข้อมูล
+    filterCampData();
+}
         // ฟังก์ชันแสดงการแจ้งเตือน
         function showNotification(message, type = 'success') {
             // ลบการแจ้งเตือนเก่า
@@ -1586,31 +1639,45 @@ async function loadCampData() {
 }
 
         // ฟังก์ชันกรองข้อมูลนักเรียนเข้าค่าย
-        function filterCampData() {
-            const statusFilter = document.getElementById('campStatusFilter').value;
-            const followFilter = document.getElementById('campFollowFilter').value;
-            
-            let filteredData = campData;
-            
-            if (statusFilter) {
-                filteredData = filteredData.filter(record => record.status === statusFilter);
+function filterCampData() {
+    const statusFilter = document.getElementById('campStatusFilter').value;
+    const followFilter = document.getElementById('campFollowFilter').value;
+    
+    let filteredData = campData;
+    
+    // กรองตามสถานะ
+    if (statusFilter) {
+        filteredData = filteredData.filter(record => record.status === statusFilter);
+    }
+    
+    // กรองตามการติดตาม
+    if (followFilter) {
+        filteredData = filteredData.filter(record => record.follow === followFilter);
+    }
+    
+    // กรองตามชั้นเรียน (เพิ่มใหม่)
+    if (currentGradeFilter !== 'all') {
+        filteredData = filteredData.filter(record => {
+            if (record.classroom) {
+                const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                return gradeMatch && gradeMatch[1] === currentGradeFilter;
             }
-            
-            if (followFilter) {
-                filteredData = filteredData.filter(record => record.follow === followFilter);
-            }
-            
-            displayCampData(filteredData);
-        }
-
+            return false;
+        });
+    }
+    
+    displayCampData(filteredData);
+}
         // ฟังก์ชันเปิด Modal เพิ่มนักเรียน
 function addCampStudent() {
     document.getElementById('campModal').style.display = 'flex';
     document.getElementById('campForm').reset();
+    
     // รีเซ็ตข้อมูลการแก้ไข
     delete document.getElementById('campForm').dataset.editRowIndex;
     delete document.getElementById('campForm').dataset.createdAt;
-    document.querySelector('#campModal h3').textContent = '➕ เพิ่มนักเรียนเข้าค่าย';
+    
+    document.querySelector('#campModal h3').textContent = 'เพิ่มนักเรียนเข้าค่าย';
 }
         // ฟังก์ชันปิด Modal
         function closeCampModal() {
@@ -1636,13 +1703,12 @@ function editCampStudent(rowIndex) {
         document.getElementById('campForm').dataset.createdAt = student.createdAt;
         
         document.getElementById('campModal').style.display = 'flex';
-        document.querySelector('#campModal h3').textContent = '✏️ แก้ไขข้อมูลนักเรียน';
+        document.querySelector('#campModal h3').textContent = 'แก้ไขข้อมูลนักเรียน';
     } else {
         console.error('Student not found with rowIndex:', rowIndex);
         showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการแก้ไข', 'danger');
     }
 }
-
         // ฟังก์ชันลบนักเรียนเข้าค่าย
 async function deleteCampStudent(rowIndex) {
     console.log('Attempting to delete student with rowIndex:', rowIndex);
