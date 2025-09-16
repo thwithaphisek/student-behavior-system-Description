@@ -693,28 +693,94 @@
         <!-- หน้านักเรียนเข้าค่าย (ใหม่) -->
        <div id="camp" class="page">
     <h2>🏕️ นักเรียนที่ต้องเข้าค่าย</h2>
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียน</button>
-            <button onclick="exportCampData()" class="btn btn-info">📤 ส่งออกข้อมูล</button>
+    		<!-- ============ เพิ่มส่วน Admin Login สำหรับหน้าค่าย ============ -->
+<div id="campAdminSection" style="margin-bottom: 25px;">
+    <!-- Admin Login Form -->
+    <div id="campAdminLoginForm" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 24px;">🔐</span>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: white; font-size: 18px;">เข้าสู่ระบบ Admin การจัดการข้อมูลค่าย</h4>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">จำเป็นต้องเข้าสู่ระบบเพื่อเพิ่ม แก้ไข หรือลบข้อมูลนักเรียน</p>
+            </div>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
-                <option value="">🏕️ ทุกสถานะ</option>
-                <option value="เข้าค่าย">เข้าค่าย</option>
-                <option value="จิตอาสา">จิตอาสา</option>
-                <option value="อื่นๆ">อื่นๆ</option>
-            </select>
-            <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
-                <option value="">📋 ทุกการติดตาม</option>
-                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-                <option value="ติดตามผล">ติดตามผล</option>
-                <option value="รอดำเนินการ">รอดำเนินการ</option>
-            </select>
+        
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="password" 
+                   id="campAdminPassword" 
+                   placeholder="รหัสผ่าน Admin การจัดการค่าย" 
+                   style="flex: 1; min-width: 200px; padding: 12px 15px; border: none; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); outline: none; transition: all 0.3s ease;"
+                   onkeypress="if(event.key==='Enter') campAdminLogin()">
+            
+            <button onclick="campAdminLogin()" 
+                    class="btn" 
+                    id="campLoginBtn"
+                    style="background: linear-gradient(45deg, #28a745, #20c997); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; white-space: nowrap; min-width: 120px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);">
+                <span id="campLoginLoading" style="display: none;" class="loading"></span>
+                <span id="campLoginText">🔓 เข้าสู่ระบบ</span>
+            </button>
+            
+            <button onclick="campAdminLogout()" 
+                    class="btn btn-danger" 
+                    id="campLogoutBtn" 
+                    style="display: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; white-space: nowrap; min-width: 120px; background: linear-gradient(45deg, #dc3545, #c82333); box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);">
+                🚪 ออกจากระบบ
+            </button>
+        </div>
+        
+        <!-- Message Area -->
+        <div id="campAdminMessage" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Admin Status Display -->
+    <div id="campAdminStatus" style="display: none; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">✅</span>
+            <div>
+                <strong style="color: white; font-size: 16px;">Admin เข้าสู่ระบบแล้ว</strong>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">คุณสามารถจัดการข้อมูลนักเรียนได้แล้ว</p>
+            </div>
         </div>
     </div>
+
+    <!-- Access Denied Message -->
+    <div id="campAccessDenied" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">🔒</span>
+            <div>
+                <strong style="color: white; font-size: 16px;">โหมดดูข้อมูลอย่างเดียว</strong>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">คุณสามารถดูและส่งออกข้อมูลได้ แต่ไม่สามารถเพิ่ม แก้ไข หรือลบได้</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============ จบส่วน Admin Login ============ -->
+   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="campActionButtons">
+        <!-- ปุ่มจะถูกสร้างโดย JavaScript ตามสถานะ Admin -->
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(108, 117, 125, 0.1); border-radius: 20px; color: #6c757d; font-size: 14px;">
+            <span>🔄</span>
+            <span>กำลังโหลด...</span>
+        </div>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
+            <option value="">🏕️ ทุกสถานะ</option>
+            <option value="เข้าค่าย">เข้าค่าย</option>
+            <option value="จิตอาสา">จิตอาสา</option>
+            <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+        <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
+            <option value="">📋 ทุกการติดตาม</option>
+            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+            <option value="ติดตามผล">ติดตามผล</option>
+            <option value="รอดำเนินการ">รอดำเนินการ</option>
+        </select>
+    </div>
+</div>
 
     <!-- เพิ่มปุ่มกรองตามชั้นเรียน -->
     <div class="grade-filter-container">
@@ -927,6 +993,7 @@
         let allAdminData = []; // เก็บข้อมูลทั้งหมดสำหรับการกรอง
         let campData = []; // เก็บข้อมูลนักเรียนเข้าค่าย
 	let currentGradeFilter = 'all';
+	let campAdminLoggedIn = false;
 	// ฟังก์ชันกรองตามชั้นเรียน
 function filterByGrade(grade) {
     currentGradeFilter = grade;
@@ -991,6 +1058,16 @@ function filterByGrade(grade) {
 
         // ฟังก์ชันเปลี่ยนหน้า
         function showPage(pageId) {
+	// ถ้าเปลี่ยนไปหน้าค่าย ให้โหลดข้อมูลและอัปเดต UI
+if (pageId === 'camp') {
+    loadCampData();
+    
+    // อัปเดต UI ทันทีสำหรับหน้าค่าย
+    setTimeout(() => {
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }, 100);
+}
             // ซ่อนหน้าทั้งหมด
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -1215,7 +1292,7 @@ function filterByGrade(grade) {
             loginText.textContent = 'เข้าสู่ระบบ';
         }
 
-        // ฟังก์ชัน logout ผู้ดูแลระบบ
+// ฟังก์ชัน logout ผู้ดูแลระบบ
         function adminLogout() {
             isAdminLoggedIn = false;
             document.getElementById('loginSection').style.display = 'block';
@@ -1225,6 +1302,204 @@ function filterByGrade(grade) {
             document.getElementById('adminStats').innerHTML = '';
             allAdminData = [];
             showNotification('ออกจากระบบแล้ว', 'info');
+        }
+
+        // ==================== ฟังก์ชันสำหรับ Admin หน้าค่าย ====================
+
+        // ฟังก์ชัน Login Admin สำหรับหน้าค่าย
+        async function campAdminLogin() {
+            const password = document.getElementById('campAdminPassword').value.trim();
+            const messageDiv = document.getElementById('campAdminMessage');
+            const loading = document.getElementById('campLoginLoading');
+            const loginText = document.getElementById('campLoginText');
+            const loginBtn = document.getElementById('campLoginBtn');
+            
+            // ตรวจสอบว่ากรอกรหัสผ่านหรือไม่
+            if (!password) {
+                showNotification('กรุณากรอกรหัสผ่าน', 'warning');
+                return;
+            }
+            
+            // แสดง loading state
+            loading.style.display = 'inline-block';
+            loginText.textContent = 'กำลังตรวจสอบ...';
+            loginBtn.disabled = true;
+            messageDiv.innerHTML = '';
+            
+            // จำลองการตรวจสอบรหัสผ่าน (delay 1.5 วินาที)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // ตรวจสอบรหัสผ่าน (สามารถเปลี่ยนรหัสผ่านได้ที่นี่)
+            if (password === 'admin1234') {
+                // Login สำเร็จ
+                campAdminLoggedIn = true;
+                
+                // ล้างรหัสผ่าน
+                document.getElementById('campAdminPassword').value = '';
+                
+                // อัปเดต UI
+                updateCampAdminUI();
+                
+                // แสดงข้อความสำเร็จ
+                showNotification('เข้าสู่ระบบ Admin หน้าค่ายสำเร็จ! คุณสามารถจัดการข้อมูลได้แล้ว', 'success');
+                
+                // อัปเดตการแสดงผลข้อมูล
+                displayCampData(getCurrentFilteredCampData());
+                updateCampActionButtons();
+                
+            } else {
+                // Login ไม่สำเร็จ
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
+                        <strong>❌ รหัสผ่านไม่ถูกต้อง</strong><br>
+                        <small>กรุณาติดต่อผู้ดูแลระบบหากลืมรหัสผ่าน</small>
+                    </div>
+                `;
+                
+                // เคลียร์รหัสผ่านที่ผิด
+                document.getElementById('campAdminPassword').value = '';
+                document.getElementById('campAdminPassword').focus();
+            }
+            
+            // ซ่อน loading state
+            loading.style.display = 'none';
+            loginText.textContent = '🔓 เข้าสู่ระบบ';
+            loginBtn.disabled = false;
+        }
+
+        // ฟังก์ชัน Logout Admin สำหรับหน้าค่าย
+        function campAdminLogout() {
+            // ยืนยันการออกจากระบบ
+            if (confirm('คุณต้องการออกจากระบบ Admin หน้าค่ายหรือไม่?')) {
+                // ออกจากระบบ
+                campAdminLoggedIn = false;
+                
+                // ล้างข้อมูลในฟอร์ม
+                document.getElementById('campAdminPassword').value = '';
+                document.getElementById('campAdminMessage').innerHTML = '';
+                
+                // อัปเดต UI
+                updateCampAdminUI();
+                
+                // แสดงข้อความแจ้งเตือน
+                showNotification('ออกจากระบบ Admin หน้าค่ายแล้ว', 'info');
+                
+                // อัปเดตการแสดงผลข้อมูล
+                displayCampData(getCurrentFilteredCampData());
+                updateCampActionButtons();
+            }
+        }
+
+        // ฟังก์ชันอัปเดต UI ตามสถานะ Login
+        function updateCampAdminUI() {
+            const loginForm = document.getElementById('campAdminLoginForm');
+            const adminStatus = document.getElementById('campAdminStatus');
+            const accessDenied = document.getElementById('campAccessDenied');
+            const logoutBtn = document.getElementById('campLogoutBtn');
+            
+            if (campAdminLoggedIn) {
+                // แสดงสถานะ Login สำเร็จ
+                loginForm.style.display = 'none';
+                adminStatus.style.display = 'block';
+                accessDenied.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                // แสดงฟอร์ม Login
+                loginForm.style.display = 'block';
+                adminStatus.style.display = 'none';
+                accessDenied.style.display = 'block';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        // ฟังก์ชันช่วยเหลือสำหรับดึงข้อมูลที่กรองแล้ว
+        function getCurrentFilteredCampData() {
+            const statusFilter = document.getElementById('campStatusFilter')?.value || '';
+            const followFilter = document.getElementById('campFollowFilter')?.value || '';
+            
+            let filteredData = [...campData]; // สร้างสำเนาของ array
+            
+            // กรองตามสถานะ
+            if (statusFilter) {
+                filteredData = filteredData.filter(record => record.status === statusFilter);
+            }
+            
+            // กรองตามการติดตาม
+            if (followFilter) {
+                filteredData = filteredData.filter(record => record.follow === followFilter);
+            }
+            
+            // กรองตามชั้นเรียน
+            if (currentGradeFilter !== 'all') {
+                filteredData = filteredData.filter(record => {
+                    if (record.classroom) {
+                        const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                        return gradeMatch && gradeMatch[1] === currentGradeFilter;
+                    }
+                    return false;
+                });
+            }
+            
+            return filteredData;
+        }
+
+        // ฟังก์ชันอัปเดตปุ่มการดำเนินการตามสถานะ Admin
+        function updateCampActionButtons() {
+            const actionButtonsDiv = document.getElementById('campActionButtons');
+            
+            if (!actionButtonsDiv) {
+                // สร้าง div ใหม่หากไม่มี
+                const parentDiv = document.querySelector('#camp div[style*="display: flex"]');
+                if (parentDiv) {
+                    const newDiv = document.createElement('div');
+                    newDiv.id = 'campActionButtons';
+                    newDiv.style.cssText = 'display: flex; gap: 10px; flex-wrap: wrap;';
+                    parentDiv.appendChild(newDiv);
+                }
+                return;
+            }
+            
+            if (campAdminLoggedIn) {
+                // แสดงปุ่มเต็มรูปแบบสำหรับ Admin
+                actionButtonsDiv.innerHTML = `
+                    <button onclick="addCampStudent()" class="btn btn-success" style="display: flex; align-items: center; gap: 8px;">
+                        <span>➕</span>
+                        <span>เพิ่มนักเรียน</span>
+                    </button>
+                    <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span>
+                        <span>ส่งออกข้อมูล</span>
+                    </button>
+                `;
+            } else {
+                // แสดงปุ่มที่จำกัดสำหรับผู้ใช้ทั่วไป
+                actionButtonsDiv.innerHTML = `
+                    <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span>
+                        <span>ส่งออกข้อมูล</span>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(108, 117, 125, 0.1); border-radius: 20px; color: #6c757d; font-size: 14px;">
+                        <span>🔒</span>
+                        <span>เข้าสู่ระบบ Admin เพื่อเพิ่ม/แก้ไขข้อมูล</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ฟังก์ชันตรวจสอบสิทธิ์ Admin (ใช้สำหรับฟังก์ชันอื่นๆ)
+        function checkCampAdminAccess(actionName = 'ดำเนินการ') {
+            if (!campAdminLoggedIn) {
+                showNotification(`กรุณาเข้าสู่ระบบ Admin ก่อน${actionName}`, 'warning');
+                
+                // เลื่อนหน้าไปที่ส่วน Login
+                document.getElementById('campAdminSection').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                return false;
+            }
+            return true;
         }
 
         // ฟังก์ชันสร้างสถิติ
@@ -1500,6 +1775,7 @@ function filterByGrade(grade) {
         // ==================== ฟังก์ชันสำหรับจัดการข้อมูลนักเรียนเข้าค่าย ====================
 
         // ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย
+// ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย (ปรับปรุงให้รองรับ Admin UI)
 async function loadCampData() {
     try {
         console.log('Loading camp data from Google Sheets...');
@@ -1512,25 +1788,41 @@ async function loadCampData() {
         if (result.success) {
             campData = result.data || [];
             console.log('Loaded camp data:', campData);
+            
+            // อัปเดตสถิติและแสดงผลข้อมูล
             generateCampStats(campData);
             displayCampData(campData);
             
+            // อัปเดต UI ตามสถานะ Admin
+            updateCampAdminUI();
+            updateCampActionButtons();
+            
             if (campData.length === 0) {
                 showNotification('ไม่มีข้อมูลนักเรียนเข้าค่าย กรุณาเพิ่มข้อมูลใหม่', 'info');
+            } else {
+                console.log(`โหลดข้อมูลสำเร็จ: ${campData.length} รายการ`);
             }
         } else {
             console.error('Error loading camp data:', result.message);
             showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย: ' + result.message, 'danger');
+            
+            // รีเซ็ตข้อมูลและ UI
             campData = [];
             generateCampStats(campData);
             displayCampData(campData);
+            updateCampAdminUI();
+            updateCampActionButtons();
         }
     } catch (error) {
         console.error('Error loading camp data:', error);
         showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error.message, 'danger');
+        
+        // รีเซ็ตข้อมูลและ UI
         campData = [];
         generateCampStats(campData);
         displayCampData(campData);
+        updateCampAdminUI();
+        updateCampActionButtons();
     }
 }
 
@@ -1579,40 +1871,72 @@ async function loadCampData() {
         }
 
         // ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย
-        function displayCampData(data) {
+// ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย (ปรับปรุงให้รองรับระบบ Admin)
+function displayCampData(data) {
     const dataDiv = document.getElementById('campData');
     
     if (!data || data.length === 0) {
-        dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลนักเรียนเข้าค่าย</div>';
+        dataDiv.innerHTML = `
+            <div class="alert alert-info" style="text-align: center; padding: 30px;">
+                <h4 style="margin-bottom: 15px;">📝 ไม่มีข้อมูลนักเรียนเข้าค่าย</h4>
+                <p style="margin-bottom: 20px; color: #6c757d;">
+                    ${campAdminLoggedIn ? 
+                        'คลิกปุ่ม "เพิ่มนักเรียน" เพื่อเริ่มต้นการบันทึกข้อมูล' : 
+                        'เข้าสู่ระบบ Admin เพื่อเพิ่มข้อมูลนักเรียน'
+                    }
+                </p>
+                ${campAdminLoggedIn ? 
+                    '<button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียนคนแรก</button>' : 
+                    ''
+                }
+            </div>
+        `;
         return;
     }
     
+    // สร้างหัวตารางที่แตกต่างกันตาม Admin status
+    let tableHeader = `
+        <tr>
+            <th style="width: 60px;">ลำดับ</th>
+            <th>เลขประจำตัว</th>
+            <th>ชื่อ - นามสกุล</th>
+            <th>ห้องเรียน</th>
+            <th>สถานะ</th>
+            <th>ติดตาม</th>
+            <th>หมายเหตุ</th>
+            ${campAdminLoggedIn ? '<th style="width: 120px;">การจัดการ</th>' : ''}
+        </tr>
+    `;
+    
     let html = `
-        <h3>📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0;">📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
+            ${campAdminLoggedIn ? 
+                '<span style="background: #28a745; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">🔓 โหมด Admin</span>' : 
+                '<span style="background: #6c757d; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">👁️ โหมดดูอย่างเดียว</span>'
+            }
+        </div>
+        
         <div style="overflow-x: auto;">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th style="width: 60px;">ลำดับ</th>
-                        <th>เลขประจำตัว</th>
-                        <th>ชื่อ - นามสกุล</th>
-                        <th>ห้องเรียน</th>
-                        <th>สถานะ</th>
-                        <th>ติดตาม</th>
-                        <th>หมายเหตุ</th>
-                        <th style="width: 120px;">การจัดการ</th>
-                    </tr>
+                    ${tableHeader}
                 </thead>
                 <tbody>
     `;
     
+    // สร้างแถวข้อมูล
     data.forEach((record, index) => {
         html += `
             <tr>
-                <td style="text-align: center; font-weight: bold;">${index + 1}</td>
-                <td>${record.studentId}</td>
-                <td>${record.fullName}</td>
-                <td>${record.classroom}</td>
+                <td style="text-align: center; font-weight: bold; color: #667eea;">${index + 1}</td>
+                <td style="font-family: monospace; font-weight: 600;">${record.studentId}</td>
+                <td style="font-weight: 500;">${record.fullName}</td>
+                <td>
+                    <span style="background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 2px 8px; border-radius: 12px; font-size: 13px; font-weight: 600;">
+                        ${record.classroom}
+                    </span>
+                </td>
                 <td>
                     <span class="status-badge status-${record.status}">
                         ${record.status}
@@ -1623,18 +1947,54 @@ async function loadCampData() {
                         ${record.follow}
                     </span>
                 </td>
-                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || ''}">${record.note || '-'}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn btn-warning" onclick="editCampStudent(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px;">✏️</button>
-                        <button class="btn btn-danger" onclick="deleteCampStudent(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px;">🗑️</button>
-                    </div>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || 'ไม่มีหมายเหตุ'}">
+                    ${record.note ? 
+                        `<span style="color: #495057;">${record.note}</span>` : 
+                        '<span style="color: #adb5bd; font-style: italic;">ไม่มีหมายเหตุ</span>'
+                    }
                 </td>
+                ${campAdminLoggedIn ? `
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-warning" 
+                                    onclick="editCampStudent(${record.rowIndex})" 
+                                    style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                    title="แก้ไขข้อมูล">
+                                ✏️
+                            </button>
+                            <button class="btn btn-danger" 
+                                    onclick="deleteCampStudent(${record.rowIndex})" 
+                                    style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                    title="ลบข้อมูล">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                ` : ''}
             </tr>
         `;
     });
     
-    html += '</tbody></table></div>';
+    html += `
+                </tbody>
+            </table>
+        </div>
+        
+        ${!campAdminLoggedIn ? `
+            <div style="background: rgba(108, 117, 125, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                    🔒 <strong>หากต้องการแก้ไขหรือลบข้อมูล</strong> กรุณาเข้าสู่ระบบ Admin ด้านบน
+                </p>
+            </div>
+        ` : `
+            <div style="background: rgba(40, 167, 69, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0; color: #28a745; font-size: 14px;">
+                    ✅ <strong>คุณสามารถจัดการข้อมูลได้เต็มรูปแบบ</strong> แก้ไข เพิ่ม หรือลบข้อมูลนักเรียน
+                </p>
+            </div>
+        `}
+    `;
+    
     dataDiv.innerHTML = html;
 }
 
@@ -1934,6 +2294,52 @@ async function deleteCampStudent(rowIndex) {
                 closeCampModal();
             }
         });
+	// ==================== Event Listeners และการเริ่มต้นระบบ ====================
+
+// เมื่อโหลดหน้าเสร็จสิ้น
+document.addEventListener('DOMContentLoaded', function() {
+    // เริ่มต้นระบบหน้าค่าย
+    if (currentPage === 'camp') {
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }
+});
+
+// ปิด Modal เมื่อกดนอกพื้นที่
+document.addEventListener('click', function(event) {
+    const campModal = document.getElementById('campModal');
+    if (event.target === campModal) {
+        closeCampModal();
+    }
+});
+
+// รองรับ Enter key ในฟอร์ม Login Camp Admin
+document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && event.target.id === 'campAdminPassword') {
+        campAdminLogin();
+    }
+});
+
+// ฟังก์ชันปิด Modal Camp
+function closeCampModal() {
+    document.getElementById('campModal').style.display = 'none';
+    
+    // รีเซ็ตฟอร์มเมื่อปิด
+    document.getElementById('campForm').reset();
+    delete document.getElementById('campForm').dataset.editRowIndex;
+    delete document.getElementById('campForm').dataset.createdAt;
+}
+
+// ฟังก์ชันแสดงสถานะการเชื่อมต่อ
+function showConnectionStatus(isConnected) {
+    const statusMessage = isConnected ? 
+        'เชื่อมต่อกับระบบสำเร็จ' : 
+        'ไม่สามารถเชื่อมต่อกับระบบได้';
+    
+    const statusType = isConnected ? 'success' : 'danger';
+    
+    showNotification(statusMessage, statusType);
+}
     </script>
 </body>
 </html>
