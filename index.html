@@ -445,7 +445,10 @@
             background-color: #17a2b8;
             color: white;
         }
-
+        .follow-ชำระเงินแล้ว {
+            background-color: #17a2b8;
+            color: white;
+        }
         .follow-รอดำเนินการ {
             background-color: #6c757d;
             color: white;
@@ -777,6 +780,7 @@
             <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
             <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
             <option value="ติดตามผล">ติดตามผล</option>
+			<option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>
             <option value="รอดำเนินการ">รอดำเนินการ</option>
         </select>
     </div>
@@ -963,6 +967,7 @@
                         <option value="รอดำเนินการ">รอดำเนินการ</option>
                         <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
                         <option value="ติดตามผล">ติดตามผล</option>
+						<option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>	
                         <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
                     </select>
                 </div>
@@ -1836,6 +1841,7 @@ async function loadCampData() {
                 completed: data.filter(r => r.follow === 'ดำเนินการแล้ว').length,
                 inProgress: data.filter(r => r.follow === 'กำลังดำเนินการ').length,
                 following: data.filter(r => r.follow === 'ติดตามผล').length,
+				following: data.filter(r => r.follow === 'ชำระเงินแล้ว').length,
                 waiting: data.filter(r => r.follow === 'รอดำเนินการ').length
             };
 
@@ -2343,6 +2349,7 @@ function showConnectionStatus(isConnected) {
     </script>
 </body>
 </html>
+
 
 
 
