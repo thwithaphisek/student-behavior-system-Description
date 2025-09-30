@@ -10,17 +10,20 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -30,6 +33,7 @@
             box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
             border: 1px solid rgba(255, 255, 255, 0.18);
         }
+
         .header h1 {
             text-align: center;
             color: #2c3e50;
@@ -40,12 +44,14 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
         .nav {
             display: flex;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
         }
+
         .nav-btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -60,14 +66,32 @@
             position: relative;
             overflow: hidden;
         }
+
         .nav-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
+
         .nav-btn.active {
             background: linear-gradient(45deg, #764ba2, #667eea);
             transform: translateY(-2px);
         }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
         .page {
             display: none;
             background: rgba(255, 255, 255, 0.95);
@@ -78,13 +102,16 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             animation: fadeIn 0.5s ease-in;
         }
+
         .page.active {
             display: block;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .page h2 {
             margin-bottom: 25px;
             color: #2c3e50;
@@ -92,15 +119,18 @@
             border-bottom: 3px solid #667eea;
             padding-bottom: 10px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
         }
+
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -112,6 +142,7 @@
             transition: all 0.3s ease;
             background-color: #fff;
         }
+
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -120,11 +151,13 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             transform: translateY(-1px);
         }
+
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
             font-family: inherit;
         }
+
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -136,27 +169,37 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
         }
+
         .btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
+
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
+
         .btn-success {
             background: linear-gradient(45deg, #28a745, #20c997);
         }
+
         .btn-danger {
             background: linear-gradient(45deg, #dc3545, #fd7e14);
         }
+
         .btn-warning {
             background: linear-gradient(45deg, #ffc107, #fd7e14);
         }
+
         .btn-info {
             background: linear-gradient(45deg, #17a2b8, #6f42c1);
         }
+
         .alert {
             padding: 15px;
             border-radius: 8px;
@@ -164,26 +207,36 @@
             font-weight: 500;
             animation: slideIn 0.3s ease-out;
         }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
         .alert-success {
             background-color: #d4edda;
             border: 1px solid #c3e6cb;
             color: #155724;
         }
+
         .alert-danger {
             background-color: #f8d7da;
             border: 1px solid #f5c6cb;
             color: #721c24;
         }
+
         .alert-info {
             background-color: #d1ecf1;
             border: 1px solid #bee5eb;
             color: #0c5460;
         }
+
         .alert-warning {
             background-color: #fff3cd;
             border: 1px solid #ffeaa7;
             color: #856404;
         }
+
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -193,47 +246,201 @@
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .table th,
         .table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e9ecef;
         }
+
         .table th {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
+
         .table tr:hover {
             background-color: #f8f9fa;
+            transform: scale(1.01);
+            transition: all 0.2s ease;
         }
+
+        .table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 20px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 300px;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .stats-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+        }
+
+        .camp-status-select {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid #e9ecef;
+            font-size: 14px;
+            background-color: white;
+            margin-right: 10px;
+        }
+
         .status-badge {
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
+            text-align: center;
             display: inline-block;
         }
+
         .status-เข้าค่าย {
             background-color: #dc3545;
             color: white;
         }
+
         .status-จิตอาสา {
             background-color: #28a745;
             color: white;
         }
+
         .status-อื่นๆ {
             background-color: #6c757d;
             color: white;
         }
+
         .follow-ดำเนินการแล้ว {
             background-color: #28a745;
             color: white;
         }
+
         .follow-กำลังดำเนินการ {
             background-color: #ffc107;
             color: #212529;
         }
+
         .follow-ติดตามผล {
             background-color: #17a2b8;
             color: white;
@@ -246,103 +453,77 @@
             background-color: #6c757d;
             color: white;
         }
-        .stats-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 10px 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-        }
-        .stats-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-        }
-        .stats-label {
-            font-size: 0.9rem;
-            color: #6c757d;
-            font-weight: 500;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            max-width: 300px;
-            z-index: 9999;
-            animation: slideInRight 0.3s ease-out;
-        }
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100%); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .search-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .search-container input {
-            flex: 1;
-        }
-        #chart3d {
-            width: 100%;
-            height: 500px;
-            margin: 20px 0;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            padding: 10px 20px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .tab-btn.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
+.grade-filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.grade-filter-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #667eea;
+    background-color: white;
+    color: #667eea;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.grade-filter-btn:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.grade-filter-btn.active {
+    background-color: #667eea;
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
+            
             .header h1 {
                 font-size: 2rem;
             }
+            
+            .nav {
+                flex-direction: column;
+            }
+            
+            .nav-btn {
+                width: 100%;
+            }
+            
+            .table {
+                font-size: 14px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100%); }
         }
     </style>
 </head>
@@ -365,17 +546,17 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="studentId">รหัสนักเรียน *</label>
-                        <input type="text" id="studentId" required placeholder="เช่น S001234">
+                        <input type="text" id="studentId" required placeholder="เช่น S001234" maxlength="20">
                     </div>
                     <div class="form-group">
                         <label for="studentNo">เลขที่ *</label>
-                        <input type="number" id="studentNo" required placeholder="เช่น 15">
+                        <input type="number" id="studentNo" required placeholder="เช่น 15" min="1" max="50">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="fullName">ชื่อ-นามสกุล *</label>
-                    <input type="text" id="fullName" required placeholder="เช่น นายสมชาย ใจดี">
+                    <input type="text" id="fullName" required placeholder="เช่น นายสมชาย ใจดี" maxlength="100">
                 </div>
                 
                 <div class="form-group">
@@ -388,180 +569,389 @@
                             <option value="1/3">1/3</option>
                             <option value="1/4">1/4</option>
                             <option value="1/5">1/5</option>
+                            <option value="1/6">1/6</option>
+                            <option value="1/7">1/7</option>
+                            <option value="1/8">1/8</option>
+                            <option value="1/9">1/9</option>
+                            <option value="1/10">1/10</option>
+                            <option value="1/11">1/11</option>
+                            <option value="1/12">1/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 2">
+                            <option value="2/1">2/1</option>
+                            <option value="2/2">2/2</option>
+                            <option value="2/3">2/3</option>
+                            <option value="2/4">2/4</option>
+                            <option value="2/5">2/5</option>
+                            <option value="2/6">2/6</option>
+                            <option value="2/7">2/7</option>
+                            <option value="2/8">2/8</option>
+                            <option value="2/9">2/9</option>
+                            <option value="2/10">2/10</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 3">
+                            <option value="3/1">3/1</option>
+                            <option value="3/2">3/2</option>
+                            <option value="3/3">3/3</option>
+                            <option value="3/4">3/4</option>
+                            <option value="3/5">3/5</option>
+                            <option value="3/6">3/6</option>
+                            <option value="3/7">3/7</option>
+                            <option value="3/8">3/8</option>
+                            <option value="3/9">3/9</option>
+                            <option value="3/10">3/10</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 4">
+                            <option value="4/1">4/1</option>
+                            <option value="4/2">4/2</option>
+                            <option value="4/3">4/3</option>
+                            <option value="4/4">4/4</option>
+                            <option value="4/5">4/5</option>
+                            <option value="4/6">4/6</option>
+                            <option value="4/7">4/7</option>
+                            <option value="4/8">4/8</option>
+                            <option value="4/9">4/9</option>
+                            <option value="4/10">4/10</option>
+                            <option value="4/11">4/11</option>
+                            <option value="4/12">4/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 5">
+                            <option value="5/1">5/1</option>
+                            <option value="5/2">5/2</option>
+                            <option value="5/3">5/3</option>
+                            <option value="5/4">5/4</option>
+                            <option value="5/5">5/5</option>
+                            <option value="5/6">5/6</option>
+                            <option value="5/7">5/7</option>
+                            <option value="5/8">5/8</option>
+                            <option value="5/9">5/9</option>
+                            <option value="5/10">5/10</option>
+                            <option value="5/11">5/11</option>
+                            <option value="5/12">5/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 6">
+                            <option value="6/1">6/1</option>
+                            <option value="6/2">6/2</option>
+                            <option value="6/3">6/3</option>
+                            <option value="6/4">6/4</option>
+                            <option value="6/5">6/5</option>
+                            <option value="6/6">6/6</option>
+                            <option value="6/7">6/7</option>
+                            <option value="6/8">6/8</option>
+                            <option value="6/9">6/9</option>
+                            <option value="6/10">6/10</option>
+                            <option value="6/11">6/11</option>
+                            <option value="6/12">6/12</option>
                         </optgroup>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="behavior">พฤติกรรมความดี *</label>
-                    <textarea id="behavior" required placeholder="อธิบายพฤติกรรมความดี"></textarea>
+                    <textarea id="behavior" required placeholder="อธิบายพฤติกรรมความดีที่นักเรียนได้แสดงออก เช่น ช่วยเหลือเพื่อน, ทำความสะอาดห้องเรียน, มีสัมมาคารวะ, เข้าแถวตรงเวลา, ส่งงานครบถ้วน" maxlength="500"></textarea>
+                    <small style="color: #6c757d;">เหลือ <span id="behaviorCount">500</span> ตัวอักษร</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="score">คะแนน *</label>
                     <select id="score" required>
                         <option value="">เลือกคะแนน</option>
-                        <option value="1">1 คะแนน</option>
-                        <option value="2">2 คะแนน</option>
-                        <option value="3">3 คะแนน</option>
-                        <option value="4">4 คะแนน</option>
-                        <option value="5">5 คะแนน</option>
+                        <option value="1">1 คะแนน - พฤติกรรมดีเล็กน้อย</option>
+                        <option value="2">2 คะแนน - พฤติกรรมดีปานกลาง</option>
+                        <option value="3">3 คะแนน - พฤติกรรมดีมาก</option>
+                        <option value="4">4 คะแนน - พฤติกรรมดีมากเป็นพิเศษ</option>
+                        <option value="5">5 คะแนน - พฤติกรรมดีเป็นแบบอย่าง</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="teacherName">ลงชื่อครู *</label>
-                    <input type="text" id="teacherName" required placeholder="ชื่อครูผู้บันทึก">
+                    <label for="teacherName">ลงชื่อครู / บุคลากร *</label>
+                    <input type="text" id="teacherName" required placeholder="เช่น อาจารย์สมหกิง ใจดี" maxlength="100">
                 </div>
                 
-                <button type="submit" class="btn">ส่งข้อมูล</button>
+                <button type="submit" class="btn">
+                    <span id="submitLoading" style="display: none;" class="loading"></span>
+                    <span id="submitText">ส่งข้อมูล</span>
+                </button>
             </form>
+            
+            <div id="registerMessage"></div>
         </div>
 
         <!-- หน้าตรวจสอบสถานะ -->
         <div id="status" class="page">
-            <h2>🔍 ตรวจสอบสถานะ</h2>
+            <h2>🔍 ตรวจสอบสถานะการดำเนินการ</h2>
+            
             <div class="search-container">
-                <input type="text" id="searchStudentId" placeholder="กรอกรหัสนักเรียน">
-                <button onclick="searchStatus()" class="btn">ค้นหา</button>
+                <input type="text" id="searchStudentId" placeholder="กรอกรหัสนักเรียนเพื่อค้นหา (เช่น S001234)">
+                <button onclick="searchStatus()" class="btn">
+                    <span id="searchLoading" style="display: none;" class="loading"></span>
+                    <span id="searchText">🔍 ค้นหา</span>
+                </button>
             </div>
+            
             <div id="statusResults"></div>
         </div>
 
-        <!-- หน้านักเรียนเข้าค่าย (แสดงเฉพาะข้อมูล) -->
-        <div id="camp" class="page">
-            <h2>🏕️ นักเรียนที่ต้องเข้าค่าย</h2>
-            <div id="campStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-            <div id="campData"></div>
-        </div>
-
-        <!-- หน้าผู้ดูแลระบบ (รวมการจัดการค่าย) -->
-        <div id="admin" class="page">
-            <div id="loginSection">
-                <h2>🔐 เข้าสู่ระบบผู้ดูแล</h2>
-                <div style="max-width: 400px; margin: 0 auto;">
-                    <div class="form-group">
-                        <label for="adminPassword">รหัสผ่าน</label>
-                        <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน">
-                    </div>
-                    <button onclick="adminLogin()" class="btn" style="width: 100%;">เข้าสู่ระบบ</button>
-                </div>
+        <!-- หน้านักเรียนเข้าค่าย (ใหม่) -->
+       <div id="camp" class="page">
+    <h2>🏕️ นักเรียนที่ต้องเข้าค่าย</h2>
+    		<!-- ============ เพิ่มส่วน Admin Login สำหรับหน้าค่าย ============ -->
+<div id="campAdminSection" style="margin-bottom: 25px;">
+    <!-- Admin Login Form -->
+    <div id="campAdminLoginForm" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 24px;">🔐</span>
             </div>
+            <div>
+                <h4 style="margin: 0; color: white; font-size: 18px;">เข้าสู่ระบบ Admin การจัดการข้อมูลค่าย</h4>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">จำเป็นต้องเข้าสู่ระบบเพื่อเพิ่ม แก้ไข หรือลบข้อมูลนักเรียน</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="password" 
+                   id="campAdminPassword" 
+                   placeholder="รหัสผ่าน Admin การจัดการค่าย" 
+                   style="flex: 1; min-width: 200px; padding: 12px 15px; border: none; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); outline: none; transition: all 0.3s ease;"
+                   onkeypress="if(event.key==='Enter') campAdminLogin()">
+            
+            <button onclick="campAdminLogin()" 
+                    class="btn" 
+                    id="campLoginBtn"
+                    style="background: linear-gradient(45deg, #28a745, #20c997); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; white-space: nowrap; min-width: 120px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);">
+                <span id="campLoginLoading" style="display: none;" class="loading"></span>
+                <span id="campLoginText">🔓 เข้าสู่ระบบ</span>
+            </button>
+            
+            <button onclick="campAdminLogout()" 
+                    class="btn btn-danger" 
+                    id="campLogoutBtn" 
+                    style="display: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; white-space: nowrap; min-width: 120px; background: linear-gradient(45deg, #dc3545, #c82333); box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);">
+                🚪 ออกจากระบบ
+            </button>
+        </div>
+        
+        <!-- Message Area -->
+        <div id="campAdminMessage" style="margin-top: 15px;"></div>
+    </div>
 
-            <div id="adminPanel" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>⚙️ จัดการระบบ</h2>
-                    <button onclick="adminLogout()" class="btn btn-danger">ออกจากระบบ</button>
-                </div>
-
-                <!-- แท็บเมนู -->
-                <div class="tab-buttons">
-                    <button class="tab-btn active" onclick="showTab('behavior')">📋 พฤติกรรม</button>
-                    <button class="tab-btn" onclick="showTab('campManage')">🏕️ จัดการค่าย</button>
-                    <button class="tab-btn" onclick="showTab('chart3d')">📊 กราฟ 3D</button>
-                </div>
-
-                <!-- แท็บพฤติกรรม -->
-                <div id="behavior" class="tab-content active">
-                    <h3>จัดการข้อมูลพฤติกรรม</h3>
-                    <div id="adminStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;"></div>
-                    <button onclick="loadAllData()" class="btn">โหลดข้อมูล</button>
-                    <button onclick="exportData()" class="btn btn-info">ส่งออกข้อมูล</button>
-                    <div id="adminData"></div>
-                </div>
-
-                <!-- แท็บจัดการค่าย -->
-                <div id="campManage" class="tab-content">
-                    <h3>จัดการข้อมูลนักเรียนเข้าค่าย</h3>
-                    <button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียน</button>
-                    <button onclick="exportCampData()" class="btn btn-info">📤 ส่งออกข้อมูลค่าย</button>
-                    
-                    <div style="margin: 20px 0;">
-                        <select id="campStatusFilter" onchange="filterCampData()" style="padding: 8px; border-radius: 8px; margin-right: 10px;">
-                            <option value="">ทุกสถานะ</option>
-                            <option value="เข้าค่าย">เข้าค่าย</option>
-                            <option value="จิตอาสา">จิตอาสา</option>
-                            <option value="อื่นๆ">อื่นๆ</option>
-                        </select>
-                        <select id="campFollowFilter" onchange="filterCampData()" style="padding: 8px; border-radius: 8px;">
-                            <option value="">ทุกการติดตาม</option>
-                            <option value="รอดำเนินการ">รอดำเนินการ</option>
-                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-                            <option value="ติดตามผล">ติดตามผล</option>
-                            <option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>
-                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                        </select>
-                    </div>
-
-                    <div id="campManageData"></div>
-                </div>
-
-                <!-- แท็บกราฟ 3D -->
-                <div id="chart3d" class="tab-content">
-                    <h3>สรุปข้อมูลแบบ 3D</h3>
-                    
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <div style="color: #dc3545; font-size: 2rem; margin-bottom: 5px;">🏕️</div>
-                                <div style="font-size: 2rem; font-weight: bold; color: #dc3545;" id="camp3dCount">0</div>
-                                <div style="color: #6c757d; font-size: 0.9rem;">เข้าค่าย</div>
-                            </div>
-                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <div style="color: #28a745; font-size: 2rem; margin-bottom: 5px;">🤝</div>
-                                <div style="font-size: 2rem; font-weight: bold; color: #28a745;" id="volunteer3dCount">0</div>
-                                <div style="color: #6c757d; font-size: 0.9rem;">จิตอาสา</div>
-                            </div>
-                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <div style="color: #6c757d; font-size: 2rem; margin-bottom: 5px;">📋</div>
-                                <div style="font-size: 2rem; font-weight: bold; color: #6c757d;" id="other3dCount">0</div>
-                                <div style="color: #6c757d; font-size: 0.9rem;">อื่นๆ</div>
-                            </div>
-                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <div style="color: #667eea; font-size: 2rem; margin-bottom: 5px;">👥</div>
-                                <div style="font-size: 2rem; font-weight: bold; color: #667eea;" id="total3dCount">0</div>
-                                <div style="color: #6c757d; font-size: 0.9rem;">รวมทั้งหมด</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;">
-                            <button onclick="rotate3DChart('left')" class="btn" style="padding: 8px 16px;">↶ หมุนซ้าย</button>
-                            <button onclick="rotate3DChart('right')" class="btn" style="padding: 8px 16px;">หมุนขวา ↷</button>
-                            <button onclick="reset3DChart()" class="btn btn-info" style="padding: 8px 16px;">รีเซ็ต</button>
-                            <button onclick="toggleAnimation()" class="btn btn-success" style="padding: 8px 16px;" id="animBtn">เริ่มหมุนอัตโนมัติ</button>
-                        </div>
-                    </div>
-                    
-                    <div id="chart3dContainer" style="background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);"></div>
-                    
-                    <div style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                        <h4 style="margin-bottom: 15px; color: #2c3e50;">สถิติการติดตามผล</h4>
-                        <div id="followUpStats"></div>
-                    </div>
-                </div>
+    <!-- Admin Status Display -->
+    <div id="campAdminStatus" style="display: none; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">✅</span>
+            <div>
+                <strong style="color: white; font-size: 16px;">Admin เข้าสู่ระบบแล้ว</strong>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">คุณสามารถจัดการข้อมูลนักเรียนได้แล้ว</p>
             </div>
         </div>
     </div>
 
-    <!-- Modal เพิ่ม/แก้ไขนักเรียนค่าย -->
+    <!-- Access Denied Message -->
+    <div id="campAccessDenied" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">🔒</span>
+            <div>
+                <strong style="color: white; font-size: 16px;">โหมดดูข้อมูลอย่างเดียว</strong>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">คุณสามารถดูและส่งออกข้อมูลได้ แต่ไม่สามารถเพิ่ม แก้ไข หรือลบได้</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============ จบส่วน Admin Login ============ -->
+   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="campActionButtons">
+        <!-- ปุ่มจะถูกสร้างโดย JavaScript ตามสถานะ Admin -->
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(108, 117, 125, 0.1); border-radius: 20px; color: #6c757d; font-size: 14px;">
+            <span>🔄</span>
+            <span>กำลังโหลด...</span>
+        </div>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
+            <option value="">🏕️ ทุกสถานะ</option>
+            <option value="เข้าค่าย">เข้าค่าย</option>
+            <option value="จิตอาสา">จิตอาสา</option>
+            <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+        <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
+            <option value="">📋 ทุกการติดตาม</option>
+            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+            <option value="ติดตามผล">ติดตามผล</option>
+			<option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>
+            <option value="รอดำเนินการ">รอดำเนินการ</option>
+        </select>
+    </div>
+</div>
+
+    <!-- เพิ่มปุ่มกรองตามชั้นเรียน -->
+    <div class="grade-filter-container">
+        <button class="grade-filter-btn active" onclick="filterByGrade('all')">ทั้งหมด</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('1')">ม.1</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('2')">ม.2</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('3')">ม.3</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('4')">ม.4</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('5')">ม.5</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('6')">ม.6</button>
+    </div>
+
+    <div id="campStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+    
+    <div id="campData"></div>
+</div>
+        <!-- หน้าผู้ดูแลระบบ -->
+        <div id="admin" class="page">
+            <div id="loginSection">
+                <h2>🔐 เข้าสู่ระบบผู้ดูแล</h2>
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="adminPassword">รหัสผ่าน</label>
+                        <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน">
+                    </div>
+                    <button onclick="adminLogin()" class="btn" style="width: 100%;">
+                        <span id="loginLoading" style="display: none;" class="loading"></span>
+                        <span id="loginText">เข้าสู่ระบบ</span>
+                    </button>
+                </div>
+                <div id="loginMessage"></div>
+            </div>
+
+            <div id="adminPanel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h2>⚙️ จัดการข้อมูลระบบ</h2>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="exportData()" class="btn btn-info">📤 ส่งออกข้อมูล</button>
+                        <button onclick="adminLogout()" class="btn btn-danger">🚪 ออกจากระบบ</button>
+                    </div>
+                </div>
+                
+                <div id="adminStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button onclick="loadAllData()" class="btn">
+                        <span id="loadLoading" style="display: none;" class="loading"></span>
+                        <span id="loadText">📋 โหลดข้อมูลทั้งหมด</span>
+                    </button>
+                    <select id="statusFilter" onchange="filterByStatus()" class="form-control" style="padding: 8px; border-radius: 20px; border: 2px solid #e9ecef;">
+                        <option value="">📋 ทุกสถานะ</option>
+                        <option value="รอดำเนินการ">⏳ รอดำเนินการ</option>
+                        <option value="อยู่ระหว่างตรวจสอบ">🔍 อยู่ระหว่างตรวจสอบ</option>
+                        <option value="อนุมัติ">✅ อนุมัติ</option>
+                        <option value="ไม่อนุมัติ">❌ ไม่อนุมัติ</option>
+                    </select>
+                </div>
+                
+                <div id="adminData"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับเพิ่มนักเรียนเข้าค่าย -->
     <div id="campModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
         <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
-            <h3 id="campModalTitle">เพิ่มนักเรียนเข้าค่าย</h3>
+            <h3 style="margin-bottom: 20px; color: #2c3e50;">➕ เพิ่มนักเรียนเข้าค่าย</h3>
             <form id="campForm">
                 <div class="form-group">
-                    <label>รหัสนักเรียน *</label>
-                    <input type="text" id="campStudentId" required>
+                    <label for="campStudentId">รหัสนักเรียน *</label>
+                    <input type="text" id="campStudentId" required placeholder="เช่น S001234" maxlength="20">
                 </div>
+                
                 <div class="form-group">
-                    <label>ชื่อ-นามสกุล *</label>
-                    <input type="text" id="campFullName" required>
+                    <label for="campFullName">ชื่อ-นามสกุล *</label>
+                    <input type="text" id="campFullName" required placeholder="เช่น นายสมชาย ใจดี" maxlength="100">
                 </div>
+                
                 <div class="form-group">
-                    <label>ห้องเรียน *</label>
-                    <input type="text" id="campClassroom" required>
+                    <label for="campClassroom">ห้องเรียน *</label>
+                    <select id="campClassroom" required>
+                        <option value="">กรุณาเลือกห้องเรียน</option>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 1">
+                            <option value="ม.1/1">ม.1/1</option>
+                            <option value="ม.1/2">ม.1/2</option>
+                            <option value="ม.1/3">ม.1/3</option>
+                            <option value="ม.1/4">ม.1/4</option>
+                            <option value="ม.1/5">ม.1/5</option>
+                            <option value="ม.1/6">ม.1/6</option>
+                            <option value="ม.1/7">ม.1/7</option>
+                            <option value="ม.1/8">ม.1/8</option>
+                            <option value="ม.1/9">ม.1/9</option>
+                            <option value="ม.1/10">ม.1/10</option>
+                            <option value="ม.1/11">ม.1/11</option>
+                            <option value="ม.1/12">ม.1/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 2">
+                            <option value="ม.2/1">ม.2/1</option>
+                            <option value="ม.2/2">ม.2/2</option>
+                            <option value="ม.2/3">ม.2/3</option>
+                            <option value="ม.2/4">ม.2/4</option>
+                            <option value="ม.2/5">ม.2/5</option>
+                            <option value="ม.2/6">ม.2/6</option>
+                            <option value="ม.2/7">ม.2/7</option>
+                            <option value="ม.2/8">ม.2/8</option>
+                            <option value="ม.2/9">ม.2/9</option>
+                            <option value="ม.2/10">ม.2/10</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 3">
+                            <option value="ม.3/1">ม.3/1</option>
+                            <option value="ม.3/2">ม.3/2</option>
+                            <option value="ม.3/3">ม.3/3</option>
+                            <option value="ม.3/4">ม.3/4</option>
+                            <option value="ม.3/5">ม.3/5</option>
+                            <option value="ม.3/6">ม.3/6</option>
+                            <option value="ม.3/7">ม.3/7</option>
+                            <option value="ม.3/8">ม.3/8</option>
+                            <option value="ม.3/9">ม.3/9</option>
+                            <option value="ม.3/10">ม.3/10</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 4">
+                            <option value="ม.4/1">ม.4/1</option>
+                            <option value="ม.4/2">ม.4/2</option>
+                            <option value="ม.4/3">ม.4/3</option>
+                            <option value="ม.4/4">ม.4/4</option>
+                            <option value="ม.4/5">ม.4/5</option>
+                            <option value="ม.4/6">ม.4/6</option>
+                            <option value="ม.4/7">ม.4/7</option>
+                            <option value="ม.4/8">ม.4/8</option>
+                            <option value="ม.4/9">ม.4/9</option>
+                            <option value="ม.4/10">ม.4/10</option>
+                            <option value="ม.4/11">ม.4/11</option>
+                            <option value="ม.4/12">ม.4/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 5">
+                            <option value="ม.5/1">ม.5/1</option>
+                            <option value="ม.5/2">ม.5/2</option>
+                            <option value="ม.5/3">ม.5/3</option>
+                            <option value="ม.5/4">ม.5/4</option>
+                            <option value="ม.5/5">ม.5/5</option>
+                            <option value="ม.5/6">ม.5/6</option>
+                            <option value="ม.5/7">ม.5/7</option>
+                            <option value="ม.5/8">ม.5/8</option>
+                            <option value="ม.5/9">ม.5/9</option>
+                            <option value="ม.5/10">ม.5/10</option>
+                            <option value="ม.5/11">ม.5/11</option>
+                            <option value="ม.5/12">ม.5/12</option>
+                        </optgroup>
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 6">
+                            <option value="ม.6/1">ม.6/1</option>
+                            <option value="ม.6/2">ม.6/2</option>
+                            <option value="ม.6/3">ม.6/3</option>
+                            <option value="ม.6/4">ม.6/4</option>
+                            <option value="ม.6/5">ม.6/5</option>
+                            <option value="ม.6/6">ม.6/6</option>
+                            <option value="ม.6/7">ม.6/7</option>
+                            <option value="ม.6/8">ม.6/8</option>
+                            <option value="ม.6/9">ม.6/9</option>
+                            <option value="ม.6/10">ม.6/10</option>
+                            <option value="ม.6/11">ม.6/11</option>
+                            <option value="ม.6/12">ม.6/12</option>
+                        </optgroup>
+                    </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>สถานะ *</label>
+                    <label for="campStatus">สถานะ *</label>
                     <select id="campStatus" required>
                         <option value="">เลือกสถานะ</option>
                         <option value="เข้าค่าย">เข้าค่าย</option>
@@ -569,535 +959,1399 @@
                         <option value="อื่นๆ">อื่นๆ</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>ติดตาม *</label>
+                    <label for="campFollow">ติดตาม *</label>
                     <select id="campFollow" required>
-                        <option value="">เลือกสถานะติดตาม</option>
+                        <option value="">เลือกสถานะการติดตาม</option>
                         <option value="รอดำเนินการ">รอดำเนินการ</option>
                         <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
                         <option value="ติดตามผล">ติดตามผล</option>
-                        <option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>
+						<option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>	
                         <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>หมายเหตุ</label>
-                    <textarea id="campNote"></textarea>
+                    <label for="campNote">หมายเหตุ</label>
+                    <textarea id="campNote" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)" maxlength="300"></textarea>
                 </div>
-                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
                     <button type="button" onclick="closeCampModal()" class="btn" style="background: #6c757d;">ยกเลิก</button>
-                    <button type="submit" class="btn btn-success">บันทึก</button>
+                    <button type="submit" class="btn btn-success">
+                        <span id="campSubmitLoading" style="display: none;" class="loading"></span>
+                        <span id="campSubmitText">บันทึก</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
+        // กำหนด URL ของ Google Apps Script Web App
+        // แทนที่ URL นี้ด้วย URL ของ Google Apps Script ที่คุณ deploy
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtsN84Kk0Oz4gCx9x7N2mn9Xwr90fZ_jU3Kt7ypFXRDOen8Mh1pLz9ERE_-RzgGTGwDA/exec';
+
+        let currentPage = 'register';
         let isAdminLoggedIn = false;
-        let campData = [];
-        let allAdminData = [];
-        let currentEditIndex = null;
-
+        let allAdminData = []; // เก็บข้อมูลทั้งหมดสำหรับการกรอง
+        let campData = []; // เก็บข้อมูลนักเรียนเข้าค่าย
+	let currentGradeFilter = 'all';
+	let campAdminLoggedIn = false;
+	// ฟังก์ชันกรองตามชั้นเรียน
+function filterByGrade(grade) {
+    currentGradeFilter = grade;
+    
+    // อัปเดต active state ของปุ่ม
+    document.querySelectorAll('.grade-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // กรองข้อมูล
+    filterCampData();
+}
+        // ฟังก์ชันแสดงการแจ้งเตือน
         function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} notification`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (pageId === 'camp') {
-                loadCampDataForView();
-            }
-        }
-
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (tabId === 'campManage') {
-                loadCampData();
-            } else if (tabId === 'chart3d') {
-                setTimeout(() => render3DChart(), 100);
-            }
-        }
-
-        function adminLogin() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === 'admin1234') {
-                isAdminLoggedIn = true;
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                showNotification('เข้าสู่ระบบสำเร็จ');
-            } else {
-                showNotification('รหัสผ่านไม่ถูกต้อง', 'danger');
-            }
-        }
-
-        function adminLogout() {
-            isAdminLoggedIn = false;
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('adminPanel').style.display = 'none';
-            showNotification('ออกจากระบบแล้ว', 'info');
-        }
-
-        // จำลองข้อมูลค่าย
-        function loadCampDataForView() {
-            const mockData = [
-                {studentId: 'S001', fullName: 'นายสมชาย ใจดี', classroom: 'ม.1/1', status: 'เข้าค่าย', follow: 'รอดำเนินการ'},
-                {studentId: 'S002', fullName: 'นางสาวสมหญิง สวยงาม', classroom: 'ม.2/3', status: 'จิตอาสา', follow: 'ดำเนินการแล้ว'}
-            ];
-            displayCampStats(mockData);
-            displayCampTable(mockData, 'campData', false);
-        }
-
-        function loadCampData() {
-            campData = [
-                {studentId: 'S001', fullName: 'นายสมชาย ใจดี', classroom: 'ม.1/1', status: 'เข้าค่าย', follow: 'รอดำเนินการ', note: '', rowIndex: 0},
-                {studentId: 'S002', fullName: 'นางสาวสมหญิง สวยงาม', classroom: 'ม.2/3', status: 'จิตอาสา', follow: 'ดำเนินการแล้ว', note: '', rowIndex: 1}
-            ];
-            displayCampTable(campData, 'campManageData', true);
-        }
-
-        function displayCampStats(data) {
-            const stats = {
-                total: data.length,
-                camp: data.filter(r => r.status === 'เข้าค่าย').length,
-                volunteer: data.filter(r => r.status === 'จิตอาสา').length
-            };
-            document.getElementById('campStats').innerHTML = `
-                <div class="stats-card">
-                    <div style="font-size: 2rem;">👥</div>
-                    <div class="stats-number">${stats.total}</div>
-                    <div class="stats-label">ทั้งหมด</div>
-                </div>
-                <div class="stats-card">
-                    <div style="font-size: 2rem;">🏕️</div>
-                    <div class="stats-number" style="color: #dc3545;">${stats.camp}</div>
-                    <div class="stats-label">เข้าค่าย</div>
-                </div>
-                <div class="stats-card">
-                    <div style="font-size: 2rem;">🤝</div>
-                    <div class="stats-number" style="color: #28a745;">${stats.volunteer}</div>
-                    <div class="stats-label">จิตอาสา</div>
-                </div>
-            `;
-        }
-
-        function displayCampTable(data, elementId, showActions) {
-            const html = `
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>รหัสนักเรียน</th>
-                            <th>ชื่อ-นามสกุล</th>
-                            <th>ห้องเรียน</th>
-                            <th>สถานะ</th>
-                            <th>ติดตาม</th>
-                            <th>หมายเหตุ</th>
-                            ${showActions ? '<th>จัดการ</th>' : ''}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${data.map((record, index) => `
-                            <tr>
-                                <td>${record.studentId}</td>
-                                <td>${record.fullName}</td>
-                                <td>${record.classroom}</td>
-                                <td><span class="status-badge status-${record.status}">${record.status}</span></td>
-                                <td><span class="status-badge follow-${record.follow}">${record.follow}</span></td>
-                                <td>${record.note || '-'}</td>
-                                ${showActions ? `
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-warning" onclick="editCampStudent(${record.rowIndex || index})" style="padding: 6px 12px;">แก้ไข</button>
-                                            <button class="btn btn-danger" onclick="deleteCampStudent(${record.rowIndex || index})" style="padding: 6px 12px;">ลบ</button>
-                                        </div>
-                                    </td>
-                                ` : ''}
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
-            document.getElementById(elementId).innerHTML = html;
-        }
-
-        function filterCampData() {
-            const statusFilter = document.getElementById('campStatusFilter').value;
-            const followFilter = document.getElementById('campFollowFilter').value;
-            
-            let filtered = campData;
-            if (statusFilter) filtered = filtered.filter(r => r.status === statusFilter);
-            if (followFilter) filtered = filtered.filter(r => r.follow === followFilter);
-            
-            displayCampTable(filtered, 'campManageData', true);
-        }
-
-        function addCampStudent() {
-            currentEditIndex = null;
-            document.getElementById('campModalTitle').textContent = 'เพิ่มนักเรียนเข้าค่าย';
-            document.getElementById('campForm').reset();
-            document.getElementById('campModal').style.display = 'flex';
-        }
-
-        function editCampStudent(index) {
-            currentEditIndex = index;
-            const student = campData.find(s => (s.rowIndex || campData.indexOf(s)) === index);
-            if (student) {
-                document.getElementById('campModalTitle').textContent = 'แก้ไขข้อมูลนักเรียน';
-                document.getElementById('campStudentId').value = student.studentId;
-                document.getElementById('campFullName').value = student.fullName;
-                document.getElementById('campClassroom').value = student.classroom;
-                document.getElementById('campStatus').value = student.status;
-                document.getElementById('campFollow').value = student.follow;
-                document.getElementById('campNote').value = student.note || '';
-                document.getElementById('campModal').style.display = 'flex';
-            }
-        }
-
-        function deleteCampStudent(index) {
-            if (confirm('ต้องการลบข้อมูลนี้หรือไม่?')) {
-                campData = campData.filter((_, i) => i !== index);
-                showNotification('ลบข้อมูลสำเร็จ');
-                loadCampData();
-            }
-        }
-
-        function closeCampModal() {
-            document.getElementById('campModal').style.display = 'none';
-        }
-
-        document.getElementById('campForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = {
-                studentId: document.getElementById('campStudentId').value,
-                fullName: document.getElementById('campFullName').value,
-                classroom: document.getElementById('campClassroom').value,
-                status: document.getElementById('campStatus').value,
-                follow: document.getElementById('campFollow').value,
-                note: document.getElementById('campNote').value
-            };
-
-            if (currentEditIndex !== null) {
-                campData[currentEditIndex] = {...campData[currentEditIndex], ...formData};
-                showNotification('แก้ไขข้อมูลสำเร็จ');
-            } else {
-                campData.push({...formData, rowIndex: campData.length});
-                showNotification('เพิ่มข้อมูลสำเร็จ');
-            }
-
-            closeCampModal();
-            loadCampData();
-        });
-
-        function exportCampData() {
-            const headers = ['รหัสนักเรียน', 'ชื่อ-นามสกุล', 'ห้องเรียน', 'สถานะ', 'ติดตาม', 'หมายเหตุ'];
-            let csvContent = headers.join(',') + '\n';
-            campData.forEach(record => {
-                csvContent += [
-                    record.studentId,
-                    `"${record.fullName}"`,
-                    record.classroom,
-                    record.status,
-                    record.follow,
-                    `"${record.note || ''}"`
-                ].join(',') + '\n';
+            // ลบการแจ้งเตือนเก่า
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
             });
 
-            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `camp_data_${new Date().toISOString().slice(0, 10)}.csv`;
-            link.click();
-            showNotification('ส่งออกข้อมูลสำเร็จ');
+            // สร้างการแจ้งเตือนใหม่
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} notification`;
+            notification.innerHTML = message;
+            
+            document.body.appendChild(notification);
+            
+            // ลบอัตโนมัติหลัง 5 วินาทีี
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('fade-out');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
         }
 
-        function searchStatus() {
-            const studentId = document.getElementById('searchStudentId').value;
+        // ฟังก์ชันตรวจสอบการเชื่อมต่อ
+        async function checkConnection() {
+            if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+                showNotification(`
+                    <strong>⚠️ กรุณาตั้งค่า Google Apps Script ก่อนใช้งาน</strong><br>
+                    1. แทนที่ YOUR_SCRIPT_ID ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
+                    2. Deploy Google Apps Script เป็น Web App<br>
+                    3. ตั้งค่า Permissions ให้ Anyone can access
+                `, 'warning');
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=test`, {
+                    method: 'GET'
+                });
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                console.error('Connection check failed:', error);
+                return false;
+            }
+        }
+
+        // ฟังก์ชันเปลี่ยนหน้า
+        function showPage(pageId) {
+	// ถ้าเปลี่ยนไปหน้าค่าย ให้โหลดข้อมูลและอัปเดต UI
+if (pageId === 'camp') {
+    loadCampData();
+    
+    // อัปเดต UI ทันทีสำหรับหน้าค่าย
+    setTimeout(() => {
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }, 100);
+}
+            // ซ่อนหน้าทั้งหมด
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // แสดงหน้าที่เลือก
+            document.getElementById(pageId).classList.add('active');
+            
+            // อัปเดต navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentPage = pageId;
+            
+            // ถ้าไม่ได้ login admin และเปลี่ยนไปหน้า admin ให้แสดง login form
+            if (pageId === 'admin' && !isAdminLoggedIn) {
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('adminPanel').style.display = 'none';
+            }
+
+            // ถ้าเปลี่ยนไปหน้าค่าย ให้โหลดข้อมูล
+            if (pageId === 'camp') {
+                loadCampData();
+            }
+        }
+
+        // ฟังก์ชันส่งข้อมูลลงทะเบียน
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const loading = document.getElementById('submitLoading');
+            const submitText = document.getElementById('submitText');
+            const messageDiv = document.getElementById('registerMessage');
+            
+            // แสดง loading
+            loading.style.display = 'inline-block';
+            submitText.textContent = 'กำลังส่งข้อมูล...';
+            submitBtn.disabled = true;
+            messageDiv.innerHTML = '';
+            
+            // ตรวจสอบการเชื่อมต่อ
+            const isConnected = await checkConnection();
+            if (!isConnected) {
+                loading.style.display = 'none';
+                submitText.textContent = 'ส่งข้อมูล';
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            // เก็บข้อมูลจากฟอร์ม
+            const formData = {
+                action: 'submit',
+                studentId: document.getElementById('studentId').value.trim(),
+                studentNo: document.getElementById('studentNo').value.trim(),
+                fullName: document.getElementById('fullName').value.trim(),
+                classroom: document.getElementById('classroom').value,
+                behavior: document.getElementById('behavior').value.trim(),
+                score: document.getElementById('score').value,
+                teacherName: document.getElementById('teacherName').value.trim(),
+                timestamp: new Date().toLocaleString('th-TH', {timeZone: 'Asia/Bangkok'}),
+                status: 'รอดำเนินการ'
+            };
+            
+            try {
+                // ส่งข้อมูลแบบ URL-encoded เพื่อหลีกเลี่ยง CORS
+                const params = new URLSearchParams();
+                params.append('data', JSON.stringify(formData));
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('✅ บันทึกข้อมูลเรียบร้อยแล้ว!', 'success');
+                    document.getElementById('registerForm').reset();
+                    // Reset character counter
+                    document.getElementById('behaviorCount').textContent = '500';
+                } else {
+                    showNotification(`❌ เกิดข้อผิดพลาด: ${result.message}`, 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้<br><small>กรุณาตรวจสอบการตั้งค่า Google Apps Script URL</small>', 'danger');
+            }
+            
+            // ซ่อน loading
+            loading.style.display = 'none';
+            submitText.textContent = 'ส่งข้อมูล';
+            submitBtn.disabled = false;
+        });
+
+        // ฟังก์ชันนับตัวอักษรใน textarea
+        document.getElementById('behavior').addEventListener('input', function() {
+            const maxLength = 500;
+            const currentLength = this.value.length;
+            const remaining = maxLength - currentLength;
+            document.getElementById('behaviorCount').textContent = remaining;
+            
+            if (remaining < 50) {
+                document.getElementById('behaviorCount').style.color = '#dc3545';
+            } else {
+                document.getElementById('behaviorCount').style.color = '#6c757d';
+            }
+        });
+
+        // ฟังก์ชันค้นหาสถานะ
+        async function searchStatus() {
+            const studentId = document.getElementById('searchStudentId').value.trim();
+            const loading = document.getElementById('searchLoading');
+            const searchText = document.getElementById('searchText');
+            const resultsDiv = document.getElementById('statusResults');
+            
             if (!studentId) {
                 showNotification('กรุณากรอกรหัสนักเรียน', 'warning');
                 return;
             }
-            document.getElementById('statusResults').innerHTML = `
-                <div class="alert alert-info">
-                    <h4>ผลการค้นหา: ${studentId}</h4>
-                    <p>สถานะ: รอดำเนินการ</p>
-                </div>
-            `;
+            
+            loading.style.display = 'inline-block';
+            searchText.textContent = 'กำลังค้นหา...';
+            resultsDiv.innerHTML = '';
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=search&studentId=${encodeURIComponent(studentId)}`);
+                const result = await response.json();
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    let html = '<h3>📋 ผลการค้นหา</h3>';
+                    let foundRecords = result.data.filter(record => 
+                        record.status === 'รอดำเนินการ' || 
+                        record.status === 'อยู่ระหว่างตรวจสอบ' ||
+                        record.status === 'อนุมัติ' ||
+                        record.status === 'ไม่อนุมัติ'
+                    );
+
+                    if (foundRecords.length > 0) {
+                        foundRecords.forEach(record => {
+                            const statusIcon = {
+                                'รอดำเนินการ': '⏳',
+                                'อยู่ระหว่างตรวจสอบ': '🔍',
+                                'อนุมัติ': '✅',
+                                'ไม่อนุมัติ': '❌'
+                            };
+
+                            const statusColor = {
+                                'รอดำเนินการ': '#ffa500',
+                                'อยู่ระหว่างตรวจสอบ': '#17a2b8',
+                                'อนุมัติ': '#28a745',
+                                'ไม่อนุมัติ': '#dc3545'
+                            }[record.status] || '#6c757d';
+
+                            html += `
+                                <div class="status-card">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <h4>🎯 ${record.fullName || 'ไม่ระบุ'} (${record.classroom || 'ไม่ระบุ'})</h4>
+                                        <span style="color: ${statusColor}; font-weight: bold;">
+                                            ${statusIcon[record.status] || '❓'} ${record.status || 'ไม่ระบุ'}
+                                        </span>
+                                    </div>
+                                    <p><strong>🎯 พฤติกรรม:</strong> ${record.behavior || 'ไม่ระบุ'}</p>
+                                    <p><strong>⭐ คะแนน:</strong> ${record.score || 'ไม่ระบุ'} คะแนน</p>
+                                    <p><strong>👨‍🏫 ครูผู้บันทึก:</strong> ${record.teacherName || 'ไม่ระบุ'}</p>
+                                    <p><strong>📅 วันที่บันทึก:</strong> ${record.timestamp || 'ไม่ระบุ'}</p>
+                                    ${record.rejectReason ? `<p><strong>❌ เหตุผลที่ไม่อนุมัติ:</strong> <span style="color: #dc3545;">${record.rejectReason}</span></p>` : ''}
+                                    ${record.updatedBy && record.updatedAt ? `<p><strong>🔄 อัปเดตล่าสุด:</strong> ${record.updatedBy} เมื่อ ${record.updatedAt}</p>` : ''}
+                                </div>
+                            `;
+                        });
+                    } else {
+                        html += '<div class="alert alert-info">ไม่พบข้อมูลในสถานะที่แสดงได้</div>';
+                    }
+                    
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<div class="alert alert-info">ไม่พบข้อมูลสำหรับรหัสนักเรียนนี้</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('เกิดข้อผิดพลาดในการค้นหาข้อมูล', 'danger');
+                resultsDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการค้นหาข้อมูล</div>';
+            }
+            
+            loading.style.display = 'none';
+            searchText.textContent = '🔍 ค้นหา';
         }
 
-        function loadAllData() {
-            allAdminData = [
-                {studentId: 'S001', fullName: 'นายทดสอบ', classroom: '1/1', behavior: 'ช่วยเหลือเพื่อน', score: 5, status: 'อนุมัติ'}
-            ];
-            document.getElementById('adminData').innerHTML = '<div class="alert alert-success">โหลดข้อมูล 1 รายการ</div>';
+        // ฟังก์ชัน login ผู้ดูแลระบบ
+        async function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            const messageDiv = document.getElementById('loginMessage');
+            const loading = document.getElementById('loginLoading');
+            const loginText = document.getElementById('loginText');
+            
+            loading.style.display = 'inline-block';
+            loginText.textContent = 'กำลังตรวจสอบ...';
+            
+            // จำลองการตรวจสอบ
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            if (password === 'admin1234') {
+                isAdminLoggedIn = true;
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                messageDiv.innerHTML = '';
+                showNotification('เข้าสู่ระบบสำเร็จ', 'success');
+                
+                // โหลดข้อมูลทันที
+                loadAllData();
+            } else {
+                messageDiv.innerHTML = '<div class="alert alert-danger">รหัสผ่านไม่ถูกต้อง</div>';
+            }
+            
+            loading.style.display = 'none';
+            loginText.textContent = 'เข้าสู่ระบบ';
         }
 
-        function exportData() {
-            showNotification('ส่งออกข้อมูลสำเร็จ');
+// ฟังก์ชัน logout ผู้ดูแลระบบ
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminData').innerHTML = '';
+            document.getElementById('adminStats').innerHTML = '';
+            allAdminData = [];
+            showNotification('ออกจากระบบแล้ว', 'info');
         }
 
-        let rotationAngle = 0;
-        let animationId = null;
-        let isAnimating = false;
+        // ==================== ฟังก์ชันสำหรับ Admin หน้าค่าย ====================
 
-        function render3DChart() {
-            const container = document.getElementById('chart3dContainer');
-            if (!container) return;
+        // ฟังก์ชัน Login Admin สำหรับหน้าค่าย
+        async function campAdminLogin() {
+            const password = document.getElementById('campAdminPassword').value.trim();
+            const messageDiv = document.getElementById('campAdminMessage');
+            const loading = document.getElementById('campLoginLoading');
+            const loginText = document.getElementById('campLoginText');
+            const loginBtn = document.getElementById('campLoginBtn');
+            
+            // ตรวจสอบว่ากรอกรหัสผ่านหรือไม่
+            if (!password) {
+                showNotification('กรุณากรอกรหัสผ่าน', 'warning');
+                return;
+            }
+            
+            // แสดง loading state
+            loading.style.display = 'inline-block';
+            loginText.textContent = 'กำลังตรวจสอบ...';
+            loginBtn.disabled = true;
+            messageDiv.innerHTML = '';
+            
+            // จำลองการตรวจสอบรหัสผ่าน (delay 1.5 วินาที)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // ตรวจสอบรหัสผ่าน (สามารถเปลี่ยนรหัสผ่านได้ที่นี่)
+            if (password === 'admin1234') {
+                // Login สำเร็จ
+                campAdminLoggedIn = true;
+                
+                // ล้างรหัสผ่าน
+                document.getElementById('campAdminPassword').value = '';
+                
+                // อัปเดต UI
+                updateCampAdminUI();
+                
+                // แสดงข้อความสำเร็จ
+                showNotification('เข้าสู่ระบบ Admin หน้าค่ายสำเร็จ! คุณสามารถจัดการข้อมูลได้แล้ว', 'success');
+                
+                // อัปเดตการแสดงผลข้อมูล
+                displayCampData(getCurrentFilteredCampData());
+                updateCampActionButtons();
+                
+            } else {
+                // Login ไม่สำเร็จ
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
+                        <strong>❌ รหัสผ่านไม่ถูกต้อง</strong><br>
+                        <small>กรุณาติดต่อผู้ดูแลระบบหากลืมรหัสผ่าน</small>
+                    </div>
+                `;
+                
+                // เคลียร์รหัสผ่านที่ผิด
+                document.getElementById('campAdminPassword').value = '';
+                document.getElementById('campAdminPassword').focus();
+            }
+            
+            // ซ่อน loading state
+            loading.style.display = 'none';
+            loginText.textContent = '🔓 เข้าสู่ระบบ';
+            loginBtn.disabled = false;
+        }
 
-            // อัพเดทสถิติ
+        // ฟังก์ชัน Logout Admin สำหรับหน้าค่าย
+        function campAdminLogout() {
+            // ยืนยันการออกจากระบบ
+            if (confirm('คุณต้องการออกจากระบบ Admin หน้าค่ายหรือไม่?')) {
+                // ออกจากระบบ
+                campAdminLoggedIn = false;
+                
+                // ล้างข้อมูลในฟอร์ม
+                document.getElementById('campAdminPassword').value = '';
+                document.getElementById('campAdminMessage').innerHTML = '';
+                
+                // อัปเดต UI
+                updateCampAdminUI();
+                
+                // แสดงข้อความแจ้งเตือน
+                showNotification('ออกจากระบบ Admin หน้าค่ายแล้ว', 'info');
+                
+                // อัปเดตการแสดงผลข้อมูล
+                displayCampData(getCurrentFilteredCampData());
+                updateCampActionButtons();
+            }
+        }
+
+        // ฟังก์ชันอัปเดต UI ตามสถานะ Login
+        function updateCampAdminUI() {
+            const loginForm = document.getElementById('campAdminLoginForm');
+            const adminStatus = document.getElementById('campAdminStatus');
+            const accessDenied = document.getElementById('campAccessDenied');
+            const logoutBtn = document.getElementById('campLogoutBtn');
+            
+            if (campAdminLoggedIn) {
+                // แสดงสถานะ Login สำเร็จ
+                loginForm.style.display = 'none';
+                adminStatus.style.display = 'block';
+                accessDenied.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                // แสดงฟอร์ม Login
+                loginForm.style.display = 'block';
+                adminStatus.style.display = 'none';
+                accessDenied.style.display = 'block';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        // ฟังก์ชันช่วยเหลือสำหรับดึงข้อมูลที่กรองแล้ว
+        function getCurrentFilteredCampData() {
+            const statusFilter = document.getElementById('campStatusFilter')?.value || '';
+            const followFilter = document.getElementById('campFollowFilter')?.value || '';
+            
+            let filteredData = [...campData]; // สร้างสำเนาของ array
+            
+            // กรองตามสถานะ
+            if (statusFilter) {
+                filteredData = filteredData.filter(record => record.status === statusFilter);
+            }
+            
+            // กรองตามการติดตาม
+            if (followFilter) {
+                filteredData = filteredData.filter(record => record.follow === followFilter);
+            }
+            
+            // กรองตามชั้นเรียน
+            if (currentGradeFilter !== 'all') {
+                filteredData = filteredData.filter(record => {
+                    if (record.classroom) {
+                        const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                        return gradeMatch && gradeMatch[1] === currentGradeFilter;
+                    }
+                    return false;
+                });
+            }
+            
+            return filteredData;
+        }
+
+        // ฟังก์ชันอัปเดตปุ่มการดำเนินการตามสถานะ Admin
+        function updateCampActionButtons() {
+            const actionButtonsDiv = document.getElementById('campActionButtons');
+            
+            if (!actionButtonsDiv) {
+                // สร้าง div ใหม่หากไม่มี
+                const parentDiv = document.querySelector('#camp div[style*="display: flex"]');
+                if (parentDiv) {
+                    const newDiv = document.createElement('div');
+                    newDiv.id = 'campActionButtons';
+                    newDiv.style.cssText = 'display: flex; gap: 10px; flex-wrap: wrap;';
+                    parentDiv.appendChild(newDiv);
+                }
+                return;
+            }
+            
+            if (campAdminLoggedIn) {
+                // แสดงปุ่มเต็มรูปแบบสำหรับ Admin
+                actionButtonsDiv.innerHTML = `
+                    <button onclick="addCampStudent()" class="btn btn-success" style="display: flex; align-items: center; gap: 8px;">
+                        <span>➕</span>
+                        <span>เพิ่มนักเรียน</span>
+                    </button>
+                    <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span>
+                        <span>ส่งออกข้อมูล</span>
+                    </button>
+                `;
+            } else {
+                // แสดงปุ่มที่จำกัดสำหรับผู้ใช้ทั่วไป
+                actionButtonsDiv.innerHTML = `
+                    <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span>
+                        <span>ส่งออกข้อมูล</span>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(108, 117, 125, 0.1); border-radius: 20px; color: #6c757d; font-size: 14px;">
+                        <span>🔒</span>
+                        <span>เข้าสู่ระบบ Admin เพื่อเพิ่ม/แก้ไขข้อมูล</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ฟังก์ชันตรวจสอบสิทธิ์ Admin (ใช้สำหรับฟังก์ชันอื่นๆ)
+        function checkCampAdminAccess(actionName = 'ดำเนินการ') {
+            if (!campAdminLoggedIn) {
+                showNotification(`กรุณาเข้าสู่ระบบ Admin ก่อน${actionName}`, 'warning');
+                
+                // เลื่อนหน้าไปที่ส่วน Login
+                document.getElementById('campAdminSection').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                return false;
+            }
+            return true;
+        }
+
+        // ฟังก์ชันสร้างสถิติ
+        function generateStats(data) {
             const stats = {
-                camp: campData.filter(r => r.status === 'เข้าค่าย').length,
-                volunteer: campData.filter(r => r.status === 'จิตอาสา').length,
-                other: campData.filter(r => r.status === 'อื่นๆ').length,
-                total: campData.length
+                total: data.length,
+                pending: data.filter(r => r.status === 'รอดำเนินการ').length,
+                approved: data.filter(r => r.status === 'อนุมัติ').length,
+                rejected: data.filter(r => r.status === 'ไม่อนุมัติ').length,
+                reviewing: data.filter(r => r.status === 'อยู่ระหว่างตรวจสอบ').length
             };
 
-            document.getElementById('camp3dCount').textContent = stats.camp;
-            document.getElementById('volunteer3dCount').textContent = stats.volunteer;
-            document.getElementById('other3dCount').textContent = stats.other;
-            document.getElementById('total3dCount').textContent = stats.total;
+            const statsHtml = `
+                <div class="stats-card">
+                    <div class="stats-icon">📊</div>
+                    <div class="stats-number">${stats.total}</div>
+                    <div class="stats-label">ทั้งหมด</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">⏳</div>
+                    <div class="stats-number" style="color: #ffa500;">${stats.pending}</div>
+                    <div class="stats-label">รอดำเนินการ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">🔍</div>
+                    <div class="stats-number" style="color: #17a2b8;">${stats.reviewing}</div>
+                    <div class="stats-label">ตรวจสอบ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">✅</div>
+                    <div class="stats-number" style="color: #28a745;">${stats.approved}</div>
+                    <div class="stats-label">อนุมัติ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">❌</div>
+                    <div class="stats-number" style="color: #dc3545;">${stats.rejected}</div>
+                    <div class="stats-label">ไม่อนุมัติ</div>
+                </div>
+            `;
 
-            // สร้าง Scene, Camera, Renderer
-            container.innerHTML = '';
-            const width = container.offsetWidth;
-            const height = 500;
+            document.getElementById('adminStats').innerHTML = statsHtml;
+        }
 
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf8f9fa);
-
-            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            camera.position.set(5, 5, 10);
-            camera.lookAt(0, 0, 0);
-
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(width, height);
-            renderer.shadowMap.enabled = true;
-            container.appendChild(renderer.domElement);
-
-            // เพิ่มแสง
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(10, 10, 10);
-            directionalLight.castShadow = true;
-            scene.add(directionalLight);
-
-            // สร้างแท่งกราฟ 3D
-            const data = [
-                { label: 'เข้าค่าย', value: stats.camp, color: 0xdc3545, x: -4 },
-                { label: 'จิตอาสา', value: stats.volunteer, color: 0x28a745, x: 0 },
-                { label: 'อื่นๆ', value: stats.other, color: 0x6c757d, x: 4 }
-            ];
-
-            const maxValue = Math.max(...data.map(d => d.value), 1);
-            const bars = [];
-
-            data.forEach(item => {
-                const height = (item.value / maxValue) * 8 || 0.5;
-                const geometry = new THREE.BoxGeometry(2, height, 2);
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: item.color,
-                    shininess: 100,
-                    specular: 0x444444
-                });
-                const bar = new THREE.Mesh(geometry, material);
-                bar.position.set(item.x, height / 2, 0);
-                bar.castShadow = true;
-                bar.receiveShadow = true;
-                scene.add(bar);
-                bars.push(bar);
-
-                // เพิ่มกรอบขอบ
-                const edges = new THREE.EdgesGeometry(geometry);
-                const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 });
-                const wireframe = new THREE.LineSegments(edges, lineMaterial);
-                bar.add(wireframe);
-
-                // เพิ่มข้อความ
-                createTextLabel(item.label + '\n' + item.value + ' คน', item.x, height + 1, 0, scene);
-            });
-
-            // สร้างพื้น
-            const planeGeometry = new THREE.PlaneGeometry(20, 20);
-            const planeMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xe0e0e0,
-                side: THREE.DoubleSide
-            });
-            const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-            plane.rotation.x = -Math.PI / 2;
-            plane.position.y = 0;
-            plane.receiveShadow = true;
-            scene.add(plane);
-
-            // เพิ่มกริด
-            const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0xcccccc);
-            scene.add(gridHelper);
-
-            // แกน XYZ
-            const axesHelper = new THREE.AxesHelper(10);
-            scene.add(axesHelper);
-
-            // ฟังก์ชัน animate
-            function animate() {
-                requestAnimationFrame(animate);
+        // ฟังก์ชันโหลดข้อมูลทั้งหมดสำหรับผู้ดูแลระบบ
+        async function loadAllData() {
+            const loading = document.getElementById('loadLoading');
+            const loadText = document.getElementById('loadText');
+            const dataDiv = document.getElementById('adminData');
+            
+            loading.style.display = 'inline-block';
+            loadText.textContent = 'กำลังโหลด...';
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getAll`);
+                const result = await response.json();
                 
-                if (isAnimating) {
-                    rotationAngle += 0.01;
-                    bars.forEach(bar => {
-                        bar.rotation.y = rotationAngle;
+                if (result.success && result.data && result.data.length > 0) {
+                    allAdminData = result.data;
+                    generateStats(result.data);
+                    displayAdminData(result.data);
+                    
+                    showNotification('โหลดข้อมูลเรียบร้อย', 'success');
+                } else {
+                    dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลในระบบ</div>';
+                    document.getElementById('adminStats').innerHTML = '';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'danger');
+                dataDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+            }
+            
+            loading.style.display = 'none';
+            loadText.textContent = '📋 โหลดข้อมูลทั้งหมด';
+        }
+
+        // ฟังก์ชันแสดงข้อมูลผู้ดูแลระบบ
+        function displayAdminData(data) {
+            const dataDiv = document.getElementById('adminData');
+            
+            let html = `
+                <h3>📊 ข้อมูลทั้งหมด (${data.length} รายการ)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัสนักเรียน</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>พฤติกรรม</th>
+                                <th>คะแนน</th>
+                                <th>ครูผู้บันทึก</th>
+                                <th>วันที่</th>
+                                <th>สถานะ</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.forEach((record, displayIndex) => {
+                const statusColor = {
+                    'อนุมัติ': '#28a745',
+                    'ไม่อนุมัติ': '#dc3545',
+                    'อยู่ระหว่างตรวจสอบ': '#17a2b8',
+                    'รอดำเนินการ': '#ffa500'
+                }[record.status] || '#6c757d';
+                
+                const actualRowIndex = record.rowIndex !== undefined ? record.rowIndex : displayIndex;
+                
+                html += `
+                    <tr id="row-${actualRowIndex}">
+                        <td>${record.studentId || '-'}</td>
+                        <td>${record.fullName || '-'}</td>
+                        <td>${record.classroom || '-'}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.behavior || ''}">${record.behavior || '-'}</td>
+                        <td>${record.score || '-'}</td>
+                        <td>${record.teacherName || '-'}</td>
+                        <td style="font-size: 12px;">${record.timestamp || '-'}</td>
+                        <td style="color: ${statusColor}; font-weight: bold;">${record.status || 'รอดำเนินการ'}</td>
+                        <td>
+                            ${record.status === 'รอดำเนินการ' || record.status === 'อยู่ระหว่างตรวจสอบ' ? `
+                                <div class="action-buttons">
+                                    <button class="btn btn-success" onclick="updateStatus(${actualRowIndex}, 'อนุมัติ')" data-row="${actualRowIndex}">✅ อนุมัติ</button>
+                                    <button class="btn btn-danger" onclick="rejectRecord(${actualRowIndex})" data-row="${actualRowIndex}">❌ ไม่อนุมัติ</button>
+                                </div>
+                            ` : `
+                                <span style="color: #6c757d;">ดำเนินการแล้ว</span>
+                                ${record.rejectReason ? `<br><small style="color: #dc3545;">เหตุผล: ${record.rejectReason}</small>` : ''}
+                                ${record.updatedBy ? `<br><small style="color: #6c757d;">โดย: ${record.updatedBy}</small>` : ''}
+                                ${record.updatedAt ? `<br><small style="color: #6c757d;">เมื่อ: ${record.updatedAt}</small>` : ''}
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></div>';
+            dataDiv.innerHTML = html;
+        }
+
+        // ฟังก์ชันกรองข้อมูลตามสถานะ
+        function filterByStatus() {
+            const selectedStatus = document.getElementById('statusFilter').value;
+            
+            if (!selectedStatus) {
+                displayAdminData(allAdminData);
+            } else {
+                const filteredData = allAdminData.filter(record => record.status === selectedStatus);
+                displayAdminData(filteredData);
+            }
+        }
+
+        // ฟังก์ชันอัปเดตสถานะ
+        async function updateStatus(rowIndex, newStatus, rejectReason = '') {
+            try {
+                console.log('Updating status for rowIndex:', rowIndex, 'newStatus:', newStatus);
+                
+                // แสดง loading ในปุ่ม
+                const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.innerHTML = '⏳ กำลังดำเนินการ...';
+                });
+                
+                const updateData = {
+                    action: 'updateStatus',
+                    rowIndex: rowIndex,
+                    status: newStatus,
+                    rejectReason: rejectReason,
+                    updatedBy: 'ผู้ดูแลระบบ',
+                    updatedAt: new Date().toLocaleString('th-TH')
+                };
+                
+                console.log('Sending update data:', updateData);
+                
+                // ส่งข้อมูลแบบ URL-encoded เพื่อหลีกเลี่ยง CORS
+                const params = new URLSearchParams();
+                params.append('data', JSON.stringify(updateData));
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+                
+                const result = await response.json();
+                console.log('Update result:', result);
+                
+                if (result.success) {
+                    showNotification(`✅ ${newStatus === 'อนุมัติ' ? 'อนุมัติ' : 'ไม่อนุมัติ'}เรียบร้อยแล้ว`, 'success');
+                    
+                    // โหลดข้อมูลใหม่
+                    await loadAllData();
+                } else {
+                    showNotification('เกิดข้อผิดพลาดในการอัปเดตสถานะ: ' + result.message, 'danger');
+                    
+                    // เปิดปุ่มกลับ
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅ อนุมัติ' : '❌ ไม่อนุมัติ';
                     });
                 }
+            } catch (error) {
+                console.error('Update status error:', error);
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + error.message, 'danger');
                 
-                camera.position.x = Math.sin(rotationAngle * 0.5) * 10;
-                camera.position.z = Math.cos(rotationAngle * 0.5) * 10;
-                camera.lookAt(0, 2, 0);
-                
-                renderer.render(scene, camera);
+                // เปิดปุ่มกลับ
+                const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅ อนุมัติ' : '❌ ไม่อนุมัติ';
+                });
             }
-            animate();
-
-            // แสดงสถิติการติดตาม
-            renderFollowUpStats();
         }
 
-        function createTextLabel(text, x, y, z, scene) {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = 256;
-            canvas.height = 128;
+        // ฟังก์ชันปฏิเสธพร้อมเหตุผล
+        function rejectRecord(rowIndex) {
+            const reason = prompt('กรุณาระบุเหตุผลในการไม่อนุมัติ:');
+            if (reason && reason.trim()) {
+                updateStatus(rowIndex, 'ไม่อนุมัติ', reason.trim());
+            } else if (reason === '') {
+                showNotification('กรุณาระบุเหตุผลในการไม่อนุมัติ', 'warning');
+            }
+        }
+
+        // ฟังก์ชันส่งออกข้อมูล
+        function exportData() {
+            if (!allAdminData || allAdminData.length === 0) {
+                showNotification('ไม่มีข้อมูลให้ส่งออก กรุณาโหลดข้อมูลก่อน', 'warning');
+                return;
+            }
+
+            // สร้างข้อมูล CSV
+            const headers = ['วันที่', 'รหัสนักเรียน', 'เลขที่', 'ชื่อ-นามสกุล', 'ห้องเรียน', 'พฤติกรรม', 'คะแนน', 'ครูผู้บันทึก', 'สถานะ', 'เหตุผล', 'ผู้อัปเดต', 'วันที่อัปเดต'];
             
-            context.fillStyle = '#ffffff';
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            context.fillStyle = '#000000';
-            context.font = 'bold 24px Arial';
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
+            let csvContent = headers.join(',') + '\n';
             
-            const lines = text.split('\n');
-            lines.forEach((line, i) => {
-                context.fillText(line, canvas.width / 2, (canvas.height / 2) + (i - 0.5) * 30);
+            allAdminData.forEach(record => {
+                const row = [
+                    record.timestamp || '',
+                    record.studentId || '',
+                    record.studentNo || '',
+                    `"${(record.fullName || '').replace(/"/g, '""')}"`,
+                    record.classroom || '',
+                    `"${(record.behavior || '').replace(/"/g, '""')}"`,
+                    record.score || '',
+                    `"${(record.teacherName || '').replace(/"/g, '""')}"`,
+                    record.status || '',
+                    `"${(record.rejectReason || '').replace(/"/g, '""')}"`,
+                    `"${(record.updatedBy || '').replace(/"/g, '""')}"`,
+                    record.updatedAt || ''
+                ];
+                csvContent += row.join(',') + '\n';
             });
+
+            // ดาวน์โหลดไฟล์
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `student_behavior_data_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('ส่งออกข้อมูลเรียบร้อยแล้ว', 'success');
+        }
+
+        // ==================== ฟังก์ชันสำหรับจัดการข้อมูลนักเรียนเข้าค่าย ====================
+
+        // ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย
+// ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย (ปรับปรุงให้รองรับ Admin UI)
+async function loadCampData() {
+    try {
+        console.log('Loading camp data from Google Sheets...');
+        
+        const response = await fetch(`${SCRIPT_URL}?action=getCampData`);
+        const result = await response.json();
+        
+        console.log('Camp data response:', result);
+        
+        if (result.success) {
+            campData = result.data || [];
+            console.log('Loaded camp data:', campData);
             
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(spriteMaterial);
-            sprite.position.set(x, y, z);
-            sprite.scale.set(2, 1, 1);
-            scene.add(sprite);
-        }
-
-        function rotate3DChart(direction) {
-            if (direction === 'left') {
-                rotationAngle -= 0.3;
+            // อัปเดตสถิติและแสดงผลข้อมูล
+            generateCampStats(campData);
+            displayCampData(campData);
+            
+            // อัปเดต UI ตามสถานะ Admin
+            updateCampAdminUI();
+            updateCampActionButtons();
+            
+            if (campData.length === 0) {
+                showNotification('ไม่มีข้อมูลนักเรียนเข้าค่าย กรุณาเพิ่มข้อมูลใหม่', 'info');
             } else {
-                rotationAngle += 0.3;
+                console.log(`โหลดข้อมูลสำเร็จ: ${campData.length} รายการ`);
             }
+        } else {
+            console.error('Error loading camp data:', result.message);
+            showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย: ' + result.message, 'danger');
+            
+            // รีเซ็ตข้อมูลและ UI
+            campData = [];
+            generateCampStats(campData);
+            displayCampData(campData);
+            updateCampAdminUI();
+            updateCampActionButtons();
         }
+    } catch (error) {
+        console.error('Error loading camp data:', error);
+        showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error.message, 'danger');
+        
+        // รีเซ็ตข้อมูลและ UI
+        campData = [];
+        generateCampStats(campData);
+        displayCampData(campData);
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }
+}
 
-        function reset3DChart() {
-            rotationAngle = 0;
-            isAnimating = false;
-            document.getElementById('animBtn').textContent = 'เริ่มหมุนอัตโนมัติ';
-            render3DChart();
-        }
-
-        function toggleAnimation() {
-            isAnimating = !isAnimating;
-            const btn = document.getElementById('animBtn');
-            btn.textContent = isAnimating ? 'หยุดหมุนอัตโนมัติ' : 'เริ่มหมุนอัตโนมัติ';
-            btn.className = isAnimating ? 'btn btn-danger' : 'btn btn-success';
-        }
-
-        function renderFollowUpStats() {
-            const followStats = {
-                completed: campData.filter(r => r.follow === 'ดำเนินการแล้ว').length,
-                inProgress: campData.filter(r => r.follow === 'กำลังดำเนินการ').length,
-                following: campData.filter(r => r.follow === 'ติดตามผล').length,
-                paid: campData.filter(r => r.follow === 'ชำระเงินแล้ว').length,
-                waiting: campData.filter(r => r.follow === 'รอดำเนินการ').length
+        // ฟังก์ชันสร้างสถิตินักเรียนเข้าค่าย
+        function generateCampStats(data) {
+            const stats = {
+                total: data.length,
+                camp: data.filter(r => r.status === 'เข้าค่าย').length,
+                volunteer: data.filter(r => r.status === 'จิตอาสา').length,
+                other: data.filter(r => r.status === 'อื่นๆ').length,
+                completed: data.filter(r => r.follow === 'ดำเนินการแล้ว').length,
+                inProgress: data.filter(r => r.follow === 'กำลังดำเนินการ').length,
+                following: data.filter(r => r.follow === 'ติดตามผล').length,
+				following: data.filter(r => r.follow === 'ชำระเงินแล้ว').length,
+                waiting: data.filter(r => r.follow === 'รอดำเนินการ').length
             };
 
-            const total = Object.values(followStats).reduce((a, b) => a + b, 0) || 1;
-
-            const html = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #28a745;">${followStats.completed}</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">ดำเนินการแล้ว</div>
-                        <div style="font-size: 0.75rem; color: #999;">${((followStats.completed/total)*100).toFixed(1)}%</div>
-                    </div>
-                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #ffc107;">${followStats.inProgress}</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">กำลังดำเนินการ</div>
-                        <div style="font-size: 0.75rem; color: #999;">${((followStats.inProgress/total)*100).toFixed(1)}%</div>
-                    </div>
-                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #17a2b8;">${followStats.following}</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">ติดตามผล</div>
-                        <div style="font-size: 0.75rem; color: #999;">${((followStats.following/total)*100).toFixed(1)}%</div>
-                    </div>
-                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #17a2b8;">${followStats.paid}</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">ชำระเงินแล้ว</div>
-                        <div style="font-size: 0.75rem; color: #999;">${((followStats.paid/total)*100).toFixed(1)}%</div>
-                    </div>
-                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6c757d;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #6c757d;">${followStats.waiting}</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">รอดำเนินการ</div>
-                        <div style="font-size: 0.75rem; color: #999;">${((followStats.waiting/total)*100).toFixed(1)}%</div>
-                    </div>
+            const statsHtml = `
+                <div class="stats-card">
+                    <div class="stats-icon">👥</div>
+                    <div class="stats-number">${stats.total}</div>
+                    <div class="stats-label">ทั้งหมด</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">🏕️</div>
+                    <div class="stats-number" style="color: #dc3545;">${stats.camp}</div>
+                    <div class="stats-label">เข้าค่าย</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">🤝</div>
+                    <div class="stats-number" style="color: #28a745;">${stats.volunteer}</div>
+                    <div class="stats-label">จิตอาสา</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">✅</div>
+                    <div class="stats-number" style="color: #28a745;">${stats.completed}</div>
+                    <div class="stats-label">ดำเนินการแล้ว</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon">⚡</div>
+                    <div class="stats-number" style="color: #ffc107;">${stats.inProgress}</div>
+                    <div class="stats-label">กำลังดำเนินการ</div>
                 </div>
             `;
 
-            document.getElementById('followUpStats').innerHTML = html;
+            document.getElementById('campStats').innerHTML = statsHtml;
         }
 
-        function lightenColor(color, percent) {
-            const num = parseInt(color.replace('#', ''), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) + amt;
-            const G = (num >> 8 & 0x00FF) + amt;
-            const B = (num & 0x0000FF) + amt;
-            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-                (B < 255 ? B < 1 ? 0 : B : 255))
-                .toString(16).slice(1);
+        // ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย
+// ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย (ปรับปรุงให้รองรับระบบ Admin)
+function displayCampData(data) {
+    const dataDiv = document.getElementById('campData');
+    
+    if (!data || data.length === 0) {
+        dataDiv.innerHTML = `
+            <div class="alert alert-info" style="text-align: center; padding: 30px;">
+                <h4 style="margin-bottom: 15px;">📝 ไม่มีข้อมูลนักเรียนเข้าค่าย</h4>
+                <p style="margin-bottom: 20px; color: #6c757d;">
+                    ${campAdminLoggedIn ? 
+                        'คลิกปุ่ม "เพิ่มนักเรียน" เพื่อเริ่มต้นการบันทึกข้อมูล' : 
+                        'เข้าสู่ระบบ Admin เพื่อเพิ่มข้อมูลนักเรียน'
+                    }
+                </p>
+                ${campAdminLoggedIn ? 
+                    '<button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียนคนแรก</button>' : 
+                    ''
+                }
+            </div>
+        `;
+        return;
+    }
+    
+    // สร้างหัวตารางที่แตกต่างกันตาม Admin status
+    let tableHeader = `
+        <tr>
+            <th style="width: 60px;">ลำดับ</th>
+            <th>เลขประจำตัว</th>
+            <th>ชื่อ - นามสกุล</th>
+            <th>ห้องเรียน</th>
+            <th>สถานะ</th>
+            <th>ติดตาม</th>
+            <th>หมายเหตุ</th>
+            ${campAdminLoggedIn ? '<th style="width: 120px;">การจัดการ</th>' : ''}
+        </tr>
+    `;
+    
+    let html = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0;">📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
+            ${campAdminLoggedIn ? 
+                '<span style="background: #28a745; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">🔓 โหมด Admin</span>' : 
+                '<span style="background: #6c757d; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">👁️ โหมดดูอย่างเดียว</span>'
+            }
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    ${tableHeader}
+                </thead>
+                <tbody>
+    `;
+    
+    // สร้างแถวข้อมูล
+    data.forEach((record, index) => {
+        html += `
+            <tr>
+                <td style="text-align: center; font-weight: bold; color: #667eea;">${index + 1}</td>
+                <td style="font-family: monospace; font-weight: 600;">${record.studentId}</td>
+                <td style="font-weight: 500;">${record.fullName}</td>
+                <td>
+                    <span style="background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 2px 8px; border-radius: 12px; font-size: 13px; font-weight: 600;">
+                        ${record.classroom}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge status-${record.status}">
+                        ${record.status}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge follow-${record.follow}">
+                        ${record.follow}
+                    </span>
+                </td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || 'ไม่มีหมายเหตุ'}">
+                    ${record.note ? 
+                        `<span style="color: #495057;">${record.note}</span>` : 
+                        '<span style="color: #adb5bd; font-style: italic;">ไม่มีหมายเหตุ</span>'
+                    }
+                </td>
+                ${campAdminLoggedIn ? `
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-warning" 
+                                    onclick="editCampStudent(${record.rowIndex})" 
+                                    style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                    title="แก้ไขข้อมูล">
+                                ✏️
+                            </button>
+                            <button class="btn btn-danger" 
+                                    onclick="deleteCampStudent(${record.rowIndex})" 
+                                    style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                    title="ลบข้อมูล">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                ` : ''}
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+        
+        ${!campAdminLoggedIn ? `
+            <div style="background: rgba(108, 117, 125, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                    🔒 <strong>หากต้องการแก้ไขหรือลบข้อมูล</strong> กรุณาเข้าสู่ระบบ Admin ด้านบน
+                </p>
+            </div>
+        ` : `
+            <div style="background: rgba(40, 167, 69, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0; color: #28a745; font-size: 14px;">
+                    ✅ <strong>คุณสามารถจัดการข้อมูลได้เต็มรูปแบบ</strong> แก้ไข เพิ่ม หรือลบข้อมูลนักเรียน
+                </p>
+            </div>
+        `}
+    `;
+    
+    dataDiv.innerHTML = html;
+}
+
+        // ฟังก์ชันกรองข้อมูลนักเรียนเข้าค่าย
+function filterCampData() {
+    const statusFilter = document.getElementById('campStatusFilter').value;
+    const followFilter = document.getElementById('campFollowFilter').value;
+    
+    let filteredData = campData;
+    
+    // กรองตามสถานะ
+    if (statusFilter) {
+        filteredData = filteredData.filter(record => record.status === statusFilter);
+    }
+    
+    // กรองตามการติดตาม
+    if (followFilter) {
+        filteredData = filteredData.filter(record => record.follow === followFilter);
+    }
+    
+    // กรองตามชั้นเรียน (เพิ่มใหม่)
+    if (currentGradeFilter !== 'all') {
+        filteredData = filteredData.filter(record => {
+            if (record.classroom) {
+                const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                return gradeMatch && gradeMatch[1] === currentGradeFilter;
+            }
+            return false;
+        });
+    }
+    
+    displayCampData(filteredData);
+}
+        // ฟังก์ชันเปิด Modal เพิ่มนักเรียน
+function addCampStudent() {
+    document.getElementById('campModal').style.display = 'flex';
+    document.getElementById('campForm').reset();
+    
+    // รีเซ็ตข้อมูลการแก้ไข
+    delete document.getElementById('campForm').dataset.editRowIndex;
+    delete document.getElementById('campForm').dataset.createdAt;
+    
+    document.querySelector('#campModal h3').textContent = 'เพิ่มนักเรียนเข้าค่าย';
+}
+        // ฟังก์ชันปิด Modal
+        function closeCampModal() {
+            document.getElementById('campModal').style.display = 'none';
         }
 
-        function darkenColor(color, percent) {
-            const num = parseInt(color.replace('#', ''), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) - amt;
-            const G = (num >> 8 & 0x00FF) - amt;
-            const B = (num & 0x0000FF) - amt;
-            return '#' + (0x1000000 + (R > 0 ? R : 0) * 0x10000 +
-                (G > 0 ? G : 0) * 0x100 +
-                (B > 0 ? B : 0))
-                .toString(16).slice(1);
+        // ฟังก์ชันแก้ไขนักเรียนเข้าค่าย
+function editCampStudent(rowIndex) {
+    console.log('Editing student with rowIndex:', rowIndex);
+    const student = campData.find(s => s.rowIndex === rowIndex);
+    console.log('Found student:', student);
+    
+    if (student) {
+        document.getElementById('campStudentId').value = student.studentId || '';
+        document.getElementById('campFullName').value = student.fullName || '';
+        document.getElementById('campClassroom').value = student.classroom || '';
+        document.getElementById('campStatus').value = student.status || '';
+        document.getElementById('campFollow').value = student.follow || '';
+        document.getElementById('campNote').value = student.note || '';
+        
+        // เก็บ rowIndex สำหรับการอัปเดต
+        document.getElementById('campForm').dataset.editRowIndex = rowIndex;
+        document.getElementById('campForm').dataset.createdAt = student.createdAt;
+        
+        document.getElementById('campModal').style.display = 'flex';
+        document.querySelector('#campModal h3').textContent = 'แก้ไขข้อมูลนักเรียน';
+    } else {
+        console.error('Student not found with rowIndex:', rowIndex);
+        showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการแก้ไข', 'danger');
+    }
+}
+        // ฟังก์ชันลบนักเรียนเข้าค่าย
+async function deleteCampStudent(rowIndex) {
+    console.log('Attempting to delete student with rowIndex:', rowIndex);
+    
+    // ตรวจสอบข้อมูลก่อนลบ
+    const student = campData.find(s => s.rowIndex === rowIndex);
+    if (!student) {
+        showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการลบ', 'danger');
+        return;
+    }
+    
+    const confirmMessage = `คุณต้องการลบข้อมูลนักเรียนคนนี้หรือไม่?\n\nชื่อ: ${student.fullName}\nรหัส: ${student.studentId}`;
+    
+    if (confirm(confirmMessage)) {
+        try {
+            // แสดง loading
+            const deleteButtons = document.querySelectorAll(`button[onclick*="deleteCampStudent(${rowIndex})"]`);
+            deleteButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerHTML = '🗑️ กำลังลบ...';
+            });
+            
+            const deleteData = {
+                action: 'deleteCampStudent',
+                rowIndex: rowIndex
+            };
+            
+            console.log('Sending delete request:', deleteData);
+            
+            const params = new URLSearchParams();
+            params.append('data', JSON.stringify(deleteData));
+            
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            });
+            
+            const result = await response.json();
+            console.log('Delete response:', result);
+            
+            if (result.success) {
+                showNotification('ลบข้อมูลเรียบร้อยแล้ว', 'success');
+                await loadCampData(); // โหลดข้อมูลใหม่
+            } else {
+                showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
+                
+                // เปิดปุ่มกลับ
+                deleteButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = '🗑️';
+                });
+            }
+        } catch (error) {
+            console.error('Error deleting camp student:', error);
+            showNotification('เกิดข้อผิดพลาดในการลบข้อมูล: ' + error.message, 'danger');
+            
+            // เปิดปุ่มกลับ
+            const deleteButtons = document.querySelectorAll(`button[onclick*="deleteCampStudent(${rowIndex})"]`);
+            deleteButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.innerHTML = '🗑️';
+            });
+        }
+    }
+}
+
+
+        // ฟังก์ชันส่งออกข้อมูลนักเรียนเข้าค่าย
+        function exportCampData() {
+            if (!campData || campData.length === 0) {
+                showNotification('ไม่มีข้อมูลให้ส่งออก', 'warning');
+                return;
+            }
+
+            // สร้างข้อมูล CSV
+            const headers = ['ลำดับ', 'เลขประจำตัว', 'ชื่อ-นามสกุล', 'ห้องเรียน', 'สถานะ', 'ติดตาม', 'หมายเหตุ', 'วันที่สร้าง'];
+            
+            let csvContent = headers.join(',') + '\n';
+            
+            campData.forEach((record, index) => {
+                const row = [
+                    index + 1,
+                    record.studentId || '',
+                    `"${(record.fullName || '').replace(/"/g, '""')}"`,
+                    record.classroom || '',
+                    record.status || '',
+                    record.follow || '',
+                    `"${(record.note || '').replace(/"/g, '""')}"`,
+                    record.createdAt || ''
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            // ดาวน์โหลดไฟล์
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `camp_students_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('ส่งออกข้อมูลนักเรียนเข้าค่ายเรียบร้อยแล้ว', 'success');
         }
 
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        // ฟังก์ชันจัดการฟอร์มนักเรียนเข้าค่าย
+        document.getElementById('campForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            showNotification('บันทึกข้อมูลสำเร็จ');
-            this.reset();
+            
+            const loading = document.getElementById('campSubmitLoading');
+            const submitText = document.getElementById('campSubmitText');
+            
+            loading.style.display = 'inline-block';
+            submitText.textContent = 'กำลังบันทึก...';
+            
+            try {
+                const editRowIndex = this.dataset.editRowIndex;
+                const createdAt = this.dataset.createdAt;
+                
+                console.log('Form submission - editRowIndex:', editRowIndex);
+                console.log('Form submission - createdAt:', createdAt);
+                
+                const formData = {
+                    studentId: document.getElementById('campStudentId').value.trim(),
+                    fullName: document.getElementById('campFullName').value.trim(),
+                    classroom: document.getElementById('campClassroom').value,
+                    status: document.getElementById('campStatus').value,
+                    follow: document.getElementById('campFollow').value,
+                    note: document.getElementById('campNote').value.trim()
+                };
+                
+                console.log('Form data:', formData);
+                
+                let requestData;
+                
+                if (editRowIndex) {
+                    // แก้ไขข้อมูล
+                    requestData = {
+                        action: 'updateCampStudent',
+                        rowIndex: parseInt(editRowIndex),
+                        createdAt: createdAt,
+                        ...formData
+                    };
+                    console.log('Update request:', requestData);
+                } else {
+                    // เพิ่มข้อมูลใหม่
+                    requestData = {
+                        action: 'addCampStudent',
+                        ...formData
+                    };
+                    console.log('Add request:', requestData);
+                }
+                
+                const params = new URLSearchParams();
+                params.append('data', JSON.stringify(requestData));
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+                
+                const result = await response.json();
+                console.log('Server response:', result);
+                
+                if (result.success) {
+                    showNotification(editRowIndex ? 'แก้ไขข้อมูลเรียบร้อยแล้ว' : 'เพิ่มนักเรียนเรียบร้อยแล้ว', 'success');
+                    await loadCampData(); // โหลดข้อมูลใหม่
+                    closeCampModal();
+                    
+                    // รีเซ็ตฟอร์ม
+                    delete this.dataset.editRowIndex;
+                    delete this.dataset.createdAt;
+                } else {
+                    showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
+                }
+                
+            } catch (error) {
+                console.error('Error saving camp data:', error);
+                showNotification('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message, 'danger');
+            }
+            
+            loading.style.display = 'none';
+            submitText.textContent = 'บันทึก';
         });
 
-        document.getElementById('campModal').addEventListener('click', function(e) {
-            if (e.target === this) closeCampModal();
+        // เพิ่ม Enter key support สำหรับการค้นหา
+        document.getElementById('searchStudentId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchStatus();
+            }
         });
+
+        // เพิ่ม Enter key support สำหรับ admin login
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
+            }
+        });
+
+        // ตรวจสอบการเชื่อมต่อเมื่อโหลดหน้า
+        window.addEventListener('load', function() {
+            checkConnection();
+        });
+
+        // เพิ่มการทำงานแบบ Progressive Web App
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // ไม่ลงทะเบียน service worker เพื่อหลีกเลี่ยงปัญหา cache
+            });
+        }
+
+        // ปิด Modal เมื่อคลิกนอกพื้นที่
+        document.getElementById('campModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCampModal();
+            }
+        });
+	// ==================== Event Listeners และการเริ่มต้นระบบ ====================
+
+// เมื่อโหลดหน้าเสร็จสิ้น
+document.addEventListener('DOMContentLoaded', function() {
+    // เริ่มต้นระบบหน้าค่าย
+    if (currentPage === 'camp') {
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }
+});
+
+// ปิด Modal เมื่อกดนอกพื้นที่
+document.addEventListener('click', function(event) {
+    const campModal = document.getElementById('campModal');
+    if (event.target === campModal) {
+        closeCampModal();
+    }
+});
+
+// รองรับ Enter key ในฟอร์ม Login Camp Admin
+document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && event.target.id === 'campAdminPassword') {
+        campAdminLogin();
+    }
+});
+
+// ฟังก์ชันปิด Modal Camp
+function closeCampModal() {
+    document.getElementById('campModal').style.display = 'none';
+    
+    // รีเซ็ตฟอร์มเมื่อปิด
+    document.getElementById('campForm').reset();
+    delete document.getElementById('campForm').dataset.editRowIndex;
+    delete document.getElementById('campForm').dataset.createdAt;
+}
+
+// ฟังก์ชันแสดงสถานะการเชื่อมต่อ
+function showConnectionStatus(isConnected) {
+    const statusMessage = isConnected ? 
+        'เชื่อมต่อกับระบบสำเร็จ' : 
+        'ไม่สามารถเชื่อมต่อกับระบบได้';
+    
+    const statusType = isConnected ? 'success' : 'danger';
+    
+    showNotification(statusMessage, statusType);
+}
     </script>
 </body>
 </html>
+
+
+
+
+
+
