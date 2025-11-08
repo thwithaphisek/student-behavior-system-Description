@@ -1281,7 +1281,7 @@
         }
 
         async function checkConnection() {
-            if (SCRIPT_URL.includes('AKfycbwtsN84Kk0Oz4gCx9xN2mn9Xwr90fZ_jU3Kt7ypFXRDOen8Mh1pLz9ERE_-RzgGTGwDA')) {
+            if (SCRIPT_URL.includes('AKfycbxDqZK4yR9Xw2X7_g4ZrY8ek0bXrxRpd0G_rzzLPjso-M5zsjo5ols7PaKqO_xHcKsM3A')) {
                 showNotification(`
                     <strong>⚠️ กรุณาตั้งค่า Google Apps Script ก่อนใช้งาน</strong><br>
                     1. แทนที่ URL ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
@@ -1316,7 +1316,6 @@
             currentPage = pageId;
             
             if (pageId === 'admin' && isAdminLoggedIn) {
-                // โหลดข้อมูลทั้งหมดเมื่อเข้าหน้า Admin และ Login แล้ว
                 loadAllData(); 
                 loadCampData(true); 
                 loadDocumentData(); 
@@ -1624,7 +1623,7 @@
             document.getElementById('adminStats').innerHTML = statsHtml;
         }
 
-        // โค้ดที่ได้รับการแก้ไข: แสดงตารางข้อมูลจริง
+        // โค้ดที่ได้รับการแก้ไข: แสดงตารางข้อมูลจริง (Behavior)
         function displayAdminData(data) {
             const dataDiv = document.getElementById('adminData');
             
@@ -1798,11 +1797,10 @@
         }
         
         // =======================================================
-        // #region 5. Camp Management Logic (ย้ายมา Admin)
+        // #region 5. Camp Management Logic (นักเรียนเข้าค่าย)
         // =======================================================
         
         function generateCampStatsAdmin(data) {
-            // ฟังก์ชันนี้จะสร้างสถิติสำหรับหน้า Admin Report (Camp)
             const stats = {
                 total: data.length,
                 camp: data.filter(r => r.status === 'เข้าค่าย').length,
@@ -1848,8 +1846,8 @@
                 
                 if (result.success) {
                     campData = result.data || [];
-                    generateCampStatsAdmin(campData); // อัปเดตสถิติ Admin Report
-                    filterCampData(); // แสดงข้อมูลที่ถูกกรอง (จะเรียก displayCampData)
+                    generateCampStatsAdmin(campData); 
+                    filterCampData(); 
                 } else {
                     showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย: ' + result.message, 'danger');
                     document.getElementById('campDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย</div>';
@@ -1860,31 +1858,145 @@
             }
         }
         
-        function filterCampData() {
-            // (ฟังก์ชันกรองและแสดงผลตารางนักเรียนเข้าค่าย - โค้ดที่สมบูรณ์จะอยู่ที่นี่)
+        // โค้ดที่ได้รับการแก้ไข: แสดงตารางนักเรียนเข้าค่ายจริง
+        function displayCampData(data) {
             const dataDiv = document.getElementById('campDataDisplay');
-            if (campData.length === 0) {
-                dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลนักเรียนเข้าค่ายในระบบ</div>';
+            
+            if (!data || data.length === 0) {
+                dataDiv.innerHTML = '<div class="alert alert-info">ไม่พบข้อมูลนักเรียนเข้าค่ายตามตัวกรอง</div>';
                 return;
             }
-            // Dummy Display เพื่อประหยัดพื้นที่โค้ด (แต่ในโค้ดจริงต้องสร้างตาราง HTML เต็มรูปแบบ)
-            dataDiv.innerHTML = `<div class="alert alert-warning">ตารางนักเรียนเข้าค่าย (Dummy) จำนวน ${campData.length} รายการ. โปรดสร้างตาราง HTML เต็มรูปแบบในโค้ดจริง.</div>`;
-        }
+            
+            let html = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0;">📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
+                    <span style="background: #007769; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">🔓 โหมด Admin</span>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ลำดับ</th>
+                                <th>เลขประจำตัว</th>
+                                <th>ชื่อ - นามสกุล</th>
+                                <th>ห้องเรียน</th>
+                                <th>สถานะ</th>
+                                <th>ติดตาม</th>
+                                <th style="min-width: 200px;">หมายเหตุ</th>
+                                <th style="width: 120px;">การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.forEach((record, index) => {
+                const statusClass = `status-${(record.status || '').replace(/\s/g, '')}`;
+                const followClass = `follow-${(record.follow || '').replace(/\s/g, '')}`;
 
-        function closeCampModal() {
-            document.getElementById('campModal').style.display = 'none';
-            document.getElementById('campForm').reset();
-            delete document.getElementById('campForm').dataset.editRowIndex;
+                html += `
+                    <tr>
+                        <td style="text-align: center; font-weight: bold; color: #2c5f59;">${index + 1}</td>
+                        <td style="font-family: monospace; font-weight: 600;">${record.studentId || '-'}</td>
+                        <td style="font-weight: 500;">${record.fullName || '-'}</td>
+                        <td>
+                            <span style="background: rgba(0, 119, 105, 0.1); color: #007769; padding: 2px 8px; border-radius: 12px; font-size: 13px; font-weight: 600;">
+                                ${record.classroom || '-'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge ${statusClass}">
+                                ${record.status || '-'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge ${followClass}">
+                                ${record.follow || '-'}
+                            </span>
+                        </td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || 'ไม่มีหมายเหตุ'}">
+                            ${record.note ? 
+                                `<span style="color: #495057;">${record.note.substring(0, 50)}...</span>` : 
+                                '<span style="color: #adb5bd; font-style: italic;">-</span>'
+                            }
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-warning" 
+                                        onclick="editCampStudent(${record.rowIndex})" 
+                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                        title="แก้ไขข้อมูล">
+                                    ✏️
+                                </button>
+                                <button class="btn btn-danger" 
+                                        onclick="deleteCampStudent(${record.rowIndex})" 
+                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                        title="ลบข้อมูล">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background: rgba(0, 119, 105, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                    <p style="margin: 0; color: #007769; font-size: 14px;">
+                        ✅ <strong>คุณสามารถจัดการข้อมูลได้เต็มรูปแบบ</strong> แก้ไข เพิ่ม หรือลบข้อมูลนักเรียน
+                    </p>
+                </div>
+            `;
+            
+            dataDiv.innerHTML = html;
         }
         
-        // ... (Functions addCampStudent, editCampStudent, deleteCampStudent, exportCampData, etc., ควรอยู่ตรงนี้)
+        function filterCampData() {
+            const statusFilter = document.getElementById('campStatusFilter').value;
+            const followFilter = document.getElementById('campFollowFilter').value;
+            
+            let filteredData = campData;
+            
+            // กรองตามสถานะ
+            if (statusFilter) {
+                filteredData = filteredData.filter(record => record.status === statusFilter);
+            }
+            
+            // กรองตามการติดตาม
+            if (followFilter) {
+                filteredData = filteredData.filter(record => record.follow === followFilter);
+            }
+            
+            // กรองตามชั้นเรียน
+            if (currentGradeFilter !== 'all') {
+                filteredData = filteredData.filter(record => {
+                    if (record.classroom) {
+                        const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                        return gradeMatch && gradeMatch[1] === currentGradeFilter;
+                    }
+                    return false;
+                });
+            }
+
+            displayCampData(filteredData);
+        }
+
+        // Placeholder functions for Camp Management
+        function addCampStudent() { document.getElementById('campModal').style.display = 'flex'; }
+        function editCampStudent(rowIndex) { showNotification('ฟังก์ชันแก้ไขนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'warning'); }
+        function deleteCampStudent(rowIndex) { if(confirm('ยืนยันการลบนักเรียนเข้าค่าย (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); loadCampData(true); } }
+        function exportCampData() { showNotification('กำลังส่งออกข้อมูลค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); }
+
 
         // =======================================================
         // #region 6. Document & Lending Logic
         // =======================================================
 
         async function loadDocumentData() {
-            documentData = []; // Reset for fetching
+            // โหลดข้อมูลจริงจาก Apps Script
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getDocumentData`);
                 const result = await response.json();
@@ -1892,36 +2004,194 @@
                 if (result.success) {
                     documentData = result.data || [];
                     generateDocStatsAdmin(documentData);
-                    // แสดงในหน้า viewDocument (Dummy for brevity)
-                    document.getElementById('documentDataDisplay').innerHTML = `<div class="alert alert-warning">ตารางเอกสาร (Dummy) จำนวน ${documentData.length} รายการ. โปรดสร้างตาราง HTML เต็มรูปแบบในโค้ดจริง.</div>`;
+                    filterDocumentData(); // แสดงข้อมูลที่ถูกกรอง
+                } else {
+                    document.getElementById('documentDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลเอกสาร</div>';
                 }
-            } catch(e) { /* ... */ }
+            } catch(e) {
+                document.getElementById('documentDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูลเอกสาร</div>';
+            }
         }
         
         function generateDocStatsAdmin(data) {
              document.getElementById('adminDocStats').innerHTML = '<div class="alert alert-info">Dummy Stats: Document (Total: '+data.length+')</div>';
         }
 
+        // โค้ดที่ได้รับการแก้ไข: แสดงตารางติดตามเอกสารจริง
+        function displayDocumentData(data) {
+            const dataDiv = document.getElementById('documentDataDisplay');
+            if (!data || data.length === 0) {
+                dataDiv.innerHTML = '<div class="alert alert-info">ไม่พบข้อมูลเอกสารตามตัวกรอง</div>';
+                return;
+            }
+
+            const signatures = [
+                'sig1: ผู้ปกครอง', 'sig2: ครูที่ปรึกษา', 'sig3: งานการเงิน', 'sig4: งานวัดผลฯ', 
+                'sig5: การทะเบียน', 'sig6: รองวิชาการ', 'sig7: รองบุคคล', 'sig8: ผู้อำนวยการ'
+            ];
+            
+            let html = `
+                <h3>📋 รายการติดตามเอกสาร (${data.length} รายการ)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัส/ชื่อ</th>
+                                <th>ประเภท</th>
+                                <th>สถานะหลัก</th>
+                                <th style="min-width: 150px;">วันที่ส่ง</th>
+                                <th style="min-width: 350px;">การติดตามลายเซ็น</th>
+                                <th>การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            data.forEach(record => {
+                let signatureBadges = '';
+                signatures.forEach((sigLabel, index) => {
+                    const field = `sig${index + 1}`;
+                    const status = record[field] || 'Pending';
+                    const badgeClass = status === 'Complete' ? 'signature-complete' : (status === 'Not Required' ? 'signature-not-required' : 'signature-pending');
+                    const badgeIcon = status === 'Complete' ? '✅' : (status === 'Not Required' ? '➖' : '⏳');
+                    
+                    signatureBadges += `<span class="signature-badge ${badgeClass}" title="${sigLabel}">
+                        ${badgeIcon} ${sigLabel.split(': ')[1]}
+                    </span>`;
+                });
+
+                const statusClass = `status-${(record.status || '').replace(/\s/g, '')}`;
+                
+                html += `
+                    <tr>
+                        <td>${record.studentId || '-'} / ${record.fullName || '-'}</td>
+                        <td>${record.docType || '-'}</td>
+                        <td><span class="status-badge ${statusClass}">${record.status || '-'}</span></td>
+                        <td>${record.sentDate || '-'}</td>
+                        <td><div style="display:flex; flex-wrap: wrap;">${signatureBadges}</div></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-warning" 
+                                        onclick="editDocument(${record.rowIndex})" 
+                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                        title="แก้ไข/ติดตามลายเซ็น">
+                                    ✏️
+                                </button>
+                                <button class="btn btn-danger" 
+                                        onclick="deleteDocument(${record.rowIndex})" 
+                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                        title="ลบข้อมูล">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `</tbody></table></div>`;
+            dataDiv.innerHTML = html;
+        }
+        
+        function filterDocumentData() {
+             // (ฟังก์ชันกรองเอกสาร - ต้องสร้างโค้ดเต็ม)
+             loadDocumentData(); 
+        }
+
+        // Placeholder functions for Document Management
+        function editDocument(rowIndex) { showNotification('ฟังก์ชันแก้ไขเอกสาร (ต้องสร้างโค้ดเต็ม)', 'warning'); }
+        function deleteDocument(rowIndex) { if(confirm('ยืนยันการลบเอกสาร (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบเอกสาร (ต้องสร้างโค้ดเต็ม)', 'info'); loadDocumentData(); } }
+        function closeDocEditModal() { document.getElementById('docEditModal').style.display = 'none'; }
+
+
         async function loadLendingData(isReturned = false) {
-             lendingData = []; // Reset for fetching
-            try {
+             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getLendingData&isReturned=${isReturned}`);
                 const result = await response.json();
                 
                 if (result.success) {
                     lendingData = result.data || [];
                     generateLendStatsAdmin(lendingData);
-                     // แสดงในหน้า viewLending (Dummy for brevity)
-                    document.getElementById('lendingDataDisplay').innerHTML = `<div class="alert alert-warning">ตารางยืมของ (Dummy) จำนวน ${lendingData.length} รายการ. โปรดสร้างตาราง HTML เต็มรูปแบบในโค้ดจริง.</div>`;
+                    displayLendingData(lendingData, isReturned);
+                } else {
+                    document.getElementById('lendingDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลการยืม</div>';
                 }
-            } catch(e) { /* ... */ }
+            } catch(e) {
+                document.getElementById('lendingDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูลการยืม</div>';
+            }
         }
         
         function generateLendStatsAdmin(data) {
              document.getElementById('adminLendStats').innerHTML = '<div class="alert alert-info">Dummy Stats: Lending (Total: '+data.length+')</div>';
         }
 
-        // ... (Function addDocument, updateDocumentSignature, addLending, markAsReturned, etc., ควรอยู่ตรงนี้)
+        // โค้ดที่ได้รับการแก้ไข: แสดงตารางติดตามการยืมของจริง
+        function displayLendingData(data, isReturned) {
+            const dataDiv = document.getElementById('lendingDataDisplay');
+            const title = isReturned ? '📋 รายการที่คืนแล้ว' : '📋 รายการที่ยังไม่คืน';
+            
+            if (!data || data.length === 0) {
+                dataDiv.innerHTML = `<div class="alert alert-info">ไม่พบ ${title}</div>`;
+                return;
+            }
+            
+            let html = `
+                <h3>${title} (${data.length} รายการ)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัส/ห้อง</th>
+                                <th>ชื่อผู้ยืม</th>
+                                <th>เบอร์โทร</th>
+                                <th style="min-width: 250px;">สิ่งของที่ยืม</th>
+                                <th>วันที่ยืม</th>
+                                <th>วันที่กำหนดคืน</th>
+                                <th>สถานะ</th>
+                                <th>การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.forEach(record => {
+                const status = record.isReturned === 'Yes' ? 'คืนแล้ว' : 'ยืมอยู่';
+                const statusClass = record.isReturned === 'Yes' ? 'status-คืนแล้ว' : 'status-ยืมอยู่';
+                
+                html += `<tr>
+                    <td>${record.studentId || '-'} / ${record.classroom || '-'}</td>
+                    <td>${record.fullName || '-'}</td>
+                    <td>${record.tel || '-'}</td>
+                    <td title="${record.item || '-'}">${record.item ? record.item.substring(0, 50) + '...' : '-'}</td>
+                    <td>${record.lendDate || '-'}</td>
+                    <td>${record.returnDate || '-'}</td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
+                    <td>
+                        ${record.isReturned !== 'Yes' ? 
+                            `<button class="btn btn-success" onclick="markAsReturned(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px; border-radius: 15px;">
+                                ✅ คืนแล้ว
+                            </button>` : 
+                            `<span style="color: #007769;">คืนเมื่อ: ${record.returnedAt || '-'}</span>`}
+                    </td>
+                </tr>`;
+            });
+            
+            html += `</tbody></table></div>`;
+            dataDiv.innerHTML = html;
+        }
+
+        // Placeholder function for Lending Management
+        async function markAsReturned(rowIndex) {
+            const password = prompt(`กรุณาใส่รหัสผ่าน Admin (${ADMIN_PASSWORD}) เพื่อยืนยันการคืนของ:`);
+            if (password !== ADMIN_PASSWORD) {
+                showNotification('❌ รหัสผ่านไม่ถูกต้อง การดำเนินการถูกยกเลิก', 'danger');
+                return;
+            }
+            showNotification('✅ กำลังบันทึกการคืนของ (ต้องสร้างโค้ดเต็ม)', 'success');
+            // Logic to call Apps Script to update status
+            loadLendingData(false); // Reload the 'not returned' list
+        }
+
 
         // =======================================================
         // #region 7. Export All Data
@@ -1968,6 +2238,8 @@
         document.addEventListener('click', function(e) { if (e.target.id === 'campModal' || e.target.id === 'docEditModal') { closeCampModal(); closeDocEditModal(); } });
 
     </script>
+
 </body>
 </html>
+
 
