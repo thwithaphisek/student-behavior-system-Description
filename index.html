@@ -1077,13 +1077,13 @@
                             </select>
                         </div>
                         <div class="grade-filter-container">
-                            <button class="grade-filter-btn active" onclick="filterByGrade('all')">ทั้งหมด</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('1')">ม.1</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('2')">ม.2</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('3')">ม.3</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('4')">ม.4</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('5')">ม.5</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('6')">ม.6</button>
+                            <button class="grade-filter-btn active" onclick="filterByGrade('all', event)">ทั้งหมด</button>
+                            <button class="grade-filter-btn" onclick="filterByGrade('1', event)">ม.1</button>
+                            <button class="grade-filter-btn" onclick="filterByGrade('2', event)">ม.2</button>
+                            <button class="grade-filter-btn" onclick="filterByGrade('3', event)">ม.3</button>
+                            <button class="grade-filter-btn" onclick="filterByGrade('4', event)">ม.4</button>
+                            <button class="grade-filter-btn" onclick="filterByGrade('5', event)">ม.5</button>
+                            <button class="grade-filter-btn" onclick="filterByGrade('6', event)">ม.6</button>
                         </div>
                         <div id="campDataDisplay"></div>
                     </div>
@@ -1245,7 +1245,7 @@
     
     <script>
         // กำหนด URL ของ Google Apps Script Web App
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydYOMVB3jO1QDIraP6IcII0s6V2YOzvrvxKP0X_hCi4u0UdEJkLnJt_yJeWsDzAB-0/exec'; // **กรุณาเปลี่ยน URL นี้**
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydYOMVB3jO1QDIraP6IcII0s6V2YOzvrvxKP0X_hCi4u0UdEJkLnTjH2G8G-w/exec'; // **กรุณาเปลี่ยน URL นี้**
 
         // ตัวแปรสถานะและรหัสผ่าน
         let currentPage = 'home';
@@ -1281,7 +1281,7 @@
         }
 
         async function checkConnection() {
-            if (SCRIPT_URL.includes('AKfycbydYOMVB3jO1QDIraP6IcII0s6V2YOzvrvxKP0X_hCi4u0UdEJkLnJt_yJeWsDzAB-0')) {
+            if (SCRIPT_URL.includes('AKfycbydYOMVB3jO1QDIraP6IcII0s6V2YOzvrvxKP0X_hCi4u0UdEJkLnTjH2G8G-w')) {
                 showNotification(`
                     <strong>⚠️ กรุณาตั้งค่า Google Apps Script ก่อนใช้งาน</strong><br>
                     1. แทนที่ URL ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
@@ -1866,34 +1866,54 @@
             }
         }
         
+        // แก้ไข: เพิ่มตรรกะการจัดการ Active State และเรียกการกรองหลัก
+        function filterByGrade(grade, event) {
+            currentGradeFilter = grade;
+            
+            // อัปเดต active state ของปุ่ม 
+            document.querySelectorAll('.grade-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // สำหรับกรณีที่ถูกเรียกใช้ครั้งแรก (all)
+                document.querySelector(`.grade-filter-btn[onclick*="filterByGrade('${grade}')"]`).classList.add('active');
+            }
+            
+            filterCampData(); // เรียกใช้การกรองหลัก
+        }
+
         function filterCampData() {
             const statusFilter = document.getElementById('campStatusFilter').value;
             const followFilter = document.getElementById('campFollowFilter').value;
             
             let filteredData = campData;
             
-            // กรองตามสถานะ
+            // 1. กรองตามสถานะ
             if (statusFilter) {
                 filteredData = filteredData.filter(record => record.status === statusFilter);
             }
             
-            // กรองตามการติดตาม
+            // 2. กรองตามการติดตาม
             if (followFilter) {
                 filteredData = filteredData.filter(record => record.follow === followFilter);
             }
             
-            // กรองตามชั้นเรียน
+            // 3. กรองตามชั้นเรียน (Grade Filter Logic)
             if (currentGradeFilter !== 'all') {
                 filteredData = filteredData.filter(record => {
                     // ใช้ key เป็นตัวพิมพ์เล็กตามที่แปลงไว้ใน loadCampData
                     if (record.classroom) {
-                        const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                        // ดึงเลขชั้นเรียน (เช่น 'ม.1/1' -> '1')
+                        const gradeMatch = String(record.classroom).match(/^ม\.?(\d)/);
                         return gradeMatch && gradeMatch[1] === currentGradeFilter;
                     }
                     return false;
                 });
             }
 
+            // แสดงตารางข้อมูลจริง
             displayCampData(filteredData);
         }
 
@@ -2004,7 +2024,18 @@
             dataDiv.innerHTML = html;
         }
 
-        // ... (Function loadCampData, filterCampData, addCampStudent, editCampStudent, deleteCampStudent, exportCampData, etc.)
+        function closeCampModal() {
+            document.getElementById('campModal').style.display = 'none';
+            document.getElementById('campForm').reset();
+            delete document.getElementById('campForm').dataset.editRowIndex;
+        }
+
+        // Placeholder functions for Camp Management
+        function addCampStudent() { document.getElementById('campModal').style.display = 'flex'; }
+        function editCampStudent(rowIndex) { showNotification('ฟังก์ชันแก้ไขนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'warning'); }
+        function deleteCampStudent(rowIndex) { if(confirm('ยืนยันการลบนักเรียนเข้าค่าย (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); loadCampData(true); } }
+        function exportCampData() { showNotification('กำลังส่งออกข้อมูลค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); }
+
 
         // =======================================================
         // #region 6. Document & Lending Logic (แก้ไขแสดงตารางจริง)
@@ -2112,6 +2143,33 @@
              loadDocumentData(); 
         }
 
+        // Placeholder functions for Document Management
+        function editDocument(rowIndex) { showNotification('ฟังก์ชันแก้ไขเอกสาร (ต้องสร้างโค้ดเต็ม)', 'warning'); }
+        function deleteDocument(rowIndex) { if(confirm('ยืนยันการลบเอกสาร (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบเอกสาร (ต้องสร้างโค้ดเต็ม)', 'info'); loadDocumentData(); } }
+        function closeDocEditModal() { document.getElementById('docEditModal').style.display = 'none'; }
+
+
+        async function loadLendingData(isReturned = false) {
+             try {
+                const response = await fetch(`${SCRIPT_URL}?action=getLendingData&isReturned=${isReturned}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    lendingData = result.data || [];
+                    generateLendStatsAdmin(lendingData);
+                    displayLendingData(lendingData, isReturned);
+                } else {
+                    document.getElementById('lendingDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลการยืม</div>';
+                }
+            } catch(e) {
+                document.getElementById('lendingDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูลการยืม</div>';
+            }
+        }
+        
+        function generateLendStatsAdmin(data) {
+             document.getElementById('adminLendStats').innerHTML = '<div class="alert alert-info">Dummy Stats: Lending (Total: '+data.length+')</div>';
+        }
+
         // โค้ดที่ได้รับการแก้ไข: แสดงตารางติดตามการยืมของจริง
         function displayLendingData(data, isReturned) {
             const dataDiv = document.getElementById('lendingDataDisplay');
@@ -2167,19 +2225,18 @@
             dataDiv.innerHTML = html;
         }
 
-        // ... (ส่วน Placeholder และ Initialization) ...
+        // Placeholder function for Lending Management
+        async function markAsReturned(rowIndex) {
+            const password = prompt(`กรุณาใส่รหัสผ่าน Admin (${ADMIN_PASSWORD}) เพื่อยืนยันการคืนของ:`);
+            if (password !== ADMIN_PASSWORD) {
+                showNotification('❌ รหัสผ่านไม่ถูกต้อง การดำเนินการถูกยกเลิก', 'danger');
+                return;
+            }
+            showNotification('✅ กำลังบันทึกการคืนของ (ต้องสร้างโค้ดเต็ม)', 'success');
+            // Logic to call Apps Script to update status
+            loadLendingData(false); // Reload the 'not returned' list
+        }
 
-        // Placeholder functions for Camp Management
-        function addCampStudent() { document.getElementById('campModal').style.display = 'flex'; }
-        function editCampStudent(rowIndex) { showNotification('ฟังก์ชันแก้ไขนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'warning'); }
-        function deleteCampStudent(rowIndex) { if(confirm('ยืนยันการลบนักเรียนเข้าค่าย (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); loadCampData(true); } }
-        function exportCampData() { showNotification('กำลังส่งออกข้อมูลค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); }
-
-        // Placeholder functions for Document Management
-        function editDocument(rowIndex) { showNotification('ฟังก์ชันแก้ไขเอกสาร (ต้องสร้างโค้ดเต็ม)', 'warning'); }
-        function deleteDocument(rowIndex) { if(confirm('ยืนยันการลบเอกสาร (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบเอกสาร (ต้องสร้างโค้ดเต็ม)', 'info'); loadDocumentData(); } }
-        function closeDocEditModal() { document.getElementById('docEditModal').style.display = 'none'; }
-        function markAsReturned(rowIndex) { showNotification('✅ กำลังบันทึกการคืนของ (ต้องสร้างโค้ดเต็ม)', 'success'); loadLendingData(false); }
 
         // =======================================================
         // #region 7. Export All Data
@@ -2217,6 +2274,8 @@
         // =======================================================
         window.addEventListener('load', function() {
             checkConnection();
+            // เมื่อโหลดหน้าครั้งแรก ให้ตั้งค่าปุ่มกรองชั้นเรียน "ทั้งหมด" เป็น Active
+            filterByGrade('all'); 
             showPage('home');
         });
         
