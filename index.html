@@ -1859,7 +1859,7 @@
         }
         
         // โค้ดที่ได้รับการแก้ไข: แสดงตารางนักเรียนเข้าค่ายจริง
-        function displayCampData(data) {
+    function displayCampData(data) {
             const dataDiv = document.getElementById('campDataDisplay');
             
             if (!data || data.length === 0) {
@@ -1891,45 +1891,56 @@
             `;
             
             data.forEach((record, index) => {
-                const statusClass = `status-${(record.status || '').replace(/\s/g, '')}`;
-                const followClass = `follow-${(record.follow || '').replace(/\s/g, '')}`;
+                // *** การแก้ไข: ตรวจสอบและให้ค่าเริ่มต้นที่ปลอดภัย ***
+                const studentId = record.studentId || '-';
+                const fullName = record.fullName || '-';
+                const classroom = record.classroom || '-';
+                const status = record.status || '-';
+                const follow = record.follow || '-';
+                const note = record.note || '';
+
+                const statusClass = `status-${status.replace(/\s/g, '')}`;
+                const followClass = `follow-${follow.replace(/\s/g, '')}`;
+                
+                // rowIndex คือ index แถวจริงใน Google Sheet (ใช้สำหรับปุ่ม Edit/Delete)
+                const actualRowIndex = record.rowIndex || index + 2; 
 
                 html += `
                     <tr>
                         <td style="text-align: center; font-weight: bold; color: #2c5f59;">${index + 1}</td>
-                        <td style="font-family: monospace; font-weight: 600;">${record.studentId || '-'}</td>
-                        <td style="font-weight: 500;">${record.fullName || '-'}</td>
+                        <td style="font-family: monospace; font-weight: 600;">${studentId}</td>
+                        <td style="font-weight: 500;">${fullName}</td>
                         <td>
                             <span style="background: rgba(0, 119, 105, 0.1); color: #007769; padding: 2px 8px; border-radius: 12px; font-size: 13px; font-weight: 600;">
-                                ${record.classroom || '-'}
+                                ${classroom}
                             </span>
                         </td>
                         <td>
                             <span class="status-badge ${statusClass}">
-                                ${record.status || '-'}
+                                ${status}
                             </span>
                         </td>
                         <td>
                             <span class="status-badge ${followClass}">
-                                ${record.follow || '-'}
+                                ${follow}
                             </span>
                         </td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || 'ไม่มีหมายเหตุ'}">
-                            ${record.note ? 
-                                `<span style="color: #495057;">${record.note.substring(0, 50)}...</span>` : 
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${note}">
+                            ${note ? 
+                                `<span style="color: #495057;">${note.substring(0, 50)}...</span>` : 
                                 '<span style="color: #adb5bd; font-style: italic;">-</span>'
                             }
                         </td>
                         <td>
                             <div class="action-buttons">
                                 <button class="btn btn-warning" 
-                                        onclick="editCampStudent(${record.rowIndex})" 
+                                        onclick="editCampStudent(${actualRowIndex})" 
                                         style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
                                         title="แก้ไขข้อมูล">
                                     ✏️
                                 </button>
                                 <button class="btn btn-danger" 
-                                        onclick="deleteCampStudent(${record.rowIndex})" 
+                                        onclick="deleteCampStudent(${actualRowIndex})" 
                                         style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
                                         title="ลบข้อมูล">
                                     🗑️
@@ -2241,6 +2252,7 @@
 
 </body>
 </html>
+
 
 
 
