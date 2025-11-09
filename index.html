@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>งานกิจการนักเรียน</title>
+    <title>ระบบบันทึกพฤติกรรมนักเรียน</title>
     <style>
-        /* CSS ปรับปรุงใหม่ เน้นโทนสีเขียว Earthy/Premium */
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +12,8 @@
         }
 
         body {
-            /* เปลี่ยนสีพื้นหลังหลักเป็นโทนเขียวเข้ม (Earthy Green) */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2c5f59 0%, #007769 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -38,11 +36,10 @@
 
         .header h1 {
             text-align: center;
-            color: #2c5f59;
+            color: #2c3e50;
             margin-bottom: 20px;
             font-size: 2.5rem;
-            /* เปลี่ยนสี Gradient หัวข้อเป็นเขียวเข้ม */
-            background: linear-gradient(45deg, #007769, #2c5f59);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -56,8 +53,7 @@
         }
 
         .nav-btn {
-            /* เปลี่ยนสีปุ่มหลักเป็นเขียวเข้ม */
-            background: linear-gradient(45deg, #007769, #2c5f59);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -66,19 +62,18 @@
             font-size: 16px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 119, 105, 0.4);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             position: relative;
             overflow: hidden;
         }
 
         .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 119, 105, 0.6);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
         .nav-btn.active {
-             /* เปลี่ยนสี Active State เป็นเขียวอ่อนลงเล็กน้อย */
-            background: linear-gradient(45deg, #2c5f59, #007769);
+            background: linear-gradient(45deg, #764ba2, #667eea);
             transform: translateY(-2px);
         }
 
@@ -119,27 +114,11 @@
 
         .page h2 {
             margin-bottom: 25px;
-            color: #2c5f59;
+            color: #2c3e50;
             font-size: 1.8rem;
-            /* เปลี่ยนสีเส้นใต้เป็นเขียวเข้ม */
-            border-bottom: 3px solid #007769;
+            border-bottom: 3px solid #667eea;
             padding-bottom: 10px;
         }
-        
-        /* New: Sub-page style for Document/Lending Tracking */
-        .sub-page {
-            display: none;
-            padding: 20px;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            margin-top: 15px;
-            background-color: #f8f9fa;
-        }
-        .sub-page.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in;
-        }
-
 
         .form-group {
             margin-bottom: 20px;
@@ -149,7 +128,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #2c5f59;
+            color: #2c3e50;
         }
 
         .form-group input,
@@ -168,9 +147,8 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            /* เปลี่ยนสี Focus Border เป็นเขียวเข้ม */
-            border-color: #007769; 
-            box-shadow: 0 0 0 3px rgba(0, 119, 105, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             transform: translateY(-1px);
         }
 
@@ -181,8 +159,7 @@
         }
 
         .btn {
-            /* เปลี่ยนสีปุ่ม Submit หลักเป็นเขียวเข้ม */
-            background: linear-gradient(45deg, #007769, #2c5f59);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 12px 30px;
@@ -191,14 +168,14 @@
             font-size: 16px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 119, 105, 0.4);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             position: relative;
             overflow: hidden;
         }
 
         .btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 119, 105, 0.6);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
         .btn:disabled {
@@ -208,19 +185,19 @@
         }
 
         .btn-success {
-            background: linear-gradient(45deg, #007769, #004d41);
+            background: linear-gradient(45deg, #28a745, #20c997);
         }
-        
+
         .btn-danger {
             background: linear-gradient(45deg, #dc3545, #fd7e14);
         }
 
         .btn-warning {
-            background: linear-gradient(45deg, #ffdb58, #ffc107); /* ใช้สีทอง Accent */
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
         }
 
         .btn-info {
-            background: linear-gradient(45deg, #2196f3, #00bcd4); /* คงสีฟ้า Info ไว้ */
+            background: linear-gradient(45deg, #17a2b8, #6f42c1);
         }
 
         .alert {
@@ -256,7 +233,7 @@
 
         .alert-warning {
             background-color: #fff3cd;
-            border: 1px solid #ffdb58;
+            border: 1px solid #ffeaa7;
             color: #856404;
         }
 
@@ -278,8 +255,7 @@
         }
 
         .table th {
-            /* เปลี่ยนสีหัวตารางเป็นเขียวเข้ม */
-            background: linear-gradient(45deg, #2c5f59, #007769);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             font-weight: 600;
             position: sticky;
@@ -312,8 +288,7 @@
             padding: 20px;
             margin: 10px 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            /* เปลี่ยนสีขอบซ้ายเป็นเขียวเข้ม */
-            border-left: 4px solid #007769;
+            border-left: 4px solid #667eea;
             transition: all 0.3s ease;
         }
 
@@ -392,15 +367,13 @@
             left: 0;
             right: 0;
             height: 4px;
-            /* เปลี่ยนสีขอบบน Stats Card เป็นเขียวเข้ม */
-            background: linear-gradient(45deg, #007769, #2c5f59);
+            background: linear-gradient(45deg, #667eea, #764ba2);
         }
 
         .stats-number {
             font-size: 2.5rem;
             font-weight: bold;
-            /* เปลี่ยนสีตัวเลข Stats เป็นเขียวเข้ม */
-            color: #007769;
+            color: #667eea;
             margin: 10px 0;
         }
 
@@ -443,59 +416,74 @@
             display: inline-block;
         }
 
-        /* Camp Status */
-        .status-เข้าค่าย { background-color: #dc3545; color: white; }
-        .status-จิตอาสา { background-color: #007769; color: white; } /* ปรับเป็นเขียวเข้ม */
-        .status-อื่นๆ { background-color: #6c757d; color: white; }
-        .follow-ดำเนินการแล้ว { background-color: #007769; color: white; } /* ปรับเป็นเขียวเข้ม */
-        .follow-กำลังดำเนินการ { background-color: #ffdb58; color: #333; } /* ปรับเป็นทอง */
-        .follow-ติดตามผล { background-color: #2196f3; color: white; } /* คงสีฟ้า */
-        .follow-ชำระเงินแล้ว { background-color: #2196f3; color: white; } /* คงสีฟ้า */
-        .follow-รอดำเนินการ { background-color: #6c757d; color: white; }
-        
-        /* Document Status */
-        .status-รอดำเนินการ { background-color: #ffdb58; color: #333; } /* ปรับเป็นทอง */
-        .status-อนุมัติแล้ว { background-color: #007769; color: white; } /* ปรับเป็นเขียวเข้ม */
-        .status-จัดเก็บแล้ว { background-color: #2196f3; color: white; }
-        .status-ไม่สำเร็จ { background-color: #dc3545; color: white; }
-
-        /* Lending Status */
-        .status-ยืมอยู่ { background-color: #dc3545; color: white; }
-        .status-คืนแล้ว { background-color: #007769; color: white; } /* ปรับเป็นเขียวเข้ม */
-
-
-        .grade-filter-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .grade-filter-btn {
-            padding: 8px 16px;
-            border-radius: 20px;
-            /* เปลี่ยนสีเป็นเขียวเข้ม */
-            border: 2px solid #007769;
-            background-color: white;
-            color: #007769;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .grade-filter-btn:hover {
-            background-color: #007769;
+        .status-เข้าค่าย {
+            background-color: #dc3545;
             color: white;
-            transform: translateY(-2px);
         }
 
-        .grade-filter-btn.active {
-            background-color: #007769;
+        .status-จิตอาสา {
+            background-color: #28a745;
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 119, 105, 0.4);
         }
+
+        .status-อื่นๆ {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .follow-ดำเนินการแล้ว {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .follow-กำลังดำเนินการ {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .follow-ติดตามผล {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .follow-ชำระเงินแล้ว {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .follow-รอดำเนินการ {
+            background-color: #6c757d;
+            color: white;
+        }
+.grade-filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.grade-filter-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #667eea;
+    background-color: white;
+    color: #667eea;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.grade-filter-btn:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.grade-filter-btn.active {
+    background-color: #667eea;
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -537,137 +525,23 @@
         @keyframes fadeOut {
             to { opacity: 0; transform: translateX(100%); }
         }
-
-        /* New: Card Layout CSS (ซ่อนไอคอน) */
-        .home-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 20px;
-        }
-
-        .home-card {
-            /* ใช้สีเขียวอ่อน/หินเป็นพื้นหลัง Card */
-            background: rgba(195, 232, 228, 0.95); 
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            min-height: 120px; /* ลดความสูงลงเมื่อไม่มีไอคอน */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .home-card:hover {
-            transform: translateY(-3px);
-             /* เน้น Border ด้วยสีเขียวเข้ม */
-            border: 2px solid #007769; 
-            box-shadow: 0 12px 40px rgba(0, 119, 105, 0.3);
-        }
-
-        .card-icon {
-            /* ซ่อนไอคอนหน้าแรก */
-            display: none;
-            visibility: hidden;
-            font-size: 3.5rem;
-            margin-bottom: 0px; 
-        }
-
-        .card-title {
-            font-size: 1.6rem; /* เน้นชื่อหัวข้อให้ใหญ่ขึ้น */
-            font-weight: 800;
-            color: #2c5f59; /* หัวข้อใช้สีเขียวเข้ม */
-            margin-bottom: 5px;
-        }
-
-        .card-description {
-            font-size: 1rem;
-            color: #555;
-        }
-
-        /* Hide the original nav bar */
-        .header .nav { display: none; }
-        
-        /* New: Back Button Style */
-        .back-button {
-            /* เปลี่ยนสีปุ่มย้อนกลับเป็นเขียวเข้ม */
-            background: #2c5f59;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-button:hover {
-            background: #1e3f3d;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏛️ งานกิจการนักเรียน</h1>
-            </div>
-        
-        <div id="home" class="page active">
-            <h2>หน้าแรก: ระบบงานกิจการนักเรียน</h2>
-            <div class="home-grid">
-                
-                <div class="home-card" onclick="showPage('register', event)">
-                    <div class="card-icon">🏅</div>
-                    <div class="card-title">บันทึกพฤติกรรมความดี</div>
-                    <div class="card-description">สำหรับครู/บุคลากรบันทึกความดีของนักเรียน</div>
-                </div>
-
-                <div class="home-card" onclick="showPage('status', event)">
-                    <div class="card-icon">🚦</div>
-                    <div class="card-title">ตรวจสอบสถานะพฤติกรรม</div>
-                    <div class="card-description">สำหรับนักเรียน/ผู้ปกครอง ตรวจสอบสถานะการอนุมัติ</div>
-                </div>
-
-                <div class="home-card" onclick="showPage('documentTracking', event)">
-                    <div class="card-icon">🖋️</div>
-                    <div class="card-title">ระบบติดตามเอกสารนักเรียน</div>
-                    <div class="card-description">บันทึกและติดตามสถานะการดำเนินการเอกสารต่างๆ</div>
-                </div>
-
-                <div class="home-card" onclick="showPage('lendingTracking', event)">
-                    <div class="card-icon">🔑</div>
-                    <div class="card-title">ระบบติดตามการยืมของ</div>
-                    <div class="card-description">บันทึกรายการยืมและคืนสิ่งของ/อุปกรณ์</div>
-                </div>
-
-                <div class="home-card" onclick="showPage('admin', event)">
-                    <div class="card-icon">📊</div>
-                    <div class="card-title">ผู้ดูแลระบบ</div>
-                    <div class="card-description">จัดการข้อมูลทั้งหมดและออกรายงาน</div>
-                </div>
+            <h1>🎓 ระบบบันทึกพฤติกรรมนักเรียน</h1>
+            <div class="nav">
+                <button class="nav-btn active" onclick="showPage('register')">📝 ลงทะเบียน</button>
+                <button class="nav-btn" onclick="showPage('status')">🔍 ตรวจสอบสถานะ</button>
+                <button class="nav-btn" onclick="showPage('camp')">🏕️ นักเรียนเข้าค่าย</button>
+                <button class="nav-btn" onclick="showPage('admin')">⚙️ ผู้ดูแลระบบ</button>
             </div>
         </div>
 
-        <div id="register" class="page">
+        <!-- หน้าลงทะเบียน -->
+        <div id="register" class="page active">
             <h2>📝 ลงทะเบียนพฤติกรรมความดี</h2>
-            <button class="back-button" onclick="showPage('home', event)">
-                ⬅️ กลับหน้าหลัก
-            </button>
             <form id="registerForm">
                 <div class="form-row">
                     <div class="form-group">
@@ -804,11 +678,10 @@
             <div id="registerMessage"></div>
         </div>
 
+        <!-- หน้าตรวจสอบสถานะ -->
         <div id="status" class="page">
-            <h2>🚦 ตรวจสอบสถานะการดำเนินการพฤติกรรม</h2>
-            <button class="back-button" onclick="showPage('home', event)">
-                ⬅️ กลับหน้าหลัก
-            </button>
+            <h2>🔍 ตรวจสอบสถานะการดำเนินการ</h2>
+            
             <div class="search-container">
                 <input type="text" id="searchStudentId" placeholder="กรอกรหัสนักเรียนเพื่อค้นหา (เช่น S001234)">
                 <button onclick="searchStatus()" class="btn">
@@ -820,161 +693,118 @@
             <div id="statusResults"></div>
         </div>
 
-        <div id="documentTracking" class="page">
-            <h2>🖋️ ระบบติดตามเอกสารนักเรียน</h2>
-            <button class="back-button" onclick="showPage('home', event)">
-                ⬅️ กลับหน้าหลัก
-            </button>
-            <div class="nav">
-                <button class="nav-btn active" onclick="showDocumentSubPage('addDocument')">➕ เพิ่มข้อมูลเอกสารใหม่</button>
-                <button class="nav-btn" onclick="showDocumentSubPage('viewDocument')">📋 แสดงรายงาน ติดตามเอกสาร</button>
+        <!-- หน้านักเรียนเข้าค่าย (ใหม่) -->
+       <div id="camp" class="page">
+    <h2>🏕️ นักเรียนที่ต้องเข้าค่าย</h2>
+    		<!-- ============ เพิ่มส่วน Admin Login สำหรับหน้าค่าย ============ -->
+<div id="campAdminSection" style="margin-bottom: 25px;">
+    <!-- Admin Login Form -->
+    <div id="campAdminLoginForm" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 24px;">🔐</span>
             </div>
-            <hr>
-
-            <div id="addDocument" class="sub-page active">
-                <h3>5.1 เพิ่มข้อมูลเอกสารใหม่ (รหัสผ่าน Admin1234)</h3>
-                <form id="addDocumentForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="docStudentId">รหัสนักเรียน *</label>
-                            <input type="text" id="docStudentId" required placeholder="เช่น S001234" maxlength="20">
-                        </div>
-                        <div class="form-group">
-                            <label for="docFullName">ชื่อ-นามสกุล *</label>
-                            <input type="text" id="docFullName" required placeholder="เช่น นายสมชาย ใจดี" maxlength="100">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="docType">ประเภทเอกสาร *</label>
-                        <select id="docType" required>
-                            <option value="">กรุณาเลือกประเภทเอกสาร</option>
-                            <option value="ใบลาออก">ใบลาออก</option>
-                            <option value="รายงานผลการดำเนินการตัดสิน">รายงานผลการดำเนินการตัดสิน</option>
-                            <option value="อื่นๆ">อื่นๆ</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="docStatus">สถานะหลัก *</label>
-                        <select id="docStatus" required>
-                            <option value="รอดำเนินการ">รอดำเนินการ</option>
-                            <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
-                            <option value="จัดเก็บแล้ว">จัดเก็บแล้ว</option>
-                            <option value="ไม่สำเร็จ">ไม่สำเร็จ</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="docSentDate">วันที่ส่ง *</label>
-                        <input type="date" id="docSentDate" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="docNote">หมายเหตุ</label>
-                        <textarea id="docNote" placeholder="รายละเอียดเพิ่มเติม" maxlength="500"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-success">
-                        <span id="docSubmitLoading" style="display: none;" class="loading"></span>
-                        <span id="docSubmitText">บันทึกข้อมูลเอกสาร</span>
-                    </button>
-                </form>
-            </div>
-
-            <div id="viewDocument" class="sub-page">
-                <h3>5.2 รายงาน ติดตามเอกสารนักเรียน</h3>
-                <div id="docReportStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-                <div id="docFilterControls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <select id="docStatusFilter" onchange="filterDocumentData()" class="camp-status-select">
-                        <option value="">📋 ทุกสถานะ</option>
-                        <option value="รอดำเนินการ">รอดำเนินการ</option>
-                        <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
-                        <option value="จัดเก็บแล้ว">จัดเก็บแล้ว</option>
-                        <option value="ไม่สำเร็จ">ไม่สำเร็จ</option>
-                    </select>
-                    <button onclick="loadDocumentData()" class="btn">โหลดข้อมูลใหม่</button>
-                </div>
-                <div id="documentDataDisplay"></div>
+            <div>
+                <h4 style="margin: 0; color: white; font-size: 18px;">เข้าสู่ระบบ Admin การจัดการข้อมูลค่าย</h4>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">จำเป็นต้องเข้าสู่ระบบเพื่อเพิ่ม แก้ไข หรือลบข้อมูลนักเรียน</p>
             </div>
         </div>
-
-        <div id="lendingTracking" class="page">
-            <h2>🔑 ระบบติดตามการยืมของ</h2>
-            <button class="back-button" onclick="showPage('home', event)">
-                ⬅️ กลับหน้าหลัก
-            </button>
-            <div class="nav">
-                <button class="nav-btn active" onclick="showLendingSubPage('addLending')">➕ บันทึกการยืมของใหม่</button>
-                <button class="nav-btn" onclick="showLendingSubPage('viewLending')">📋 รายการการยืม</button>
-            </div>
-            <hr>
-
-            <div id="addLending" class="sub-page active">
-                <h3>6.1 บันทึกการยืมของใหม่</h3>
-                <form id="addLendingForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="lendStudentId">เลขประจำตัว *</label>
-                            <input type="text" id="lendStudentId" required placeholder="เช่น S001234" maxlength="20">
-                        </div>
-                        <div class="form-group">
-                            <label for="lendClassroom">ห้อง *</label>
-                            <input type="text" id="lendClassroom" required placeholder="เช่น ม.4/10" maxlength="10">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lendFullName">ชื่อผู้ยืม *</label>
-                        <input type="text" id="lendFullName" required placeholder="เช่น นายสมชาย ใจดี" maxlength="100">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lendTel">เบอร์โทร *</label>
-                        <input type="tel" id="lendTel" required placeholder="เช่น 08x-xxxxxxx" maxlength="15">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="lendItem">สิ่งของที่ยืม *</label>
-                        <textarea id="lendItem" required placeholder="เช่น กุญแจห้องพักครู 1105, ไมโครโฟนไร้สาย #3" maxlength="300"></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="lendDate">วันที่ยืม *</label>
-                            <input type="date" id="lendDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="returnDate">วันที่คืน (กำหนด)</label>
-                            <input type="date" id="returnDate">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn">
-                        <span id="lendSubmitLoading" style="display: none;" class="loading"></span>
-                        <span id="lendSubmitText">บันทึกการยืม</span>
-                    </button>
-                </form>
-            </div>
-
-            <div id="viewLending" class="sub-page">
-                <h3>6.2 รายการการยืม</h3>
-                <div id="lendFilterControls" style="margin-bottom: 20px;">
-                    <button onclick="loadLendingData(false)" class="btn btn-warning">📋 รายการที่ยังไม่คืน</button>
-                    <button onclick="loadLendingData(true)" class="btn btn-success">✅ รายการที่คืนแล้ว</button>
-                </div>
-                <div id="lendReportStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-                <div id="lendingDataDisplay"></div>
-            </div>
-        </div>
-
-        <div id="admin" class="page">
+        
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="password" 
+                   id="campAdminPassword" 
+                   placeholder="รหัสผ่าน Admin การจัดการค่าย" 
+                   style="flex: 1; min-width: 200px; padding: 12px 15px; border: none; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); outline: none; transition: all 0.3s ease;"
+                   onkeypress="if(event.key==='Enter') campAdminLogin()">
             
+            <button onclick="campAdminLogin()" 
+                    class="btn" 
+                    id="campLoginBtn"
+                    style="background: linear-gradient(45deg, #28a745, #20c997); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; white-space: nowrap; min-width: 120px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);">
+                <span id="campLoginLoading" style="display: none;" class="loading"></span>
+                <span id="campLoginText">🔓 เข้าสู่ระบบ</span>
+            </button>
+            
+            <button onclick="campAdminLogout()" 
+                    class="btn btn-danger" 
+                    id="campLogoutBtn" 
+                    style="display: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; white-space: nowrap; min-width: 120px; background: linear-gradient(45deg, #dc3545, #c82333); box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);">
+                🚪 ออกจากระบบ
+            </button>
+        </div>
+        
+        <!-- Message Area -->
+        <div id="campAdminMessage" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Admin Status Display -->
+    <div id="campAdminStatus" style="display: none; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">✅</span>
+            <div>
+                <strong style="color: white; font-size: 16px;">Admin เข้าสู่ระบบแล้ว</strong>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">คุณสามารถจัดการข้อมูลนักเรียนได้แล้ว</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Denied Message -->
+    <div id="campAccessDenied" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">🔒</span>
+            <div>
+                <strong style="color: white; font-size: 16px;">โหมดดูข้อมูลอย่างเดียว</strong>
+                <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">คุณสามารถดูและส่งออกข้อมูลได้ แต่ไม่สามารถเพิ่ม แก้ไข หรือลบได้</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============ จบส่วน Admin Login ============ -->
+   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="campActionButtons">
+        <!-- ปุ่มจะถูกสร้างโดย JavaScript ตามสถานะ Admin -->
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(108, 117, 125, 0.1); border-radius: 20px; color: #6c757d; font-size: 14px;">
+            <span>🔄</span>
+            <span>กำลังโหลด...</span>
+        </div>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
+            <option value="">🏕️ ทุกสถานะ</option>
+            <option value="เข้าค่าย">เข้าค่าย</option>
+            <option value="จิตอาสา">จิตอาสา</option>
+            <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+        <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
+            <option value="">📋 ทุกการติดตาม</option>
+            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+            <option value="ติดตามผล">ติดตามผล</option>
+			<option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>
+            <option value="รอดำเนินการ">รอดำเนินการ</option>
+        </select>
+    </div>
+</div>
+
+    <!-- เพิ่มปุ่มกรองตามชั้นเรียน -->
+    <div class="grade-filter-container">
+        <button class="grade-filter-btn active" onclick="filterByGrade('all')">ทั้งหมด</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('1')">ม.1</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('2')">ม.2</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('3')">ม.3</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('4')">ม.4</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('5')">ม.5</button>
+        <button class="grade-filter-btn" onclick="filterByGrade('6')">ม.6</button>
+    </div>
+
+    <div id="campStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+    
+    <div id="campData"></div>
+</div>
+        <!-- หน้าผู้ดูแลระบบ -->
+        <div id="admin" class="page">
             <div id="loginSection">
                 <h2>🔐 เข้าสู่ระบบผู้ดูแล</h2>
-                <button class="back-button" onclick="showPage('home', event)" style="margin-bottom: 20px;">
-                    ⬅️ กลับหน้าหลัก
-                </button>
                 <div class="login-form">
                     <div class="form-group">
                         <label for="adminPassword">รหัสผ่าน</label>
@@ -990,111 +820,38 @@
 
             <div id="adminPanel" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-                    <h2>📊 จัดการข้อมูลระบบ</h2>
+                    <h2>⚙️ จัดการข้อมูลระบบ</h2>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                         <button class="btn" style="background: #6c757d;" onclick="showPage('home', event)">
-                            ⬅️ กลับหน้าหลัก
-                        </button>
-                        <button onclick="showAdminReportMenu()" class="btn btn-warning">📊 รายงานภาพรวม</button>
-                        <button onclick="exportAllData()" class="btn btn-info">📤 ส่งออกข้อมูลทั้งหมด (CSV)</button>
+                        <button onclick="exportData()" class="btn btn-info">📤 ส่งออกข้อมูล</button>
                         <button onclick="adminLogout()" class="btn btn-danger">🚪 ออกจากระบบ</button>
                     </div>
                 </div>
-
-                <div id="adminReportMenu" style="margin-bottom: 30px; display: none;">
-                    <h3>📊 รายงานภาพรวม (สรุป 3 มิติ)</h3>
-                    <div class="nav" style="margin-bottom: 15px;">
-                        <button class="nav-btn active" onclick="showAdminReport('behaviorReport', this)">พฤติกรรมความดี</button>
-                        <button class="nav-btn" onclick="showAdminReport('campReport', this)">นักเรียนเข้าค่าย</button>
-                        <button class="nav-btn" onclick="showAdminReport('documentReport', this)">ติดตามเอกสาร</button>
-                        <button class="nav-btn" onclick="showAdminReport('lendingReport', this)">ติดตามการยืมของ</button>
-                    </div>
-                    
-                    <div id="behaviorReport" class="report-content active">
-                        <h4>📈 สรุปพฤติกรรมความดี</h4>
-                        <div id="adminStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-                    </div>
-                    <div id="campReport" class="report-content">
-                        <h4>🏕️ สรุปนักเรียนเข้าค่าย</h4>
-                        <div id="adminCampStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-                    </div>
-                    <div id="documentReport" class="report-content">
-                        <h4>📄 สรุปติดตามเอกสาร</h4>
-                        <div id="adminDocStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-                    </div>
-                    <div id="lendingReport" class="report-content">
-                        <h4>📚 สรุปติดตามการยืมของ</h4>
-                        <div id="adminLendStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
-                    </div>
-                    <hr>
+                
+                <div id="adminStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button onclick="loadAllData()" class="btn">
+                        <span id="loadLoading" style="display: none;" class="loading"></span>
+                        <span id="loadText">📋 โหลดข้อมูลทั้งหมด</span>
+                    </button>
+                    <select id="statusFilter" onchange="filterByStatus()" class="form-control" style="padding: 8px; border-radius: 20px; border: 2px solid #e9ecef;">
+                        <option value="">📋 ทุกสถานะ</option>
+                        <option value="รอดำเนินการ">⏳ รอดำเนินการ</option>
+                        <option value="อยู่ระหว่างตรวจสอบ">🔍 อยู่ระหว่างตรวจสอบ</option>
+                        <option value="อนุมัติ">✅ อนุมัติ</option>
+                        <option value="ไม่อนุมัติ">❌ ไม่อนุมัติ</option>
+                    </select>
                 </div>
                 
-                <div id="adminDataMenu" style="margin-bottom: 30px;">
-                    <h3>📋 ข้อมูลรายบุคคล</h3>
-                    <div class="nav" style="margin-bottom: 15px;">
-                        <button class="nav-btn active" onclick="showAdminData('behaviorData', this)">จัดการพฤติกรรมความดี</button>
-                        <button class="nav-btn" onclick="showAdminData('campData', this)">จัดการนักเรียนเข้าค่าย</button>
-                    </div>
-
-                    <div id="behaviorData" class="data-content active">
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                            <button onclick="loadAllData()" class="btn">
-                                <span id="loadLoading" style="display: none;" class="loading"></span>
-                                <span id="loadText">📋 โหลดข้อมูลทั้งหมด</span>
-                            </button>
-                            <select id="statusFilter" onchange="filterByStatus()" class="form-control" style="padding: 8px; border-radius: 20px; border: 2px solid #e9ecef;">
-                                <option value="">📋 ทุกสถานะ</option>
-                                <option value="รอดำเนินการ">⏳ รอดำเนินการ</option>
-                                <option value="อยู่ระหว่างตรวจสอบ">🔍 อยู่ระหว่างตรวจสอบ</option>
-                                <option value="อนุมัติ">✅ อนุมัติ</option>
-                                <option value="ไม่อนุมัติ">❌ ไม่อนุมัติ</option>
-                            </select>
-                        </div>
-                        <div id="adminData"></div>
-                    </div>
-
-                    <div id="campData" class="data-content">
-                        <h3>🏕️ จัดการข้อมูลนักเรียนเข้าค่าย</h3>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                            <button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียนเข้าค่าย</button>
-                            <button onclick="loadCampData()" class="btn">โหลดข้อมูลค่าย</button>
-                            <button onclick="exportCampData()" class="btn btn-info">📤 ส่งออกข้อมูลค่าย</button>
-                        </div>
-                        <div id="campAdminFilters" style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
-                            <select id="campStatusFilter" onchange="filterCampData()" class="camp-status-select">
-                                <option value="">🏕️ ทุกสถานะ</option>
-                                <option value="เข้าค่าย">เข้าค่าย</option>
-                                <option value="จิตอาสา">จิตอาสา</option>
-                                <option value="อื่นๆ">อื่นๆ</option>
-                            </select>
-                            <select id="campFollowFilter" onchange="filterCampData()" class="camp-status-select">
-                                <option value="">📋 ทุกการติดตาม</option>
-                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-                                <option value="ติดตามผล">ติดตามผล</option>
-                                <option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option>
-                                <option value="รอดำเนินการ">รอดำเนินการ</option>
-                            </select>
-                        </div>
-                        <div class="grade-filter-container">
-                            <button class="grade-filter-btn active" onclick="filterByGrade('all', event)">ทั้งหมด</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('1', event)">ม.1</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('2', event)">ม.2</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('3', event)">ม.3</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('4', event)">ม.4</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('5', event)">ม.5</button>
-                            <button class="grade-filter-btn" onclick="filterByGrade('6', event)">ม.6</button>
-                        </div>
-                        <div id="campDataDisplay"></div>
-                    </div>
-                </div>
+                <div id="adminData"></div>
             </div>
         </div>
     </div>
 
+    <!-- Modal สำหรับเพิ่มนักเรียนเข้าค่าย -->
     <div id="campModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
         <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
-            <h3 style="margin-bottom: 20px; color: #2c3e50;">➕ เพิ่ม/แก้ไข นักเรียนเข้าค่าย</h3>
+            <h3 style="margin-bottom: 20px; color: #2c3e50;">➕ เพิ่มนักเรียนเข้าค่าย</h3>
             <form id="campForm">
                 <div class="form-group">
                     <label for="campStudentId">รหัสนักเรียน *</label>
@@ -1231,47 +988,47 @@
         </div>
     </div>
 
-    <div id="docEditModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10001; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
-            <h3 style="margin-bottom: 20px; color: #2c3e50;">🔄 แก้ไข/ติดตามเอกสาร</h3>
-            <div id="docEditContent">
-                <p>กำลังโหลดข้อมูล...</p>
-            </div>
-             <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
-                <button type="button" onclick="closeDocEditModal()" class="btn" style="background: #6c757d;">ปิด</button>
-            </div>
-        </div>
-    </div>
-    
     <script>
         // กำหนด URL ของ Google Apps Script Web App
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytUpzHj9TO4KuNpTtJ96P1TS_MZeEsCA4IZOXitMV1yUsspWjOSzNzfHzwMju7Fvr2bQ/exec'; // **กรุณาเปลี่ยน URL นี้**
+        // แทนที่ URL นี้ด้วย URL ของ Google Apps Script ที่คุณ deploy
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtsN84Kk0Oz4gCx9x7N2mn9Xwr90fZ_jU3Kt7ypFXRDOen8Mh1pLz9ERE_-RzgGTGwDA/exec';
 
-        // ตัวแปรสถานะและรหัสผ่าน
-        let currentPage = 'home';
+        let currentPage = 'register';
         let isAdminLoggedIn = false;
-        let allAdminData = []; 
-        let campData = [];
-        let documentData = []; // NEW: สำหรับข้อมูลเอกสาร
-        let lendingData = []; // NEW: สำหรับข้อมูลการยืมของ
-        let currentGradeFilter = 'all';
-        const ADMIN_PASSWORD = 'admin1234'; 
-        const DOCUMENT_EDIT_PASSWORD = 'admin1324';
-
-        // =======================================================
-        // #region 1. Helper & Utility Functions
-        // =======================================================
-
+        let allAdminData = []; // เก็บข้อมูลทั้งหมดสำหรับการกรอง
+        let campData = []; // เก็บข้อมูลนักเรียนเข้าค่าย
+	let currentGradeFilter = 'all';
+	let campAdminLoggedIn = false;
+	// ฟังก์ชันกรองตามชั้นเรียน
+function filterByGrade(grade) {
+    currentGradeFilter = grade;
+    
+    // อัปเดต active state ของปุ่ม
+    document.querySelectorAll('.grade-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // กรองข้อมูล
+    filterCampData();
+}
+        // ฟังก์ชันแสดงการแจ้งเตือน
         function showNotification(message, type = 'success') {
+            // ลบการแจ้งเตือนเก่า
             const existingNotifications = document.querySelectorAll('.notification');
             existingNotifications.forEach(notification => {
                 notification.classList.add('fade-out');
                 setTimeout(() => notification.remove(), 300);
             });
+
+            // สร้างการแจ้งเตือนใหม่
             const notification = document.createElement('div');
             notification.className = `alert alert-${type} notification`;
             notification.innerHTML = message;
+            
             document.body.appendChild(notification);
+            
+            // ลบอัตโนมัติหลัง 5 วินาทีี
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.classList.add('fade-out');
@@ -1280,11 +1037,12 @@
             }, 5000);
         }
 
+        // ฟังก์ชันตรวจสอบการเชื่อมต่อ
         async function checkConnection() {
-            if (SCRIPT_URL.includes('AKfycbydYOMVB3jO1QDIraP6IcII0s6V2YOzvrvxKP0X_hCi4u0UdEJkLnTjH2G8G-w')) {
+            if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
                 showNotification(`
                     <strong>⚠️ กรุณาตั้งค่า Google Apps Script ก่อนใช้งาน</strong><br>
-                    1. แทนที่ URL ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
+                    1. แทนที่ YOUR_SCRIPT_ID ใน JavaScript ด้วย Script ID ที่แท้จริง<br>
                     2. Deploy Google Apps Script เป็น Web App<br>
                     3. ตั้งค่า Permissions ให้ Anyone can access
                 `, 'warning');
@@ -1292,7 +1050,9 @@
             }
 
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=test`, { method: 'GET' });
+                const response = await fetch(`${SCRIPT_URL}?action=test`, {
+                    method: 'GET'
+                });
                 const result = await response.json();
                 return result.success;
             } catch (error) {
@@ -1300,104 +1060,63 @@
                 return false;
             }
         }
-        
-        // =======================================================
-        // #region 2. Navigation & Page Flow
-        // =======================================================
 
-        function showPage(pageId, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        // ฟังก์ชันเปลี่ยนหน้า
+        function showPage(pageId) {
+	// ถ้าเปลี่ยนไปหน้าค่าย ให้โหลดข้อมูลและอัปเดต UI
+if (pageId === 'camp') {
+    loadCampData();
+    
+    // อัปเดต UI ทันทีสำหรับหน้าค่าย
+    setTimeout(() => {
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }, 100);
+}
+            // ซ่อนหน้าทั้งหมด
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
             
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            // แสดงหน้าที่เลือก
             document.getElementById(pageId).classList.add('active');
+            
+            // อัปเดต navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
             currentPage = pageId;
             
-            if (pageId === 'admin' && isAdminLoggedIn) {
-                loadAllData(); 
-                loadCampData(true); 
-                loadDocumentData(); 
-                loadLendingData(true);
-                showAdminData('behaviorData');
+            // ถ้าไม่ได้ login admin และเปลี่ยนไปหน้า admin ให้แสดง login form
+            if (pageId === 'admin' && !isAdminLoggedIn) {
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('adminPanel').style.display = 'none';
             }
-            if (pageId === 'documentTracking') {
-                showDocumentSubPage('addDocument');
-            }
-            if (pageId === 'lendingTracking') {
-                showLendingSubPage('addLending');
+
+            // ถ้าเปลี่ยนไปหน้าค่าย ให้โหลดข้อมูล
+            if (pageId === 'camp') {
+                loadCampData();
             }
         }
 
-        function showDocumentSubPage(subPageId) {
-            document.querySelectorAll('#documentTracking .sub-page').forEach(page => page.classList.remove('active'));
-            document.getElementById(subPageId).classList.add('active');
-            document.querySelectorAll('#documentTracking .nav-btn').forEach(btn => btn.classList.remove('active'));
-            if (event.target.classList && event.target.classList.contains('nav-btn')) event.target.classList.add('active');
-            
-            if (subPageId === 'viewDocument') {
-                loadDocumentData();
-            }
-        }
-
-        function showLendingSubPage(subPageId) {
-            document.querySelectorAll('#lendingTracking .sub-page').forEach(page => page.classList.remove('active'));
-            document.getElementById(subPageId).classList.add('active');
-            document.querySelectorAll('#lendingTracking .nav-btn').forEach(btn => btn.classList.remove('active'));
-            if (event.target.classList && event.target.classList.contains('nav-btn')) event.target.classList.add('active');
-            
-            if (subPageId === 'viewLending') {
-                loadLendingData(false); 
-            }
-        }
-
-        function showAdminReportMenu() {
-            document.getElementById('adminReportMenu').style.display = 'block';
-            document.getElementById('adminDataMenu').style.display = 'none';
-            showAdminReport('behaviorReport', document.querySelector('#adminReportMenu .nav-btn:first-child'));
-        }
-
-        function showAdminReport(reportId, btn) {
-            document.querySelectorAll('.report-content').forEach(div => div.classList.remove('active'));
-            document.getElementById(reportId).classList.add('active');
-            document.querySelectorAll('#adminReportMenu .nav-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-
-            // อัปเดตสถิติ
-            if (reportId === 'behaviorReport') generateStats(allAdminData);
-            if (reportId === 'campReport') generateCampStatsAdmin(campData);
-            if (reportId === 'documentReport') generateDocStatsAdmin(documentData);
-            if (reportId === 'lendingReport') generateLendStatsAdmin(lendingData);
-        }
-
-        function showAdminData(dataId, btn) {
-            document.getElementById('adminReportMenu').style.display = 'none';
-            document.getElementById('adminDataMenu').style.display = 'block';
-            document.querySelectorAll('.data-content').forEach(div => div.classList.remove('active'));
-            document.getElementById(dataId).classList.add('active');
-            document.querySelectorAll('#adminDataMenu .nav-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            
-            if (dataId === 'campData') loadCampData(true); 
-            if (dataId === 'behaviorData') loadAllData(); 
-        }
-
-        // =======================================================
-        // #region 3. Behavior Management (พฤติกรรมความดี)
-        // =======================================================
-
+        // ฟังก์ชันส่งข้อมูลลงทะเบียน
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const loading = document.getElementById('submitLoading');
             const submitText = document.getElementById('submitText');
+            const messageDiv = document.getElementById('registerMessage');
             
+            // แสดง loading
             loading.style.display = 'inline-block';
             submitText.textContent = 'กำลังส่งข้อมูล...';
             submitBtn.disabled = true;
+            messageDiv.innerHTML = '';
             
+            // ตรวจสอบการเชื่อมต่อ
             const isConnected = await checkConnection();
             if (!isConnected) {
                 loading.style.display = 'none';
@@ -1406,6 +1125,7 @@
                 return;
             }
             
+            // เก็บข้อมูลจากฟอร์ม
             const formData = {
                 action: 'submit',
                 studentId: document.getElementById('studentId').value.trim(),
@@ -1420,12 +1140,15 @@
             };
             
             try {
+                // ส่งข้อมูลแบบ URL-encoded เพื่อหลีกเลี่ยง CORS
                 const params = new URLSearchParams();
                 params.append('data', JSON.stringify(formData));
                 
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
                     body: params
                 });
                 
@@ -1434,20 +1157,23 @@
                 if (result.success) {
                     showNotification('✅ บันทึกข้อมูลเรียบร้อยแล้ว!', 'success');
                     document.getElementById('registerForm').reset();
+                    // Reset character counter
                     document.getElementById('behaviorCount').textContent = '500';
                 } else {
                     showNotification(`❌ เกิดข้อผิดพลาด: ${result.message}`, 'danger');
                 }
             } catch (error) {
-                showNotification('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', 'danger');
+                console.error('Error:', error);
+                showNotification('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้<br><small>กรุณาตรวจสอบการตั้งค่า Google Apps Script URL</small>', 'danger');
             }
             
+            // ซ่อน loading
             loading.style.display = 'none';
             submitText.textContent = 'ส่งข้อมูล';
             submitBtn.disabled = false;
         });
 
-        // ฟังก์ชันนับตัวอักษร
+        // ฟังก์ชันนับตัวอักษรใน textarea
         document.getElementById('behavior').addEventListener('input', function() {
             const maxLength = 500;
             const currentLength = this.value.length;
@@ -1483,57 +1209,65 @@
                 
                 if (result.success && result.data && result.data.length > 0) {
                     let html = '<h3>📋 ผลการค้นหา</h3>';
-                    
-                    result.data.forEach(record => {
-                        const statusIcon = {
-                            'รอดำเนินการ': '⏳',
-                            'อยู่ระหว่างตรวจสอบ': '🔍',
-                            'อนุมัติ': '✅',
-                            'ไม่อนุมัติ': '❌'
-                        };
+                    let foundRecords = result.data.filter(record => 
+                        record.status === 'รอดำเนินการ' || 
+                        record.status === 'อยู่ระหว่างตรวจสอบ' ||
+                        record.status === 'อนุมัติ' ||
+                        record.status === 'ไม่อนุมัติ'
+                    );
 
-                        const statusColor = {
-                            'รอดำเนินการ': '#ffdb58',
-                            'อยู่ระหว่างตรวจสอบ': '#2196f3',
-                            'อนุมัติ': '#007769',
-                            'ไม่อนุมัติ': '#dc3545'
-                        }[record.status] || '#6c757d';
+                    if (foundRecords.length > 0) {
+                        foundRecords.forEach(record => {
+                            const statusIcon = {
+                                'รอดำเนินการ': '⏳',
+                                'อยู่ระหว่างตรวจสอบ': '🔍',
+                                'อนุมัติ': '✅',
+                                'ไม่อนุมัติ': '❌'
+                            };
 
-                        html += `
-                            <div class="status-card">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <h4>🎯 ${record.fullName || 'ไม่ระบุ'} (${record.classroom || 'ไม่ระบุ'})</h4>
-                                    <span style="color: white; background-color: ${statusColor}; padding: 4px 10px; border-radius: 15px; font-weight: bold;">
-                                        ${statusIcon[record.status] || '❓'} ${record.status || 'ไม่ระบุ'}
-                                    </span>
+                            const statusColor = {
+                                'รอดำเนินการ': '#ffa500',
+                                'อยู่ระหว่างตรวจสอบ': '#17a2b8',
+                                'อนุมัติ': '#28a745',
+                                'ไม่อนุมัติ': '#dc3545'
+                            }[record.status] || '#6c757d';
+
+                            html += `
+                                <div class="status-card">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <h4>🎯 ${record.fullName || 'ไม่ระบุ'} (${record.classroom || 'ไม่ระบุ'})</h4>
+                                        <span style="color: ${statusColor}; font-weight: bold;">
+                                            ${statusIcon[record.status] || '❓'} ${record.status || 'ไม่ระบุ'}
+                                        </span>
+                                    </div>
+                                    <p><strong>🎯 พฤติกรรม:</strong> ${record.behavior || 'ไม่ระบุ'}</p>
+                                    <p><strong>⭐ คะแนน:</strong> ${record.score || 'ไม่ระบุ'} คะแนน</p>
+                                    <p><strong>👨‍🏫 ครูผู้บันทึก:</strong> ${record.teacherName || 'ไม่ระบุ'}</p>
+                                    <p><strong>📅 วันที่บันทึก:</strong> ${record.timestamp || 'ไม่ระบุ'}</p>
+                                    ${record.rejectReason ? `<p><strong>❌ เหตุผลที่ไม่อนุมัติ:</strong> <span style="color: #dc3545;">${record.rejectReason}</span></p>` : ''}
+                                    ${record.updatedBy && record.updatedAt ? `<p><strong>🔄 อัปเดตล่าสุด:</strong> ${record.updatedBy} เมื่อ ${record.updatedAt}</p>` : ''}
                                 </div>
-                                <p><strong>🎯 พฤติกรรม:</strong> ${record.behavior || 'ไม่ระบุ'}</p>
-                                <p><strong>⭐ คะแนน:</strong> ${record.score || 'ไม่ระบุ'} คะแนน</p>
-                                <p><strong>👨‍🏫 ครูผู้บันทึก:</strong> ${record.teacherName || 'ไม่ระบุ'}</p>
-                                <p><strong>📅 วันที่บันทึก:</strong> ${record.timestamp || 'ไม่ระบุ'}</p>
-                                ${record.rejectReason ? `<p><strong>❌ เหตุผลที่ไม่อนุมัติ:</strong> <span style="color: #dc3545;">${record.rejectReason}</span></p>` : ''}
-                                ${record.updatedBy && record.updatedAt ? `<p><strong>🔄 อัปเดตล่าสุด:</strong> ${record.updatedBy} เมื่อ ${record.updatedAt}</p>` : ''}
-                            </div>
-                        `;
-                    });
+                            `;
+                        });
+                    } else {
+                        html += '<div class="alert alert-info">ไม่พบข้อมูลในสถานะที่แสดงได้</div>';
+                    }
                     
                     resultsDiv.innerHTML = html;
                 } else {
                     resultsDiv.innerHTML = '<div class="alert alert-info">ไม่พบข้อมูลสำหรับรหัสนักเรียนนี้</div>';
                 }
             } catch (error) {
+                console.error('Error:', error);
                 showNotification('เกิดข้อผิดพลาดในการค้นหาข้อมูล', 'danger');
-                resultsDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการค้นหาข้อมูล (ต้องติดตั้ง Apps Script)</div>';
+                resultsDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการค้นหาข้อมูล</div>';
             }
             
             loading.style.display = 'none';
             searchText.textContent = '🔍 ค้นหา';
         }
 
-        // =======================================================
-        // #region 4. Admin Panel Logic (Login, Data Load, Display)
-        // =======================================================
-
+        // ฟังก์ชัน login ผู้ดูแลระบบ
         async function adminLogin() {
             const password = document.getElementById('adminPassword').value;
             const messageDiv = document.getElementById('loginMessage');
@@ -1543,22 +1277,18 @@
             loading.style.display = 'inline-block';
             loginText.textContent = 'กำลังตรวจสอบ...';
             
+            // จำลองการตรวจสอบ
             await new Promise(resolve => setTimeout(resolve, 1000));
             
-            if (password === ADMIN_PASSWORD) { 
+            if (password === 'admin1234') {
                 isAdminLoggedIn = true;
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-                document.getElementById('adminDataMenu').style.display = 'block';
-                document.getElementById('adminReportMenu').style.display = 'none';
                 messageDiv.innerHTML = '';
                 showNotification('เข้าสู่ระบบสำเร็จ', 'success');
                 
-                await loadAllData();
-                await loadCampData(true); 
-                await loadDocumentData();
-                await loadLendingData(true);
-                showAdminData('behaviorData', document.querySelector('#adminDataMenu .nav-btn:first-child'));
+                // โหลดข้อมูลทันที
+                loadAllData();
             } else {
                 messageDiv.innerHTML = '<div class="alert alert-danger">รหัสผ่านไม่ถูกต้อง</div>';
             }
@@ -1567,22 +1297,217 @@
             loginText.textContent = 'เข้าสู่ระบบ';
         }
 
+// ฟังก์ชัน logout ผู้ดูแลระบบ
         function adminLogout() {
             isAdminLoggedIn = false;
             document.getElementById('loginSection').style.display = 'block';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminPassword').value = '';
-            // Clear data displays
             document.getElementById('adminData').innerHTML = '';
             document.getElementById('adminStats').innerHTML = '';
-            document.getElementById('campDataDisplay').innerHTML = '';
             allAdminData = [];
-            campData = [];
-            documentData = [];
-            lendingData = [];
             showNotification('ออกจากระบบแล้ว', 'info');
         }
-        
+
+        // ==================== ฟังก์ชันสำหรับ Admin หน้าค่าย ====================
+
+        // ฟังก์ชัน Login Admin สำหรับหน้าค่าย
+        async function campAdminLogin() {
+            const password = document.getElementById('campAdminPassword').value.trim();
+            const messageDiv = document.getElementById('campAdminMessage');
+            const loading = document.getElementById('campLoginLoading');
+            const loginText = document.getElementById('campLoginText');
+            const loginBtn = document.getElementById('campLoginBtn');
+            
+            // ตรวจสอบว่ากรอกรหัสผ่านหรือไม่
+            if (!password) {
+                showNotification('กรุณากรอกรหัสผ่าน', 'warning');
+                return;
+            }
+            
+            // แสดง loading state
+            loading.style.display = 'inline-block';
+            loginText.textContent = 'กำลังตรวจสอบ...';
+            loginBtn.disabled = true;
+            messageDiv.innerHTML = '';
+            
+            // จำลองการตรวจสอบรหัสผ่าน (delay 1.5 วินาที)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // ตรวจสอบรหัสผ่าน (สามารถเปลี่ยนรหัสผ่านได้ที่นี่)
+            if (password === 'admin1234') {
+                // Login สำเร็จ
+                campAdminLoggedIn = true;
+                
+                // ล้างรหัสผ่าน
+                document.getElementById('campAdminPassword').value = '';
+                
+                // อัปเดต UI
+                updateCampAdminUI();
+                
+                // แสดงข้อความสำเร็จ
+                showNotification('เข้าสู่ระบบ Admin หน้าค่ายสำเร็จ! คุณสามารถจัดการข้อมูลได้แล้ว', 'success');
+                
+                // อัปเดตการแสดงผลข้อมูล
+                displayCampData(getCurrentFilteredCampData());
+                updateCampActionButtons();
+                
+            } else {
+                // Login ไม่สำเร็จ
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
+                        <strong>❌ รหัสผ่านไม่ถูกต้อง</strong><br>
+                        <small>กรุณาติดต่อผู้ดูแลระบบหากลืมรหัสผ่าน</small>
+                    </div>
+                `;
+                
+                // เคลียร์รหัสผ่านที่ผิด
+                document.getElementById('campAdminPassword').value = '';
+                document.getElementById('campAdminPassword').focus();
+            }
+            
+            // ซ่อน loading state
+            loading.style.display = 'none';
+            loginText.textContent = '🔓 เข้าสู่ระบบ';
+            loginBtn.disabled = false;
+        }
+
+        // ฟังก์ชัน Logout Admin สำหรับหน้าค่าย
+        function campAdminLogout() {
+            // ยืนยันการออกจากระบบ
+            if (confirm('คุณต้องการออกจากระบบ Admin หน้าค่ายหรือไม่?')) {
+                // ออกจากระบบ
+                campAdminLoggedIn = false;
+                
+                // ล้างข้อมูลในฟอร์ม
+                document.getElementById('campAdminPassword').value = '';
+                document.getElementById('campAdminMessage').innerHTML = '';
+                
+                // อัปเดต UI
+                updateCampAdminUI();
+                
+                // แสดงข้อความแจ้งเตือน
+                showNotification('ออกจากระบบ Admin หน้าค่ายแล้ว', 'info');
+                
+                // อัปเดตการแสดงผลข้อมูล
+                displayCampData(getCurrentFilteredCampData());
+                updateCampActionButtons();
+            }
+        }
+
+        // ฟังก์ชันอัปเดต UI ตามสถานะ Login
+        function updateCampAdminUI() {
+            const loginForm = document.getElementById('campAdminLoginForm');
+            const adminStatus = document.getElementById('campAdminStatus');
+            const accessDenied = document.getElementById('campAccessDenied');
+            const logoutBtn = document.getElementById('campLogoutBtn');
+            
+            if (campAdminLoggedIn) {
+                // แสดงสถานะ Login สำเร็จ
+                loginForm.style.display = 'none';
+                adminStatus.style.display = 'block';
+                accessDenied.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                // แสดงฟอร์ม Login
+                loginForm.style.display = 'block';
+                adminStatus.style.display = 'none';
+                accessDenied.style.display = 'block';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        // ฟังก์ชันช่วยเหลือสำหรับดึงข้อมูลที่กรองแล้ว
+        function getCurrentFilteredCampData() {
+            const statusFilter = document.getElementById('campStatusFilter')?.value || '';
+            const followFilter = document.getElementById('campFollowFilter')?.value || '';
+            
+            let filteredData = [...campData]; // สร้างสำเนาของ array
+            
+            // กรองตามสถานะ
+            if (statusFilter) {
+                filteredData = filteredData.filter(record => record.status === statusFilter);
+            }
+            
+            // กรองตามการติดตาม
+            if (followFilter) {
+                filteredData = filteredData.filter(record => record.follow === followFilter);
+            }
+            
+            // กรองตามชั้นเรียน
+            if (currentGradeFilter !== 'all') {
+                filteredData = filteredData.filter(record => {
+                    if (record.classroom) {
+                        const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                        return gradeMatch && gradeMatch[1] === currentGradeFilter;
+                    }
+                    return false;
+                });
+            }
+            
+            return filteredData;
+        }
+
+        // ฟังก์ชันอัปเดตปุ่มการดำเนินการตามสถานะ Admin
+        function updateCampActionButtons() {
+            const actionButtonsDiv = document.getElementById('campActionButtons');
+            
+            if (!actionButtonsDiv) {
+                // สร้าง div ใหม่หากไม่มี
+                const parentDiv = document.querySelector('#camp div[style*="display: flex"]');
+                if (parentDiv) {
+                    const newDiv = document.createElement('div');
+                    newDiv.id = 'campActionButtons';
+                    newDiv.style.cssText = 'display: flex; gap: 10px; flex-wrap: wrap;';
+                    parentDiv.appendChild(newDiv);
+                }
+                return;
+            }
+            
+            if (campAdminLoggedIn) {
+                // แสดงปุ่มเต็มรูปแบบสำหรับ Admin
+                actionButtonsDiv.innerHTML = `
+                    <button onclick="addCampStudent()" class="btn btn-success" style="display: flex; align-items: center; gap: 8px;">
+                        <span>➕</span>
+                        <span>เพิ่มนักเรียน</span>
+                    </button>
+                    <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span>
+                        <span>ส่งออกข้อมูล</span>
+                    </button>
+                `;
+            } else {
+                // แสดงปุ่มที่จำกัดสำหรับผู้ใช้ทั่วไป
+                actionButtonsDiv.innerHTML = `
+                    <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span>
+                        <span>ส่งออกข้อมูล</span>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(108, 117, 125, 0.1); border-radius: 20px; color: #6c757d; font-size: 14px;">
+                        <span>🔒</span>
+                        <span>เข้าสู่ระบบ Admin เพื่อเพิ่ม/แก้ไขข้อมูล</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ฟังก์ชันตรวจสอบสิทธิ์ Admin (ใช้สำหรับฟังก์ชันอื่นๆ)
+        function checkCampAdminAccess(actionName = 'ดำเนินการ') {
+            if (!campAdminLoggedIn) {
+                showNotification(`กรุณาเข้าสู่ระบบ Admin ก่อน${actionName}`, 'warning');
+                
+                // เลื่อนหน้าไปที่ส่วน Login
+                document.getElementById('campAdminSection').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                return false;
+            }
+            return true;
+        }
+
+        // ฟังก์ชันสร้างสถิติ
         function generateStats(data) {
             const stats = {
                 total: data.length,
@@ -1595,22 +1520,22 @@
             const statsHtml = `
                 <div class="stats-card">
                     <div class="stats-icon">📊</div>
-                    <div class="stats-number" style="color: #2c5f59;">${stats.total}</div>
+                    <div class="stats-number">${stats.total}</div>
                     <div class="stats-label">ทั้งหมด</div>
                 </div>
                 <div class="stats-card">
                     <div class="stats-icon">⏳</div>
-                    <div class="stats-number" style="color: #ffdb58;">${stats.pending}</div>
+                    <div class="stats-number" style="color: #ffa500;">${stats.pending}</div>
                     <div class="stats-label">รอดำเนินการ</div>
                 </div>
                 <div class="stats-card">
                     <div class="stats-icon">🔍</div>
-                    <div class="stats-number" style="color: #2196f3;">${stats.reviewing}</div>
+                    <div class="stats-number" style="color: #17a2b8;">${stats.reviewing}</div>
                     <div class="stats-label">ตรวจสอบ</div>
                 </div>
                 <div class="stats-card">
                     <div class="stats-icon">✅</div>
-                    <div class="stats-number" style="color: #007769;">${stats.approved}</div>
+                    <div class="stats-number" style="color: #28a745;">${stats.approved}</div>
                     <div class="stats-label">อนุมัติ</div>
                 </div>
                 <div class="stats-card">
@@ -1623,79 +1548,7 @@
             document.getElementById('adminStats').innerHTML = statsHtml;
         }
 
-        // โค้ดที่ได้รับการแก้ไข: แสดงตารางข้อมูลจริง (Behavior)
-        function displayAdminData(data) {
-            const dataDiv = document.getElementById('adminData');
-            
-            if (!data || data.length === 0) {
-                dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลพฤติกรรมในระบบ</div>';
-                return;
-            }
-
-            let html = `
-                <h3>📋 ข้อมูลพฤติกรรมความดี (${data.length} รายการ)</h3>
-                <div style="overflow-x: auto;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>รหัส</th>
-                                <th>ชื่อ-นามสกุล</th>
-                                <th>ห้อง</th>
-                                <th style="min-width: 200px;">พฤติกรรม</th>
-                                <th>คะแนน</th>
-                                <th>ครูผู้บันทึก</th>
-                                <th>วันที่</th>
-                                <th style="min-width: 120px;">สถานะ</th>
-                                <th style="min-width: 250px;">การดำเนินการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-            
-            data.forEach((record) => {
-                // กำหนดสีและข้อความสถานะ
-                const statusColor = {
-                    'อนุมัติ': '#007769', // Primary Green
-                    'ไม่อนุมัติ': '#dc3545', // Danger Red
-                    'อยู่ระหว่างตรวจสอบ': '#2196f3', // Info Blue
-                    'รอดำเนินการ': '#ffdb58' // Accent Gold
-                }[record.status] || '#6c757d';
-                
-                // rowIndex คือ index แถวจริงใน Google Sheet (เริ่มต้นที่ 2)
-                const actualRowIndex = record.rowIndex;
-                
-                html += `
-                    <tr id="row-${actualRowIndex}">
-                        <td>${record.studentId || '-'}</td>
-                        <td>${record.fullName || '-'}</td>
-                        <td>${record.classroom || '-'}</td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.behavior || ''}">
-                            ${record.behavior ? record.behavior.substring(0, 50) + (record.behavior.length > 50 ? '...' : '') : '-'}
-                        </td>
-                        <td>${record.score || '-'}</td>
-                        <td>${record.teacherName || '-'}</td>
-                        <td style="font-size: 12px;">${record.timestamp || '-'}</td>
-                        <td><span class="status-badge" style="background-color: ${statusColor}; color: white;">${record.status || 'รอดำเนินการ'}</span></td>
-                        <td>
-                            ${record.status === 'รอดำเนินการ' || record.status === 'อยู่ระหว่างตรวจสอบ' ? `
-                                <div class="action-buttons">
-                                    <button class="btn btn-success" onclick="updateStatus(${actualRowIndex}, 'อนุมัติ')" data-row="${actualRowIndex}">✅ อนุมัติ</button>
-                                    <button class="btn btn-danger" onclick="rejectRecord(${actualRowIndex})" data-row="${actualRowIndex}">❌ ไม่อนุมัติ</button>
-                                </div>
-                            ` : `
-                                <span style="color: #007769;">${record.status}</span>
-                                ${record.rejectReason ? `<br><small style="color: #dc3545;">เหตุผล: ${record.rejectReason}</small>` : ''}
-                                ${record.updatedBy ? `<br><small style="color: #6c757d;">โดย: ${record.updatedBy}</small>` : ''}
-                            `}
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            html += '</tbody></table></div>';
-            dataDiv.innerHTML = html;
-        }
-
+        // ฟังก์ชันโหลดข้อมูลทั้งหมดสำหรับผู้ดูแลระบบ
         async function loadAllData() {
             const loading = document.getElementById('loadLoading');
             const loadText = document.getElementById('loadText');
@@ -1710,24 +1563,90 @@
                 
                 if (result.success && result.data && result.data.length > 0) {
                     allAdminData = result.data;
-                    generateStats(result.data); 
-                    displayAdminData(result.data); 
+                    generateStats(result.data);
+                    displayAdminData(result.data);
                     
-                    showNotification('✅ โหลดข้อมูลพฤติกรรมเรียบร้อย', 'success');
+                    showNotification('โหลดข้อมูลเรียบร้อย', 'success');
                 } else {
-                    allAdminData = [];
-                    dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลพฤติกรรมในระบบ</div>';
+                    dataDiv.innerHTML = '<div class="alert alert-info">ไม่มีข้อมูลในระบบ</div>';
                     document.getElementById('adminStats').innerHTML = '';
                 }
             } catch (error) {
-                showNotification('❌ เกิดข้อผิดพลาดในการโหลดข้อมูลพฤติกรรม', 'danger');
-                dataDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์</div>';
+                console.error('Error:', error);
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'danger');
+                dataDiv.innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
             }
             
             loading.style.display = 'none';
             loadText.textContent = '📋 โหลดข้อมูลทั้งหมด';
         }
-        
+
+        // ฟังก์ชันแสดงข้อมูลผู้ดูแลระบบ
+        function displayAdminData(data) {
+            const dataDiv = document.getElementById('adminData');
+            
+            let html = `
+                <h3>📊 ข้อมูลทั้งหมด (${data.length} รายการ)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัสนักเรียน</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>พฤติกรรม</th>
+                                <th>คะแนน</th>
+                                <th>ครูผู้บันทึก</th>
+                                <th>วันที่</th>
+                                <th>สถานะ</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.forEach((record, displayIndex) => {
+                const statusColor = {
+                    'อนุมัติ': '#28a745',
+                    'ไม่อนุมัติ': '#dc3545',
+                    'อยู่ระหว่างตรวจสอบ': '#17a2b8',
+                    'รอดำเนินการ': '#ffa500'
+                }[record.status] || '#6c757d';
+                
+                const actualRowIndex = record.rowIndex !== undefined ? record.rowIndex : displayIndex;
+                
+                html += `
+                    <tr id="row-${actualRowIndex}">
+                        <td>${record.studentId || '-'}</td>
+                        <td>${record.fullName || '-'}</td>
+                        <td>${record.classroom || '-'}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.behavior || ''}">${record.behavior || '-'}</td>
+                        <td>${record.score || '-'}</td>
+                        <td>${record.teacherName || '-'}</td>
+                        <td style="font-size: 12px;">${record.timestamp || '-'}</td>
+                        <td style="color: ${statusColor}; font-weight: bold;">${record.status || 'รอดำเนินการ'}</td>
+                        <td>
+                            ${record.status === 'รอดำเนินการ' || record.status === 'อยู่ระหว่างตรวจสอบ' ? `
+                                <div class="action-buttons">
+                                    <button class="btn btn-success" onclick="updateStatus(${actualRowIndex}, 'อนุมัติ')" data-row="${actualRowIndex}">✅ อนุมัติ</button>
+                                    <button class="btn btn-danger" onclick="rejectRecord(${actualRowIndex})" data-row="${actualRowIndex}">❌ ไม่อนุมัติ</button>
+                                </div>
+                            ` : `
+                                <span style="color: #6c757d;">ดำเนินการแล้ว</span>
+                                ${record.rejectReason ? `<br><small style="color: #dc3545;">เหตุผล: ${record.rejectReason}</small>` : ''}
+                                ${record.updatedBy ? `<br><small style="color: #6c757d;">โดย: ${record.updatedBy}</small>` : ''}
+                                ${record.updatedAt ? `<br><small style="color: #6c757d;">เมื่อ: ${record.updatedAt}</small>` : ''}
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></div>';
+            dataDiv.innerHTML = html;
+        }
+
+        // ฟังก์ชันกรองข้อมูลตามสถานะ
         function filterByStatus() {
             const selectedStatus = document.getElementById('statusFilter').value;
             
@@ -1739,8 +1658,12 @@
             }
         }
 
+        // ฟังก์ชันอัปเดตสถานะ
         async function updateStatus(rowIndex, newStatus, rejectReason = '') {
             try {
+                console.log('Updating status for rowIndex:', rowIndex, 'newStatus:', newStatus);
+                
+                // แสดง loading ในปุ่ม
                 const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
                 buttons.forEach(btn => {
                     btn.disabled = true;
@@ -1756,29 +1679,42 @@
                     updatedAt: new Date().toLocaleString('th-TH')
                 };
                 
+                console.log('Sending update data:', updateData);
+                
+                // ส่งข้อมูลแบบ URL-encoded เพื่อหลีกเลี่ยง CORS
                 const params = new URLSearchParams();
                 params.append('data', JSON.stringify(updateData));
                 
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
                     body: params
                 });
                 
                 const result = await response.json();
+                console.log('Update result:', result);
                 
                 if (result.success) {
                     showNotification(`✅ ${newStatus === 'อนุมัติ' ? 'อนุมัติ' : 'ไม่อนุมัติ'}เรียบร้อยแล้ว`, 'success');
+                    
+                    // โหลดข้อมูลใหม่
                     await loadAllData();
                 } else {
                     showNotification('เกิดข้อผิดพลาดในการอัปเดตสถานะ: ' + result.message, 'danger');
+                    
+                    // เปิดปุ่มกลับ
                     buttons.forEach(btn => {
                         btn.disabled = false;
                         btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅ อนุมัติ' : '❌ ไม่อนุมัติ';
                     });
                 }
             } catch (error) {
+                console.error('Update status error:', error);
                 showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + error.message, 'danger');
+                
+                // เปิดปุ่มกลับ
                 const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
                 buttons.forEach(btn => {
                     btn.disabled = false;
@@ -1787,6 +1723,7 @@
             }
         }
 
+        // ฟังก์ชันปฏิเสธพร้อมเหตุผล
         function rejectRecord(rowIndex) {
             const reason = prompt('กรุณาระบุเหตุผลในการไม่อนุมัติ:');
             if (reason && reason.trim()) {
@@ -1795,25 +1732,124 @@
                 showNotification('กรุณาระบุเหตุผลในการไม่อนุมัติ', 'warning');
             }
         }
+
+        // ฟังก์ชันส่งออกข้อมูล
+        function exportData() {
+            if (!allAdminData || allAdminData.length === 0) {
+                showNotification('ไม่มีข้อมูลให้ส่งออก กรุณาโหลดข้อมูลก่อน', 'warning');
+                return;
+            }
+
+            // สร้างข้อมูล CSV
+            const headers = ['วันที่', 'รหัสนักเรียน', 'เลขที่', 'ชื่อ-นามสกุล', 'ห้องเรียน', 'พฤติกรรม', 'คะแนน', 'ครูผู้บันทึก', 'สถานะ', 'เหตุผล', 'ผู้อัปเดต', 'วันที่อัปเดต'];
+            
+            let csvContent = headers.join(',') + '\n';
+            
+            allAdminData.forEach(record => {
+                const row = [
+                    record.timestamp || '',
+                    record.studentId || '',
+                    record.studentNo || '',
+                    `"${(record.fullName || '').replace(/"/g, '""')}"`,
+                    record.classroom || '',
+                    `"${(record.behavior || '').replace(/"/g, '""')}"`,
+                    record.score || '',
+                    `"${(record.teacherName || '').replace(/"/g, '""')}"`,
+                    record.status || '',
+                    `"${(record.rejectReason || '').replace(/"/g, '""')}"`,
+                    `"${(record.updatedBy || '').replace(/"/g, '""')}"`,
+                    record.updatedAt || ''
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            // ดาวน์โหลดไฟล์
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `student_behavior_data_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('ส่งออกข้อมูลเรียบร้อยแล้ว', 'success');
+        }
+
+        // ==================== ฟังก์ชันสำหรับจัดการข้อมูลนักเรียนเข้าค่าย ====================
+
+        // ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย
+// ฟังก์ชันโหลดข้อมูลนักเรียนเข้าค่าย (ปรับปรุงให้รองรับ Admin UI)
+async function loadCampData() {
+    try {
+        console.log('Loading camp data from Google Sheets...');
         
-        // =======================================================
-        // #region 5. Camp Management Logic (นักเรียนเข้าค่าย)
-        // =======================================================
+        const response = await fetch(`${SCRIPT_URL}?action=getCampData`);
+        const result = await response.json();
         
-        function generateCampStatsAdmin(data) {
+        console.log('Camp data response:', result);
+        
+        if (result.success) {
+            campData = result.data || [];
+            console.log('Loaded camp data:', campData);
+            
+            // อัปเดตสถิติและแสดงผลข้อมูล
+            generateCampStats(campData);
+            displayCampData(campData);
+            
+            // อัปเดต UI ตามสถานะ Admin
+            updateCampAdminUI();
+            updateCampActionButtons();
+            
+            if (campData.length === 0) {
+                showNotification('ไม่มีข้อมูลนักเรียนเข้าค่าย กรุณาเพิ่มข้อมูลใหม่', 'info');
+            } else {
+                console.log(`โหลดข้อมูลสำเร็จ: ${campData.length} รายการ`);
+            }
+        } else {
+            console.error('Error loading camp data:', result.message);
+            showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย: ' + result.message, 'danger');
+            
+            // รีเซ็ตข้อมูลและ UI
+            campData = [];
+            generateCampStats(campData);
+            displayCampData(campData);
+            updateCampAdminUI();
+            updateCampActionButtons();
+        }
+    } catch (error) {
+        console.error('Error loading camp data:', error);
+        showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error.message, 'danger');
+        
+        // รีเซ็ตข้อมูลและ UI
+        campData = [];
+        generateCampStats(campData);
+        displayCampData(campData);
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }
+}
+
+        // ฟังก์ชันสร้างสถิตินักเรียนเข้าค่าย
+        function generateCampStats(data) {
             const stats = {
                 total: data.length,
                 camp: data.filter(r => r.status === 'เข้าค่าย').length,
                 volunteer: data.filter(r => r.status === 'จิตอาสา').length,
+                other: data.filter(r => r.status === 'อื่นๆ').length,
                 completed: data.filter(r => r.follow === 'ดำเนินการแล้ว').length,
+                inProgress: data.filter(r => r.follow === 'กำลังดำเนินการ').length,
+                following: data.filter(r => r.follow === 'ติดตามผล').length,
+				following: data.filter(r => r.follow === 'ชำระเงินแล้ว').length,
                 waiting: data.filter(r => r.follow === 'รอดำเนินการ').length
             };
 
             const statsHtml = `
                 <div class="stats-card">
                     <div class="stats-icon">👥</div>
-                    <div class="stats-number" style="color: #2c5f59;">${stats.total}</div>
-                    <div class="stats-label">นักเรียนทั้งหมด</div>
+                    <div class="stats-number">${stats.total}</div>
+                    <div class="stats-label">ทั้งหมด</div>
                 </div>
                 <div class="stats-card">
                     <div class="stats-icon">🏕️</div>
@@ -1822,469 +1858,500 @@
                 </div>
                 <div class="stats-card">
                     <div class="stats-icon">🤝</div>
-                    <div class="stats-number" style="color: #007769;">${stats.volunteer}</div>
+                    <div class="stats-number" style="color: #28a745;">${stats.volunteer}</div>
                     <div class="stats-label">จิตอาสา</div>
                 </div>
                 <div class="stats-card">
                     <div class="stats-icon">✅</div>
-                    <div class="stats-number" style="color: #007769;">${stats.completed}</div>
+                    <div class="stats-number" style="color: #28a745;">${stats.completed}</div>
                     <div class="stats-label">ดำเนินการแล้ว</div>
                 </div>
                 <div class="stats-card">
-                    <div class="stats-icon">⏳</div>
-                    <div class="stats-number" style="color: #ffdb58;">${stats.waiting}</div>
-                    <div class="stats-label">รอดำเนินการ</div>
+                    <div class="stats-icon">⚡</div>
+                    <div class="stats-number" style="color: #ffc107;">${stats.inProgress}</div>
+                    <div class="stats-label">กำลังดำเนินการ</div>
                 </div>
             `;
-            document.getElementById('adminCampStats').innerHTML = statsHtml;
+
+            document.getElementById('campStats').innerHTML = statsHtml;
         }
 
-        async function loadCampData(isAdmin = false) {
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=getCampData`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    // *** การแก้ไข: แปลง key ให้เป็นตัวพิมพ์เล็กเพื่อความปลอดภัยในการเข้าถึง ***
-                    campData = (result.data || []).map(record => {
-                        const newRecord = {};
-                        for (const key in record) {
-                            newRecord[key.toLowerCase()] = record[key];
-                        }
-                        return newRecord;
-                    });
-
-                    generateCampStatsAdmin(campData); 
-                    filterCampData(); 
-                } else {
-                    showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย: ' + result.message, 'danger');
-                    document.getElementById('campDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลค่าย</div>';
-                }
-            } catch (error) {
-                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูลค่าย', 'danger');
-                document.getElementById('campDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์</div>';
-            }
-        }
-        
-        // แก้ไข: เพิ่มตรรกะการจัดการ Active State และเรียกการกรองหลัก
-        function filterByGrade(grade, event) {
-            currentGradeFilter = grade;
-            
-            // อัปเดต active state ของปุ่ม 
-            document.querySelectorAll('.grade-filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            if (event && event.target) {
-                event.target.classList.add('active');
-            } else {
-                // สำหรับกรณีที่ถูกเรียกใช้ครั้งแรก (all)
-                document.querySelector(`.grade-filter-btn[onclick*="filterByGrade('${grade}')"]`).classList.add('active');
-            }
-            
-            filterCampData(); // เรียกใช้การกรองหลัก
-        }
-
-        function filterCampData() {
-            const statusFilter = document.getElementById('campStatusFilter').value;
-            const followFilter = document.getElementById('campFollowFilter').value;
-            
-            let filteredData = campData;
-            
-            // 1. กรองตามสถานะ
-            if (statusFilter) {
-                filteredData = filteredData.filter(record => record.status === statusFilter);
-            }
-            
-            // 2. กรองตามการติดตาม
-            if (followFilter) {
-                filteredData = filteredData.filter(record => record.follow === followFilter);
-            }
-            
-            // 3. กรองตามชั้นเรียน (Grade Filter Logic)
-            if (currentGradeFilter !== 'all') {
-                filteredData = filteredData.filter(record => {
-                    // ใช้ key เป็นตัวพิมพ์เล็กตามที่แปลงไว้ใน loadCampData
-                    if (record.classroom) {
-                        // ดึงเลขชั้นเรียน (เช่น 'ม.1/1' -> '1')
-                        const gradeMatch = String(record.classroom).match(/^ม\.?(\d)/);
-                        return gradeMatch && gradeMatch[1] === currentGradeFilter;
+        // ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย
+// ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย (ปรับปรุงให้รองรับระบบ Admin)
+function displayCampData(data) {
+    const dataDiv = document.getElementById('campData');
+    
+    if (!data || data.length === 0) {
+        dataDiv.innerHTML = `
+            <div class="alert alert-info" style="text-align: center; padding: 30px;">
+                <h4 style="margin-bottom: 15px;">📝 ไม่มีข้อมูลนักเรียนเข้าค่าย</h4>
+                <p style="margin-bottom: 20px; color: #6c757d;">
+                    ${campAdminLoggedIn ? 
+                        'คลิกปุ่ม "เพิ่มนักเรียน" เพื่อเริ่มต้นการบันทึกข้อมูล' : 
+                        'เข้าสู่ระบบ Admin เพื่อเพิ่มข้อมูลนักเรียน'
                     }
-                    return false;
-                });
+                </p>
+                ${campAdminLoggedIn ? 
+                    '<button onclick="addCampStudent()" class="btn btn-success">➕ เพิ่มนักเรียนคนแรก</button>' : 
+                    ''
+                }
+            </div>
+        `;
+        return;
+    }
+    
+    // สร้างหัวตารางที่แตกต่างกันตาม Admin status
+    let tableHeader = `
+        <tr>
+            <th style="width: 60px;">ลำดับ</th>
+            <th>เลขประจำตัว</th>
+            <th>ชื่อ - นามสกุล</th>
+            <th>ห้องเรียน</th>
+            <th>สถานะ</th>
+            <th>ติดตาม</th>
+            <th>หมายเหตุ</th>
+            ${campAdminLoggedIn ? '<th style="width: 120px;">การจัดการ</th>' : ''}
+        </tr>
+    `;
+    
+    let html = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0;">📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
+            ${campAdminLoggedIn ? 
+                '<span style="background: #28a745; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">🔓 โหมด Admin</span>' : 
+                '<span style="background: #6c757d; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">👁️ โหมดดูอย่างเดียว</span>'
             }
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    ${tableHeader}
+                </thead>
+                <tbody>
+    `;
+    
+    // สร้างแถวข้อมูล
+    data.forEach((record, index) => {
+        html += `
+            <tr>
+                <td style="text-align: center; font-weight: bold; color: #667eea;">${index + 1}</td>
+                <td style="font-family: monospace; font-weight: 600;">${record.studentId}</td>
+                <td style="font-weight: 500;">${record.fullName}</td>
+                <td>
+                    <span style="background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 2px 8px; border-radius: 12px; font-size: 13px; font-weight: 600;">
+                        ${record.classroom}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge status-${record.status}">
+                        ${record.status}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge follow-${record.follow}">
+                        ${record.follow}
+                    </span>
+                </td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${record.note || 'ไม่มีหมายเหตุ'}">
+                    ${record.note ? 
+                        `<span style="color: #495057;">${record.note}</span>` : 
+                        '<span style="color: #adb5bd; font-style: italic;">ไม่มีหมายเหตุ</span>'
+                    }
+                </td>
+                ${campAdminLoggedIn ? `
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-warning" 
+                                    onclick="editCampStudent(${record.rowIndex})" 
+                                    style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                    title="แก้ไขข้อมูล">
+                                ✏️
+                            </button>
+                            <button class="btn btn-danger" 
+                                    onclick="deleteCampStudent(${record.rowIndex})" 
+                                    style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
+                                    title="ลบข้อมูล">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                ` : ''}
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+        
+        ${!campAdminLoggedIn ? `
+            <div style="background: rgba(108, 117, 125, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                    🔒 <strong>หากต้องการแก้ไขหรือลบข้อมูล</strong> กรุณาเข้าสู่ระบบ Admin ด้านบน
+                </p>
+            </div>
+        ` : `
+            <div style="background: rgba(40, 167, 69, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0; color: #28a745; font-size: 14px;">
+                    ✅ <strong>คุณสามารถจัดการข้อมูลได้เต็มรูปแบบ</strong> แก้ไข เพิ่ม หรือลบข้อมูลนักเรียน
+                </p>
+            </div>
+        `}
+    `;
+    
+    dataDiv.innerHTML = html;
+}
 
-            // แสดงตารางข้อมูลจริง
-            displayCampData(filteredData);
-        }
-
-        // โค้ดที่ได้รับการแก้ไข: แสดงตารางนักเรียนเข้าค่ายจริง
-        function displayCampData(data) {
-            const dataDiv = document.getElementById('campDataDisplay');
-            
-            if (!data || data.length === 0) {
-                dataDiv.innerHTML = '<div class="alert alert-info">ไม่พบข้อมูลนักเรียนเข้าค่ายตามตัวกรอง</div>';
-                return;
+        // ฟังก์ชันกรองข้อมูลนักเรียนเข้าค่าย
+function filterCampData() {
+    const statusFilter = document.getElementById('campStatusFilter').value;
+    const followFilter = document.getElementById('campFollowFilter').value;
+    
+    let filteredData = campData;
+    
+    // กรองตามสถานะ
+    if (statusFilter) {
+        filteredData = filteredData.filter(record => record.status === statusFilter);
+    }
+    
+    // กรองตามการติดตาม
+    if (followFilter) {
+        filteredData = filteredData.filter(record => record.follow === followFilter);
+    }
+    
+    // กรองตามชั้นเรียน (เพิ่มใหม่)
+    if (currentGradeFilter !== 'all') {
+        filteredData = filteredData.filter(record => {
+            if (record.classroom) {
+                const gradeMatch = record.classroom.match(/^ม\.?(\d)/);
+                return gradeMatch && gradeMatch[1] === currentGradeFilter;
             }
-            
-            let html = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="margin: 0;">📋 รายชื่อนักเรียนเข้าค่าย (${data.length} คน)</h3>
-                    <span style="background: #007769; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">🔓 โหมด Admin</span>
-                </div>
-                
-                <div style="overflow-x: auto;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th style="width: 60px;">ลำดับ</th>
-                                <th>เลขประจำตัว</th>
-                                <th>ชื่อ - นามสกุล</th>
-                                <th>ห้องเรียน</th>
-                                <th>สถานะ</th>
-                                <th>ติดตาม</th>
-                                <th style="min-width: 200px;">หมายเหตุ</th>
-                                <th style="width: 120px;">การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-            
-            data.forEach((record, index) => {
-                // *** การแก้ไข: ใช้ key เป็นตัวพิมพ์เล็กทั้งหมดเพื่อความปลอดภัย ***
-                const studentId = record.studentid || '-';
-                const fullName = record.fullname || '-';
-                const classroom = record.classroom || '-';
-                const status = record.status || '-';
-                const follow = record.follow || '-';
-                const note = record.note || '';
-
-                const statusClass = `status-${status.replace(/\s/g, '')}`;
-                const followClass = `follow-${follow.replace(/\s/g, '')}`;
-                
-                // rowIndex คือ index แถวจริงใน Google Sheet (ใช้สำหรับปุ่ม Edit/Delete)
-                const actualRowIndex = record.rowindex || index + 2; 
-
-                html += `
-                    <tr>
-                        <td style="text-align: center; font-weight: bold; color: #2c5f59;">${index + 1}</td>
-                        <td style="font-family: monospace; font-weight: 600;">${studentId}</td>
-                        <td style="font-weight: 500;">${fullName}</td>
-                        <td>
-                            <span style="background: rgba(0, 119, 105, 0.1); color: #007769; padding: 2px 8px; border-radius: 12px; font-size: 13px; font-weight: 600;">
-                                ${classroom}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="status-badge ${statusClass}">
-                                ${status}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="status-badge ${followClass}">
-                                ${follow}
-                            </span>
-                        </td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${note}">
-                            ${note ? 
-                                `<span style="color: #495057;">${note.substring(0, 50)}...</span>` : 
-                                '<span style="color: #adb5bd; font-style: italic;">-</span>'
-                            }
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-warning" 
-                                        onclick="editCampStudent(${actualRowIndex})" 
-                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
-                                        title="แก้ไขข้อมูล">
-                                    ✏️
-                                </button>
-                                <button class="btn btn-danger" 
-                                        onclick="deleteCampStudent(${actualRowIndex})" 
-                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
-                                        title="ลบข้อมูล">
-                                    🗑️
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            html += `
-                        </tbody>
-                    </table>
-                </div>
-                <div style="background: rgba(0, 119, 105, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
-                    <p style="margin: 0; color: #007769; font-size: 14px;">
-                        ✅ <strong>คุณสามารถจัดการข้อมูลได้เต็มรูปแบบ</strong> แก้ไข เพิ่ม หรือลบข้อมูลนักเรียน
-                    </p>
-                </div>
-            `;
-            
-            dataDiv.innerHTML = html;
-        }
-
+            return false;
+        });
+    }
+    
+    displayCampData(filteredData);
+}
+        // ฟังก์ชันเปิด Modal เพิ่มนักเรียน
+function addCampStudent() {
+    document.getElementById('campModal').style.display = 'flex';
+    document.getElementById('campForm').reset();
+    
+    // รีเซ็ตข้อมูลการแก้ไข
+    delete document.getElementById('campForm').dataset.editRowIndex;
+    delete document.getElementById('campForm').dataset.createdAt;
+    
+    document.querySelector('#campModal h3').textContent = 'เพิ่มนักเรียนเข้าค่าย';
+}
+        // ฟังก์ชันปิด Modal
         function closeCampModal() {
             document.getElementById('campModal').style.display = 'none';
-            document.getElementById('campForm').reset();
-            delete document.getElementById('campForm').dataset.editRowIndex;
         }
 
-        // Placeholder functions for Camp Management
-        function addCampStudent() { document.getElementById('campModal').style.display = 'flex'; }
-        function editCampStudent(rowIndex) { showNotification('ฟังก์ชันแก้ไขนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'warning'); }
-        function deleteCampStudent(rowIndex) { if(confirm('ยืนยันการลบนักเรียนเข้าค่าย (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบนักเรียนเข้าค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); loadCampData(true); } }
-        function exportCampData() { showNotification('กำลังส่งออกข้อมูลค่าย (ต้องสร้างโค้ดเต็ม)', 'info'); }
-
-
-        // =======================================================
-        // #region 6. Document & Lending Logic (แก้ไขแสดงตารางจริง)
-        // =======================================================
-
-        async function loadDocumentData() {
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=getDocumentData`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    documentData = result.data || [];
-                    generateDocStatsAdmin(documentData);
-                    filterDocumentData(); 
-                } else {
-                    document.getElementById('documentDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลเอกสาร</div>';
-                }
-            } catch(e) {
-                document.getElementById('documentDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูลเอกสาร</div>';
-            }
-        }
+        // ฟังก์ชันแก้ไขนักเรียนเข้าค่าย
+function editCampStudent(rowIndex) {
+    console.log('Editing student with rowIndex:', rowIndex);
+    const student = campData.find(s => s.rowIndex === rowIndex);
+    console.log('Found student:', student);
+    
+    if (student) {
+        document.getElementById('campStudentId').value = student.studentId || '';
+        document.getElementById('campFullName').value = student.fullName || '';
+        document.getElementById('campClassroom').value = student.classroom || '';
+        document.getElementById('campStatus').value = student.status || '';
+        document.getElementById('campFollow').value = student.follow || '';
+        document.getElementById('campNote').value = student.note || '';
         
-        function generateDocStatsAdmin(data) {
-             document.getElementById('adminDocStats').innerHTML = '<div class="alert alert-info">Dummy Stats: Document (Total: '+data.length+')</div>';
-        }
-
-        // โค้ดที่ได้รับการแก้ไข: แสดงตารางติดตามเอกสารจริง
-        function displayDocumentData(data) {
-            const dataDiv = document.getElementById('documentDataDisplay');
-            if (!data || data.length === 0) {
-                dataDiv.innerHTML = '<div class="alert alert-info">ไม่พบข้อมูลเอกสารตามตัวกรอง</div>';
-                return;
-            }
-
-            const signatures = [
-                'sig1: ผู้ปกครอง', 'sig2: ครูที่ปรึกษา', 'sig3: งานการเงิน', 'sig4: งานวัดผลฯ', 
-                'sig5: การทะเบียน', 'sig6: รองวิชาการ', 'sig7: รองบุคคล', 'sig8: ผู้อำนวยการ'
-            ];
+        // เก็บ rowIndex สำหรับการอัปเดต
+        document.getElementById('campForm').dataset.editRowIndex = rowIndex;
+        document.getElementById('campForm').dataset.createdAt = student.createdAt;
+        
+        document.getElementById('campModal').style.display = 'flex';
+        document.querySelector('#campModal h3').textContent = 'แก้ไขข้อมูลนักเรียน';
+    } else {
+        console.error('Student not found with rowIndex:', rowIndex);
+        showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการแก้ไข', 'danger');
+    }
+}
+        // ฟังก์ชันลบนักเรียนเข้าค่าย
+async function deleteCampStudent(rowIndex) {
+    console.log('Attempting to delete student with rowIndex:', rowIndex);
+    
+    // ตรวจสอบข้อมูลก่อนลบ
+    const student = campData.find(s => s.rowIndex === rowIndex);
+    if (!student) {
+        showNotification('ไม่พบข้อมูลนักเรียนที่ต้องการลบ', 'danger');
+        return;
+    }
+    
+    const confirmMessage = `คุณต้องการลบข้อมูลนักเรียนคนนี้หรือไม่?\n\nชื่อ: ${student.fullName}\nรหัส: ${student.studentId}`;
+    
+    if (confirm(confirmMessage)) {
+        try {
+            // แสดง loading
+            const deleteButtons = document.querySelectorAll(`button[onclick*="deleteCampStudent(${rowIndex})"]`);
+            deleteButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerHTML = '🗑️ กำลังลบ...';
+            });
             
-            let html = `
-                <h3>📋 รายการติดตามเอกสาร (${data.length} รายการ)</h3>
-                <div style="overflow-x: auto;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>รหัส/ชื่อ</th>
-                                <th>ประเภท</th>
-                                <th>สถานะหลัก</th>
-                                <th style="min-width: 150px;">วันที่ส่ง</th>
-                                <th style="min-width: 350px;">การติดตามลายเซ็น</th>
-                                <th>การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            data.forEach(record => {
-                let signatureBadges = '';
-                signatures.forEach((sigLabel, index) => {
-                    const field = `sig${index + 1}`;
-                    const status = record[field] || 'Pending';
-                    const badgeClass = status === 'Complete' ? 'signature-complete' : (status === 'Not Required' ? 'signature-not-required' : 'signature-pending');
-                    const badgeIcon = status === 'Complete' ? '✅' : (status === 'Not Required' ? '➖' : '⏳');
-                    
-                    signatureBadges += `<span class="signature-badge ${badgeClass}" title="${sigLabel}">
-                        ${badgeIcon} ${sigLabel.split(': ')[1]}
-                    </span>`;
+            const deleteData = {
+                action: 'deleteCampStudent',
+                rowIndex: rowIndex
+            };
+            
+            console.log('Sending delete request:', deleteData);
+            
+            const params = new URLSearchParams();
+            params.append('data', JSON.stringify(deleteData));
+            
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            });
+            
+            const result = await response.json();
+            console.log('Delete response:', result);
+            
+            if (result.success) {
+                showNotification('ลบข้อมูลเรียบร้อยแล้ว', 'success');
+                await loadCampData(); // โหลดข้อมูลใหม่
+            } else {
+                showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
+                
+                // เปิดปุ่มกลับ
+                deleteButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = '🗑️';
                 });
-
-                const statusClass = `status-${(record.status || '').replace(/\s/g, '')}`;
-                
-                html += `
-                    <tr>
-                        <td>${record.studentId || '-'} / ${record.fullName || '-'}</td>
-                        <td>${record.docType || '-'}</td>
-                        <td><span class="status-badge ${statusClass}">${record.status || '-'}</span></td>
-                        <td>${record.sentDate || '-'}</td>
-                        <td><div style="display:flex; flex-wrap: wrap;">${signatureBadges}</div></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-warning" 
-                                        onclick="editDocument(${record.rowIndex})" 
-                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
-                                        title="แก้ไข/ติดตามลายเซ็น">
-                                    ✏️
-                                </button>
-                                <button class="btn btn-danger" 
-                                        onclick="deleteDocument(${record.rowIndex})" 
-                                        style="padding: 6px 12px; font-size: 12px; border-radius: 15px;"
-                                        title="ลบข้อมูล">
-                                    🗑️
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
+            }
+        } catch (error) {
+            console.error('Error deleting camp student:', error);
+            showNotification('เกิดข้อผิดพลาดในการลบข้อมูล: ' + error.message, 'danger');
             
-            html += `</tbody></table></div>`;
-            dataDiv.innerHTML = html;
+            // เปิดปุ่มกลับ
+            const deleteButtons = document.querySelectorAll(`button[onclick*="deleteCampStudent(${rowIndex})"]`);
+            deleteButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.innerHTML = '🗑️';
+            });
         }
-        
-        function filterDocumentData() {
-             // (ฟังก์ชันกรองเอกสาร - ต้องสร้างโค้ดเต็ม)
-             loadDocumentData(); 
+    }
+}
+
+
+        // ฟังก์ชันส่งออกข้อมูลนักเรียนเข้าค่าย
+        function exportCampData() {
+            if (!campData || campData.length === 0) {
+                showNotification('ไม่มีข้อมูลให้ส่งออก', 'warning');
+                return;
+            }
+
+            // สร้างข้อมูล CSV
+            const headers = ['ลำดับ', 'เลขประจำตัว', 'ชื่อ-นามสกุล', 'ห้องเรียน', 'สถานะ', 'ติดตาม', 'หมายเหตุ', 'วันที่สร้าง'];
+            
+            let csvContent = headers.join(',') + '\n';
+            
+            campData.forEach((record, index) => {
+                const row = [
+                    index + 1,
+                    record.studentId || '',
+                    `"${(record.fullName || '').replace(/"/g, '""')}"`,
+                    record.classroom || '',
+                    record.status || '',
+                    record.follow || '',
+                    `"${(record.note || '').replace(/"/g, '""')}"`,
+                    record.createdAt || ''
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            // ดาวน์โหลดไฟล์
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `camp_students_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('ส่งออกข้อมูลนักเรียนเข้าค่ายเรียบร้อยแล้ว', 'success');
         }
 
-        // Placeholder functions for Document Management
-        function editDocument(rowIndex) { showNotification('ฟังก์ชันแก้ไขเอกสาร (ต้องสร้างโค้ดเต็ม)', 'warning'); }
-        function deleteDocument(rowIndex) { if(confirm('ยืนยันการลบเอกสาร (Row: ' + rowIndex + ') หรือไม่?')) { showNotification('กำลังลบเอกสาร (ต้องสร้างโค้ดเต็ม)', 'info'); loadDocumentData(); } }
-        function closeDocEditModal() { document.getElementById('docEditModal').style.display = 'none'; }
-
-
-        async function loadLendingData(isReturned = false) {
-             try {
-                const response = await fetch(`${SCRIPT_URL}?action=getLendingData&isReturned=${isReturned}`);
+        // ฟังก์ชันจัดการฟอร์มนักเรียนเข้าค่าย
+        document.getElementById('campForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('campSubmitLoading');
+            const submitText = document.getElementById('campSubmitText');
+            
+            loading.style.display = 'inline-block';
+            submitText.textContent = 'กำลังบันทึก...';
+            
+            try {
+                const editRowIndex = this.dataset.editRowIndex;
+                const createdAt = this.dataset.createdAt;
+                
+                console.log('Form submission - editRowIndex:', editRowIndex);
+                console.log('Form submission - createdAt:', createdAt);
+                
+                const formData = {
+                    studentId: document.getElementById('campStudentId').value.trim(),
+                    fullName: document.getElementById('campFullName').value.trim(),
+                    classroom: document.getElementById('campClassroom').value,
+                    status: document.getElementById('campStatus').value,
+                    follow: document.getElementById('campFollow').value,
+                    note: document.getElementById('campNote').value.trim()
+                };
+                
+                console.log('Form data:', formData);
+                
+                let requestData;
+                
+                if (editRowIndex) {
+                    // แก้ไขข้อมูล
+                    requestData = {
+                        action: 'updateCampStudent',
+                        rowIndex: parseInt(editRowIndex),
+                        createdAt: createdAt,
+                        ...formData
+                    };
+                    console.log('Update request:', requestData);
+                } else {
+                    // เพิ่มข้อมูลใหม่
+                    requestData = {
+                        action: 'addCampStudent',
+                        ...formData
+                    };
+                    console.log('Add request:', requestData);
+                }
+                
+                const params = new URLSearchParams();
+                params.append('data', JSON.stringify(requestData));
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+                
                 const result = await response.json();
+                console.log('Server response:', result);
                 
                 if (result.success) {
-                    lendingData = result.data || [];
-                    generateLendStatsAdmin(lendingData);
-                    displayLendingData(lendingData, isReturned);
+                    showNotification(editRowIndex ? 'แก้ไขข้อมูลเรียบร้อยแล้ว' : 'เพิ่มนักเรียนเรียบร้อยแล้ว', 'success');
+                    await loadCampData(); // โหลดข้อมูลใหม่
+                    closeCampModal();
+                    
+                    // รีเซ็ตฟอร์ม
+                    delete this.dataset.editRowIndex;
+                    delete this.dataset.createdAt;
                 } else {
-                    document.getElementById('lendingDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการโหลดข้อมูลการยืม</div>';
+                    showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                 }
-            } catch(e) {
-                document.getElementById('lendingDataDisplay').innerHTML = '<div class="alert alert-danger">เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูลการยืม</div>';
-            }
-        }
-        
-        function generateLendStatsAdmin(data) {
-             document.getElementById('adminLendStats').innerHTML = '<div class="alert alert-info">Dummy Stats: Lending (Total: '+data.length+')</div>';
-        }
-
-        // โค้ดที่ได้รับการแก้ไข: แสดงตารางติดตามการยืมของจริง
-        function displayLendingData(data, isReturned) {
-            const dataDiv = document.getElementById('lendingDataDisplay');
-            const title = isReturned ? '📋 รายการที่คืนแล้ว' : '📋 รายการที่ยังไม่คืน';
-            
-            if (!data || data.length === 0) {
-                dataDiv.innerHTML = `<div class="alert alert-info">ไม่พบ ${title}</div>`;
-                return;
-            }
-            
-            let html = `
-                <h3>${title} (${data.length} รายการ)</h3>
-                <div style="overflow-x: auto;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>รหัส/ห้อง</th>
-                                <th>ชื่อผู้ยืม</th>
-                                <th>เบอร์โทร</th>
-                                <th style="min-width: 250px;">สิ่งของที่ยืม</th>
-                                <th>วันที่ยืม</th>
-                                <th>วันที่กำหนดคืน</th>
-                                <th>สถานะ</th>
-                                <th>การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-            
-            data.forEach(record => {
-                const status = record.isReturned === 'Yes' ? 'คืนแล้ว' : 'ยืมอยู่';
-                const statusClass = record.isReturned === 'Yes' ? 'status-คืนแล้ว' : 'status-ยืมอยู่';
                 
-                html += `<tr>
-                    <td>${record.studentId || '-'} / ${record.classroom || '-'}</td>
-                    <td>${record.fullName || '-'}</td>
-                    <td>${record.tel || '-'}</td>
-                    <td title="${record.item || '-'}">${record.item ? record.item.substring(0, 50) + '...' : '-'}</td>
-                    <td>${record.lendDate || '-'}</td>
-                    <td>${record.returnDate || '-'}</td>
-                    <td><span class="status-badge ${statusClass}">${status}</span></td>
-                    <td>
-                        ${record.isReturned !== 'Yes' ? 
-                            `<button class="btn btn-success" onclick="markAsReturned(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px; border-radius: 15px;">
-                                ✅ คืนแล้ว
-                            </button>` : 
-                            `<span style="color: #007769;">คืนเมื่อ: ${record.returnedAt || '-'}</span>`}
-                    </td>
-                </tr>`;
-            });
-            
-            html += `</tbody></table></div>`;
-            dataDiv.innerHTML = html;
-        }
-
-        // Placeholder function for Lending Management
-        async function markAsReturned(rowIndex) {
-            const password = prompt(`กรุณาใส่รหัสผ่าน Admin (${ADMIN_PASSWORD}) เพื่อยืนยันการคืนของ:`);
-            if (password !== ADMIN_PASSWORD) {
-                showNotification('❌ รหัสผ่านไม่ถูกต้อง การดำเนินการถูกยกเลิก', 'danger');
-                return;
-            }
-            showNotification('✅ กำลังบันทึกการคืนของ (ต้องสร้างโค้ดเต็ม)', 'success');
-            // Logic to call Apps Script to update status
-            loadLendingData(false); // Reload the 'not returned' list
-        }
-
-
-        // =======================================================
-        // #region 7. Export All Data
-        // =======================================================
-
-        async function exportAllData() {
-            showNotification('⏳ กำลังรวบรวมข้อมูลจาก 4 ระบบเพื่อส่งออก... กรุณารอสักครู่', 'info');
-             try {
-                const response = await fetch(`${SCRIPT_URL}?action=exportAllData`);
-                const result = await response.json();
-                
-                if (result.success && result.csvContent) {
-                    const csvContent = result.csvContent;
-                    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-                    const link = document.createElement('a');
-                    const url = URL.createObjectURL(blob);
-                    link.setAttribute('href', url);
-                    link.setAttribute('download', `all_data_${new Date().toISOString().slice(0, 10)}.csv`);
-                    link.style.visibility = 'hidden';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showNotification('✅ ส่งออกข้อมูลรวม 4 ระบบเรียบร้อยแล้ว', 'success');
-                } else {
-                    showNotification(`❌ เกิดข้อผิดพลาดในการส่งออก: ${result.message || 'ไม่ได้รับข้อมูล CSV'}`, 'danger');
-                }
             } catch (error) {
-                showNotification('❌ เกิดข้อผิดพลาดในการเชื่อมต่อเพื่อส่งออกข้อมูล', 'danger');
+                console.error('Error saving camp data:', error);
+                showNotification('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message, 'danger');
             }
-        }
+            
+            loading.style.display = 'none';
+            submitText.textContent = 'บันทึก';
+        });
 
+        // เพิ่ม Enter key support สำหรับการค้นหา
+        document.getElementById('searchStudentId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchStatus();
+            }
+        });
 
-        // =======================================================
-        // #region 8. Initialization
-        // =======================================================
+        // เพิ่ม Enter key support สำหรับ admin login
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
+            }
+        });
+
+        // ตรวจสอบการเชื่อมต่อเมื่อโหลดหน้า
         window.addEventListener('load', function() {
             checkConnection();
-            // เมื่อโหลดหน้าครั้งแรก ให้ตั้งค่าปุ่มกรองชั้นเรียน "ทั้งหมด" เป็น Active
-            filterByGrade('all'); 
-            showPage('home');
         });
-        
-        // Event Listeners for Enter key (Behavior, Admin Login)
-        document.getElementById('searchStudentId').addEventListener('keypress', function(e) { if (e.key === 'Enter') searchStatus(); });
-        document.getElementById('adminPassword').addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
-        document.addEventListener('click', function(e) { if (e.target.id === 'campModal' || e.target.id === 'docEditModal') { closeCampModal(); closeDocEditModal(); } });
 
+        // เพิ่มการทำงานแบบ Progressive Web App
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // ไม่ลงทะเบียน service worker เพื่อหลีกเลี่ยงปัญหา cache
+            });
+        }
+
+        // ปิด Modal เมื่อคลิกนอกพื้นที่
+        document.getElementById('campModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCampModal();
+            }
+        });
+	// ==================== Event Listeners และการเริ่มต้นระบบ ====================
+
+// เมื่อโหลดหน้าเสร็จสิ้น
+document.addEventListener('DOMContentLoaded', function() {
+    // เริ่มต้นระบบหน้าค่าย
+    if (currentPage === 'camp') {
+        updateCampAdminUI();
+        updateCampActionButtons();
+    }
+});
+
+// ปิด Modal เมื่อกดนอกพื้นที่
+document.addEventListener('click', function(event) {
+    const campModal = document.getElementById('campModal');
+    if (event.target === campModal) {
+        closeCampModal();
+    }
+});
+
+// รองรับ Enter key ในฟอร์ม Login Camp Admin
+document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && event.target.id === 'campAdminPassword') {
+        campAdminLogin();
+    }
+});
+
+// ฟังก์ชันปิด Modal Camp
+function closeCampModal() {
+    document.getElementById('campModal').style.display = 'none';
+    
+    // รีเซ็ตฟอร์มเมื่อปิด
+    document.getElementById('campForm').reset();
+    delete document.getElementById('campForm').dataset.editRowIndex;
+    delete document.getElementById('campForm').dataset.createdAt;
+}
+
+// ฟังก์ชันแสดงสถานะการเชื่อมต่อ
+function showConnectionStatus(isConnected) {
+    const statusMessage = isConnected ? 
+        'เชื่อมต่อกับระบบสำเร็จ' : 
+        'ไม่สามารถเชื่อมต่อกับระบบได้';
+    
+    const statusType = isConnected ? 'success' : 'danger';
+    
+    showNotification(statusMessage, statusType);
+}
     </script>
 </body>
 </html>
+
+
+
+
+
 
