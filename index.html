@@ -160,6 +160,17 @@
             min-height: 100px;
             font-family: inherit;
         }
+        
+        /* === CSS ที่เพิ่มสำหรับลายเซ็น === */
+        .signature-canvas {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            width: 100%;
+            height: 150px;
+            cursor: crosshair;
+            touch-action: none; /* สำหรับมือถือ */
+        }
+        /* === จบส่วน CSS ลายเซ็น === */
 
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
@@ -772,10 +783,13 @@
                         <label for="lateClassroom">ห้องเรียน *</label>
                         <input type="text" id="lateClassroom" required placeholder="เช่น 6/1">
                     </div>
-                    <div class="form-group">
-                        <label for="lateSignature">ลายเซ็น (พิมพ์ชื่อ) *</label>
-                        <input type="text" id="lateSignature" required placeholder="พิมพ์ชื่อเพื่อยืนยัน">
-                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lateSignatureCanvas">ลายเซ็น (วาดบนหน้าจอ) *</label>
+                    <canvas id="lateSignatureCanvas" class="signature-canvas"></canvas>
+                    <button type="button" onclick="clearSignature()" class="btn btn-warning" style="font-size: 14px; padding: 8px 16px; margin-top: 10px;">
+                        ✏️ ล้างลายเซ็น
+                    </button>
                 </div>
                 <button type="submit" class="btn">
                     <span id="lateSubmitLoading" style="display: none;" class="loading"></span>
@@ -846,6 +860,7 @@
 
         <div id="camp" class="page">
             <h2>🏕️ นักเรียนที่ต้องเข้าค่าย (แสดงผลเท่านั้น)</h2>
+            
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="campActionButtons">
                      <button onclick="exportCampData()" class="btn btn-info" style="display: flex; align-items: center; gap: 8px;">
@@ -1086,7 +1101,7 @@
                     <label for="campClassroom">ห้องเรียน *</label>
                     <select id="campClassroom" required>
                          <option value="">กรุณาเลือกห้องเรียน</option>
-                         <optgroup label="ชั้นมัธยมศึกษาปีที่ 1">
+                        <optgroup label="ชั้นมัธยมศึกษาปีที่ 1">
                             <option value="ม.1/1">ม.1/1</option><option value="ม.1/2">ม.1/2</option><option value="ม.1/3">ม.1/3</option><option value="ม.1/4">ม.1/4</option><option value="ม.1/5">ม.1/5</option><option value="ม.1/6">ม.1/6</option><option value="ม.1/7">ม.1/7</option><option value="ม.1/8">ม.1/8</option><option value="ม.1/9">ม.1/9</option><option value="ม.1/10">ม.1/10</option><option value="ม.1/11">ม.1/11</option><option value="ม.1/12">ม.1/12</option>
                         </optgroup>
                         <optgroup label="ชั้นมัธยมศึกษาปีที่ 2">
@@ -1258,24 +1273,100 @@
 
     <script>
         // กำหนด URL ของ Google Apps Script Web App
-        // !!! สำคัญ: ต้องใช้ URL เดิมของคุณ !!!
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyc0yxONq8rGzPlYsOWdmWXuZEqGcWZrXCt17eRw25OcUS-aP8eEwAAP54XoR9HN_RhFA/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtsN84Kk0Oz4gCx9x7N2mn9Xwr90fZ_jU3Kt7ypFXRDOen8Mh1pLz9ERE_-RzgGTGwDA/exec';
 
         // --- Global Variables ---
         let currentPage = 'home';
         let isAdminLoggedIn = false;
-        let isBlacklistLoggedIn = false; // สำหรับหน้าบัญชีดำ
-        let currentAdminPage = 'behavior'; // หน้าเริ่มต้นใน Admin
+        let isBlacklistLoggedIn = false; 
+        let currentAdminPage = 'behavior'; 
         
-        let allAdminData = []; // พฤติกรรม
-        let campData = []; // เข้าค่าย
-        let blacklistData = []; // บัญชีดำ
-        let lateData = []; // มาสาย
-        let lendingData = []; // ยืมของ
-        let documentData = []; // เอกสาร
-        let docTypes = []; // ประเภทเอกสาร
+        let allAdminData = []; 
+        let campData = []; 
+        let blacklistData = []; 
+        let lateData = []; 
+        let lendingData = []; 
+        let documentData = []; 
+        let docTypes = []; 
 
         let currentGradeFilter = 'all';
+
+        // --- (ใหม่) Global Variables for Signature Pad ---
+        let signaturePad;
+        let signatureCtx;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function initSignaturePad() {
+            signaturePad = document.getElementById('lateSignatureCanvas');
+            if (!signaturePad) return; 
+
+            signatureCtx = signaturePad.getContext('2d');
+            
+            // ตั้งค่าขนาด Canvas ให้คมชัด
+            signaturePad.width = signaturePad.offsetWidth;
+            signaturePad.height = signaturePad.offsetHeight;
+            
+            signatureCtx.strokeStyle = '#000';
+            signatureCtx.lineWidth = 2;
+            signatureCtx.lineCap = 'round';
+            
+            // --- Event Listeners (Mouse) ---
+            signaturePad.addEventListener('mousedown', startDrawing);
+            signaturePad.addEventListener('mousemove', draw);
+            signaturePad.addEventListener('mouseup', stopDrawing);
+            signaturePad.addEventListener('mouseout', stopDrawing);
+            
+            // --- Event Listeners (Touch) ---
+            signaturePad.addEventListener('touchstart', startDrawing);
+            signaturePad.addEventListener('touchmove', draw);
+            signaturePad.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = getCoords(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault(); 
+            const [x, y] = getCoords(e);
+            signatureCtx.beginPath();
+            signatureCtx.moveTo(lastX, lastY);
+            signatureCtx.lineTo(x, y);
+            signatureCtx.stroke();
+            [lastX, lastY] = [x, y];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function getCoords(e) {
+            const rect = signaturePad.getBoundingClientRect();
+            if (e.touches) { // สำหรับมือถือ
+                return [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
+            }
+            // สำหรับเมาส์
+            return [e.clientX - rect.left, e.clientY - rect.top];
+        }
+
+        function clearSignature() {
+            if (signatureCtx) {
+                signatureCtx.clearRect(0, 0, signaturePad.width, signaturePad.height);
+            }
+        }
+
+        function isCanvasEmpty(canvas) {
+            const blank = document.createElement('canvas');
+            blank.width = canvas.width;
+            blank.height = canvas.height;
+            return canvas.toDataURL() === blank.toDataURL();
+        }
+        // --- (จบส่วน JS ลายเซ็น) ---
+
 
         // --- Utility Functions ---
 
@@ -1340,7 +1431,6 @@
                 }
             });
             
-            // ถ้าคลิกจาก Home Card ให้ปุ่ม Nav ด้านบน Active ด้วย
             if (fromHomeCard) {
                 const navBtn = document.querySelector(`.nav-btn[onclick="showPage('${pageId}')"]`);
                 if (navBtn) navBtn.classList.add('active');
@@ -1348,10 +1438,13 @@
 
             currentPage = pageId;
             
-            // โหลดข้อมูลอัตโนมัติเมื่อเปิดหน้า (ถ้ายังไม่มี)
             switch (pageId) {
                 case 'late':
                     if (lateData.length === 0) loadLateData();
+                    // (ใหม่) ปรับขนาด Canvas เมื่อแสดงหน้านี้
+                    if (signaturePad) {
+                         signaturePad.width = signaturePad.offsetWidth;
+                    }
                     break;
                 case 'lending':
                     if (lendingData.length === 0) loadLendingData();
@@ -1360,7 +1453,7 @@
                     if (documentData.length === 0) loadDocumentData();
                     break;
                 case 'camp':
-                    if (campData.length === 0) loadCampData(false); // โหลดแบบ display-only
+                    if (campData.length === 0) loadCampData(false); 
                     break;
                 case 'blacklist':
                     if (!isBlacklistLoggedIn) {
@@ -1375,17 +1468,13 @@
                         document.getElementById('loginSection').style.display = 'block';
                         document.getElementById('adminPanel').style.display = 'none';
                     } else {
-                        // เมื่อเข้าหน้า admin ให้โหลดหน้าย่อยที่ active อยู่
                         loadDataForAdminPage(currentAdminPage);
                     }
                     break;
             }
         }
 
-        // --- ฟังก์ชันหน้า Home (ใหม่) ---
-        // (ใช้ showPage() ใน HTML)
-
-        // --- ฟังก์ชันหน้ามาสาย (ใหม่) ---
+        // --- ฟังก์ชันหน้ามาสาย (แก้ไข-ลายเซ็น) ---
         document.getElementById('lateForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -1396,20 +1485,39 @@
             loading.style.display = 'inline-block';
             text.textContent = 'กำลังบันทึก...';
 
+            // === เริ่มส่วนที่แก้ไข ===
+            const canvas = document.getElementById('lateSignatureCanvas');
+            
+            // 1. ตรวจสอบว่าวาดลายเซ็นหรือยัง
+            if (isCanvasEmpty(canvas)) {
+                showNotification('กรุณาวาดลายเซ็น', 'warning');
+                btn.disabled = false;
+                loading.style.display = 'none';
+                text.textContent = 'บันทึกข้อมูล';
+                return; // หยุดการส่ง
+            }
+            
+            // 2. แปลงลายเซ็นเป็น Text (Base64)
+            const signatureData = canvas.toDataURL('image/png');
+
             const formData = {
                 action: 'addLateStudent',
                 studentId: document.getElementById('lateStudentId').value.trim(),
                 fullName: document.getElementById('lateFullName').value.trim(),
                 classroom: document.getElementById('lateClassroom').value.trim(),
-                signature: document.getElementById('lateSignature').value.trim(),
+                signature: signatureData, // <-- อัปเดตบรรทัดนี้
                 timestamp: new Date().toLocaleString('th-TH', {timeZone: 'Asia/Bangkok'})
             };
+            // === จบส่วนที่แก้ไข ===
 
             try {
                 const result = await postToGoogleScript(formData);
                 if (result.success) {
                     showNotification('บันทึกข้อมูลมาสายเรียบร้อย', 'success');
                     document.getElementById('lateForm').reset();
+                    
+                    clearSignature(); // <-- เพิ่ม: ล้างลายเซ็นหลังส่งสำเร็จ
+                    
                     await loadLateData(); // โหลดข้อมูลใหม่
                 } else {
                     showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
@@ -1437,8 +1545,8 @@
                 const result = await fetch(`${SCRIPT_URL}?action=getLateStudents`).then(res => res.json());
                 if (result.success) {
                     lateData = result.data || [];
-                    displayLateData(lateData); // แสดงผลหน้าสาธารณะ
-                    if(isAdminLoggedIn) displayAdminLateData(lateData); // แสดงผลหน้า Admin
+                    displayLateData(lateData); 
+                    if(isAdminLoggedIn) displayAdminLateData(lateData); 
                 } else {
                     showNotification('โหลดข้อมูลมาสายไม่สำเร็จ', 'danger');
                 }
@@ -1476,7 +1584,7 @@
                         <td>${record.studentId}</td>
                         <td>${record.fullName}</td>
                         <td>${record.classroom}</td>
-                        <td>${record.signature}</td>
+                        <td><img src="${record.signature}" alt="ลายเซ็น" style="height: 40px; border-bottom: 1px solid #ccc;"></td>
                     </tr>
                 `;
             });
@@ -1502,7 +1610,7 @@
                 classroom: document.getElementById('lendingClassroom').value.trim(),
                 phone: document.getElementById('lendingPhone').value.trim(),
                 item: document.getElementById('lendingItem').value.trim(),
-                status: 'ยืม', // สถานะเริ่มต้น
+                status: 'ยืม', 
                 timestamp: new Date().toLocaleString('th-TH', {timeZone: 'Asia/Bangkok'})
             };
 
@@ -1511,7 +1619,7 @@
                 if (result.success) {
                     showNotification('บันทึกการยืมเรียบร้อย', 'success');
                     document.getElementById('lendingForm').reset();
-                    await loadLendingData(); // โหลดข้อมูลใหม่
+                    await loadLendingData(); 
                 } else {
                     showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
                 }
@@ -1538,8 +1646,8 @@
                 const result = await fetch(`${SCRIPT_URL}?action=getLendingItems`).then(res => res.json());
                 if (result.success) {
                     lendingData = result.data || [];
-                    displayLendingData(lendingData); // แสดงผลหน้าสาธารณะ
-                    if(isAdminLoggedIn) displayAdminLendingData(lendingData); // แสดงผลหน้า Admin
+                    displayLendingData(lendingData); 
+                    if(isAdminLoggedIn) displayAdminLendingData(lendingData); 
                 } else {
                     showNotification('โหลดข้อมูลยืมของไม่สำเร็จ', 'danger');
                 }
@@ -1602,8 +1710,8 @@
                 const result = await fetch(`${SCRIPT_URL}?action=getDocumentData`).then(res => res.json());
                 if (result.success) {
                     documentData = result.data || [];
-                    displayDocumentData(documentData); // แสดงผลหน้าสาธารณะ
-                    if(isAdminLoggedIn) displayAdminDocumentData(documentData); // แสดงผลหน้า Admin
+                    displayDocumentData(documentData); 
+                    if(isAdminLoggedIn) displayAdminDocumentData(documentData); 
                 } else {
                     showNotification('โหลดข้อมูลเอกสารไม่สำเร็จ', 'danger');
                 }
@@ -1699,9 +1807,9 @@
                 const result = await fetch(`${SCRIPT_URL}?action=getCampData`).then(res => res.json());
                 if (result.success) {
                     campData = result.data || [];
-                    generateCampStats(campData); // สร้างสถิติ (คงเดิม)
-                    displayCampData(campData, isAdminView); // แสดงผลหน้าสาธารณะ (แก้ไข)
-                    if(isAdminLoggedIn) displayAdminCampData(campData); // แสดงผลหน้า Admin
+                    generateCampStats(campData); 
+                    displayCampData(campData, isAdminView); 
+                    if(isAdminLoggedIn) displayAdminCampData(campData); 
                 } else {
                     showNotification('โหลดข้อมูลค่ายไม่สำเร็จ', 'danger');
                 }
@@ -1710,11 +1818,9 @@
             }
         }
         
-        // ฟังก์ชันกรองตามชั้นเรียน (แก้ไข)
         function filterByGrade(grade, event) {
             currentGradeFilter = grade;
             
-            // อัปเดต active state ของปุ่ม
             document.querySelectorAll('.grade-filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -1722,10 +1828,9 @@
                  event.target.classList.add('active');
             }
            
-            filterCampData(); // กรองข้อมูล
+            filterCampData(); 
         }
 
-        // ฟังก์ชันกรองข้อมูลนักเรียนเข้าค่าย (คงเดิม)
         function filterCampData() {
             const statusFilter = document.getElementById('campStatusFilter').value;
             const followFilter = document.getElementById('campFollowFilter').value;
@@ -1744,10 +1849,9 @@
                 });
             }
             
-            displayCampData(filteredData, false); // แสดงผลในหน้าสาธารณะ
+            displayCampData(filteredData, false); 
         }
 
-        // ฟังก์ชันสร้างสถิตินักเรียนเข้าค่าย (คงเดิม)
         function generateCampStats(data) {
              const stats = {
                 total: data.length,
@@ -1792,9 +1896,8 @@
             document.getElementById('campStats').innerHTML = statsHtml;
         }
 
-        // ฟังก์ชันแสดงข้อมูลนักเรียนเข้าค่าย (แก้ไข - ไม่มีปุ่ม Admin)
         function displayCampData(data, isAdminView) {
-            if (isAdminView || currentPage !== 'camp') return; // หน้านี้สำหรับแสดงผลสาธารณะเท่านั้น
+            if (isAdminView || currentPage !== 'camp') return; 
 
             const dataDiv = document.getElementById('campData');
             if (!data || data.length === 0) {
@@ -1848,8 +1951,8 @@
             loading.style.display = 'inline-block';
             loginText.textContent = 'กำลังตรวจสอบ...';
             
-            // !!! รหัสผ่านสำหรับดูบัญชีดำ (ควรตั้งค่าให้ปลอดภัย) !!!
-            if (password === 'tp1234') { 
+            // !!! รหัสผ่านสำหรับดูบัญชีดำ !!!
+            if (password === 'blacklist123') { 
                 isBlacklistLoggedIn = true;
                 document.getElementById('blacklistLogin').style.display = 'none';
                 document.getElementById('blacklistData').style.display = 'block';
@@ -1878,8 +1981,8 @@
                 const result = await fetch(`${SCRIPT_URL}?action=getBlacklist`).then(res => res.json());
                 if (result.success) {
                     blacklistData = result.data || [];
-                    displayBlacklistData(blacklistData); // แสดงผลหน้าสาธารณะ (ถ้า login)
-                    if(isAdminLoggedIn) displayAdminBlacklistData(blacklistData); // แสดงผลหน้า Admin
+                    displayBlacklistData(blacklistData); 
+                    if(isAdminLoggedIn) displayAdminBlacklistData(blacklistData); 
                 } else {
                     showNotification('โหลดข้อมูลบัญชีดำไม่สำเร็จ', 'danger');
                 }
@@ -1904,13 +2007,12 @@
                 return;
             }
 
-            // หาจำนวนคอลัมน์ความผิดสูงสุด
             let maxOffenses = 0;
             filteredData.forEach(r => {
                 const offenseCount = Object.keys(r).filter(k => k.startsWith('offense')).length;
                 if (offenseCount > maxOffenses) maxOffenses = offenseCount;
             });
-            if (maxOffenses === 0) maxOffenses = 1; // อย่างน้อย 1
+            if (maxOffenses === 0) maxOffenses = 1; 
 
             let html = `
                 <div style="overflow-x: auto;">
@@ -1947,7 +2049,6 @@
 
         // --- ฟังก์ชันหน้า Admin (แก้ไข) ---
 
-        // (ฟังก์ชัน login/logout เดิม)
         async function adminLogin() {
             const password = document.getElementById('adminPassword').value;
             const messageDiv = document.getElementById('loginMessage');
@@ -1957,7 +2058,7 @@
             loading.style.display = 'inline-block';
             loginText.textContent = 'กำลังตรวจสอบ...';
             
-            // !!! รหัสผ่าน Admin หลัก (ควรตั้งค่าให้ปลอดภัย) !!!
+            // !!! รหัสผ่าน Admin หลัก !!!
             if (password === 'admin1234') { 
                 isAdminLoggedIn = true;
                 document.getElementById('loginSection').style.display = 'none';
@@ -1965,7 +2066,6 @@
                 messageDiv.innerHTML = '';
                 showNotification('เข้าสู่ระบบผู้ดูแลสำเร็จ', 'success');
                 
-                // โหลดหน้าแรกของ Admin (Behavior)
                 showAdminPage('behavior');
             } else {
                 messageDiv.innerHTML = '<div class="alert alert-danger">รหัสผ่านไม่ถูกต้อง</div>';
@@ -1977,19 +2077,17 @@
 
         function adminLogout() {
             isAdminLoggedIn = false;
-            isBlacklistLoggedIn = false; // ออกจากระบบบัญชีดำด้วย
+            isBlacklistLoggedIn = false; 
             document.getElementById('loginSection').style.display = 'block';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminPassword').value = '';
             
-            // ล้างข้อมูลทั้งหมด
             allAdminData = []; campData = []; blacklistData = []; lateData = []; lendingData = []; documentData = [];
 
             showNotification('ออกจากระบบแล้ว', 'info');
-            showPage('home'); // กลับไปหน้าแรก
+            showPage('home'); 
         }
 
-        // ฟังก์ชันสลับหน้าย่อยใน Admin (ใหม่)
         function showAdminPage(pageId) {
             currentAdminPage = pageId;
             document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
@@ -1998,19 +2096,17 @@
             document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`nav-${pageId}`).classList.add('active');
 
-            // โหลดข้อมูลสำหรับหน้านั้นๆ
             loadDataForAdminPage(pageId);
         }
         
-        // ฟังก์ชันโหลดข้อมูลตามหน้า Admin (ใหม่)
         function loadDataForAdminPage(pageId) {
              switch (pageId) {
                 case 'behavior':
                     if (allAdminData.length === 0) loadAllData();
-                    else displayAdminData(allAdminData); // แสดงข้อมูลที่มีอยู่
+                    else displayAdminData(allAdminData); 
                     break;
                 case 'camp':
-                    if (campData.length === 0) loadCampData(true); // โหลดแบบ Admin
+                    if (campData.length === 0) loadCampData(true); 
                     else displayAdminCampData(campData);
                     break;
                 case 'blacklist':
@@ -2036,7 +2132,7 @@
         }
 
         // --- Admin: พฤติกรรม (ฟังก์ชันเดิม) ---
-        async function loadAllData() { /* (โค้ดเดิม) */ 
+        async function loadAllData() { 
             const loading = document.getElementById('loadLoading');
             const loadText = document.getElementById('loadText');
             const dataDiv = document.getElementById('adminData');
@@ -2063,7 +2159,7 @@
             loading.style.display = 'none';
             loadText.textContent = '📋 โหลดข้อมูลทั้งหมด';
         }
-        function generateStats(data) { /* (โค้ดเดิม) */ 
+        function generateStats(data) { 
             const stats = {
                 total: data.length,
                 pending: data.filter(r => r.status === 'รอดำเนินการ').length,
@@ -2080,7 +2176,7 @@
             `;
             document.getElementById('adminStats').innerHTML = statsHtml;
         }
-        function displayAdminData(data) { /* (โค้ดเดิม) */ 
+        function displayAdminData(data) { 
             const dataDiv = document.getElementById('adminData');
             let html = `
                 <h3>📊 ข้อมูลทั้งหมด (${data.length} รายการ)</h3>
@@ -2125,7 +2221,7 @@
             html += '</tbody></table></div>';
             dataDiv.innerHTML = html;
         }
-        function filterByStatus() { /* (โค้ดเดิม) */ 
+        function filterByStatus() { 
             const selectedStatus = document.getElementById('statusFilter').value;
             if (!selectedStatus) {
                 displayAdminData(allAdminData);
@@ -2134,7 +2230,7 @@
                 displayAdminData(filteredData);
             }
         }
-        async function updateStatus(rowIndex, newStatus, rejectReason = '') { /* (โค้ดเดิม) */ 
+        async function updateStatus(rowIndex, newStatus, rejectReason = '') { 
              try {
                 const buttons = document.querySelectorAll(`button[data-row="${rowIndex}"]`);
                 buttons.forEach(btn => { btn.disabled = true; btn.innerHTML = '⏳'; });
@@ -2152,7 +2248,7 @@
                 
                 if (result.success) {
                     showNotification(`อัปเดตสถานะเรียบร้อย`, 'success');
-                    await loadAllData(); // โหลดข้อมูลใหม่
+                    await loadAllData(); 
                 } else {
                     showNotification('เกิดข้อผิดพลาดในการอัปเดต: ' + result.message, 'danger');
                     buttons.forEach(btn => { btn.disabled = false; btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅' : '❌'; });
@@ -2163,7 +2259,7 @@
                 buttons.forEach(btn => { btn.disabled = false; btn.innerHTML = btn.innerHTML.includes('อนุมัติ') ? '✅' : '❌'; });
             }
         }
-        function rejectRecord(rowIndex) { /* (โค้ดเดิม) */ 
+        function rejectRecord(rowIndex) { 
             const reason = prompt('กรุณาระบุเหตุผลในการไม่อนุมัติ:');
             if (reason && reason.trim()) {
                 updateStatus(rowIndex, 'ไม่อนุมัติ', reason.trim());
@@ -2171,7 +2267,7 @@
                 showNotification('กรุณาระบุเหตุผล', 'warning');
             }
         }
-        function exportData() { /* (โค้ดเดิม) */ 
+        function exportData() { 
             if (!allAdminData || allAdminData.length === 0) {
                 showNotification('ไม่มีข้อมูลให้ส่งออก', 'warning');
                 return;
@@ -2278,7 +2374,7 @@
                     const result = await postToGoogleScript({ action: 'deleteCampStudent', rowIndex: rowIndex });
                     if (result.success) {
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
-                        await loadCampData(true, true); // โหลดใหม่แบบ admin (force)
+                        await loadCampData(true, true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
                     }
@@ -2319,7 +2415,7 @@
                 
                 if (result.success) {
                     showNotification(rowIndex ? 'แก้ไขข้อมูลเรียบร้อย' : 'เพิ่มนักเรียนเรียบร้อย', 'success');
-                    await loadCampData(true, true); // โหลดใหม่แบบ admin (force)
+                    await loadCampData(true, true); 
                     closeModal('campModal');
                 } else {
                     showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
@@ -2388,12 +2484,10 @@
             form.reset();
             document.getElementById('blacklistRowIndex').value = '';
             
-            // ล้างช่องความผิดเก่า
             const offensesContainer = document.getElementById('offensesContainer');
             offensesContainer.innerHTML = '';
 
             if (rowIndex) {
-                // Edit
                 document.getElementById('blacklistModalTitle').textContent = 'แก้ไขข้อมูลบัญชีดำ';
                 const student = blacklistData.find(s => s.rowIndex === rowIndex);
                 if (student) {
@@ -2409,11 +2503,9 @@
                     });
                 }
             } else {
-                // Add
                 document.getElementById('blacklistModalTitle').textContent = '➕ เพิ่มรายชื่อบัญชีดำ';
             }
             
-            // เพิ่มช่องแรกถ้ายังไม่มี
             if (offensesContainer.children.length === 0) {
                  addOffenseField();
             }
@@ -2446,7 +2538,7 @@
                     const result = await postToGoogleScript({ action: 'deleteBlacklistStudent', rowIndex: rowIndex });
                     if (result.success) {
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
-                        await loadBlacklistData(true); // โหลดใหม่ (force)
+                        await loadBlacklistData(true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
                     }
@@ -2471,7 +2563,6 @@
                     fullName: document.getElementById('blacklistFullName').value.trim(),
                 };
                 
-                // รวบรวมฐานความผิด
                 document.querySelectorAll('.offense-input').forEach((input, index) => {
                     formData[`offense${index + 1}`] = input.value.trim();
                 });
@@ -2487,7 +2578,7 @@
                 
                 if (result.success) {
                     showNotification(rowIndex ? 'แก้ไขข้อมูลเรียบร้อย' : 'เพิ่มรายชื่อเรียบร้อย', 'success');
-                    await loadBlacklistData(true); // โหลดใหม่ (force)
+                    await loadBlacklistData(true); 
                     closeModal('blacklistModal');
                 } else {
                     showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
@@ -2500,7 +2591,7 @@
             submitText.textContent = 'บันทึก';
         });
 
-        // --- Admin: มาสาย (ใหม่) ---
+        // --- Admin: มาสาย (แก้ไข-ลายเซ็น) ---
         function displayAdminLateData(data) {
             if (!isAdminLoggedIn || currentAdminPage !== 'late') return;
             const dataDiv = document.getElementById('adminLateData');
@@ -2526,7 +2617,7 @@
                         <td>${record.studentId}</td>
                         <td>${record.fullName}</td>
                         <td>${record.classroom}</td>
-                        <td>${record.signature}</td>
+                        <td><img src="${record.signature}" alt="ลายเซ็น" style="height: 40px; border-bottom: 1px solid #ccc;"></td>
                         <td>
                             <button class="btn btn-danger" onclick="deleteLateStudent(${record.rowIndex})" style="padding: 6px 12px; font-size: 12px;">🗑️</button>
                         </td>
@@ -2544,7 +2635,7 @@
                     const result = await postToGoogleScript({ action: 'deleteLateStudent', rowIndex: rowIndex });
                     if (result.success) {
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
-                        await loadLateData(true); // โหลดใหม่ (force)
+                        await loadLateData(true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
                     }
@@ -2560,7 +2651,7 @@
                     const result = await postToGoogleScript({ action: 'clearLateData' });
                     if (result.success) {
                         showNotification('ลบข้อมูลมาสายทั้งหมดเรียบร้อย', 'success');
-                        await loadLateData(true); // โหลดใหม่ (force)
+                        await loadLateData(true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                     }
@@ -2622,7 +2713,7 @@
                 const result = await postToGoogleScript({ action: 'updateLendingStatus', rowIndex: rowIndex, status: newStatus });
                 if (result.success) {
                     showNotification('อัปเดตสถานะเรียบร้อย', 'success');
-                    await loadLendingData(true); // โหลดใหม่ (force)
+                    await loadLendingData(true); 
                 } else {
                     showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                 }
@@ -2638,7 +2729,7 @@
                     const result = await postToGoogleScript({ action: 'deleteLendingItem', rowIndex: rowIndex });
                     if (result.success) {
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
-                        await loadLendingData(true); // โหลดใหม่ (force)
+                        await loadLendingData(true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                     }
@@ -2699,7 +2790,6 @@
             form.reset();
             document.getElementById('docRowIndex').value = '';
             
-            // โหลดประเภทเอกสารล่าสุด
             await loadDocTypes();
             const docTypeSelect = document.getElementById('docType');
             docTypeSelect.innerHTML = '<option value="">เลือกประเภท...</option>';
@@ -2708,7 +2798,6 @@
             });
 
             if (rowIndex) {
-                // Edit
                 document.getElementById('documentModalTitle').textContent = 'แก้ไขข้อมูลเอกสาร';
                 const doc = documentData.find(d => d.rowIndex === rowIndex);
                 if (doc) {
@@ -2719,7 +2808,6 @@
                     document.getElementById('docType').value = doc.docType;
                     document.getElementById('docStatus').value = doc.status;
                     
-                    // ตั้งค่าลายเซ็น
                     document.getElementById('sigParent').value = (doc.sigParent == '1' || doc.sigParent === true) ? '1' : '0';
                     document.getElementById('sigAdvisor').value = (doc.sigAdvisor == '1' || doc.sigAdvisor === true) ? '1' : '0';
                     document.getElementById('sigFinance').value = (doc.sigFinance == '1' || doc.sigFinance === true) ? '1' : '0';
@@ -2729,7 +2817,6 @@
                     document.getElementById('sigDirector').value = (doc.sigDirector == '1' || doc.sigDirector === true) ? '1' : '0';
                 }
             } else {
-                // Add
                 document.getElementById('documentModalTitle').textContent = '➕ เพิ่มรายการเอกสาร';
             }
             
@@ -2747,7 +2834,7 @@
                     const result = await postToGoogleScript({ action: 'deleteDocument', rowIndex: rowIndex });
                     if (result.success) {
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
-                        await loadDocumentData(true); // โหลดใหม่ (force)
+                        await loadDocumentData(true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                     }
@@ -2792,7 +2879,7 @@
                 
                 if (result.success) {
                     showNotification(rowIndex ? 'แก้ไขข้อมูลเรียบร้อย' : 'เพิ่มเอกสารเรียบร้อย', 'success');
-                    await loadDocumentData(true); // โหลดใหม่ (force)
+                    await loadDocumentData(true); 
                     closeModal('documentModal');
                 } else {
                     showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
@@ -2857,7 +2944,7 @@
                 if (result.success) {
                     showNotification('เพิ่มประเภทเอกสารแล้ว', 'success');
                     input.value = '';
-                    await loadDocTypes(true); // โหลดใหม่ (force)
+                    await loadDocTypes(true); 
                 } else {
                     showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                 }
@@ -2872,7 +2959,7 @@
                     const result = await postToGoogleScript({ action: 'deleteDocType', docType: docType });
                     if (result.success) {
                         showNotification('ลบประเภทเอกสารแล้ว', 'success');
-                        await loadDocTypes(true); // โหลดใหม่ (force)
+                        await loadDocTypes(true); 
                     } else {
                         showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
                     }
@@ -2891,7 +2978,6 @@
                 const result = await postToGoogleScript({ action: 'addTestData', type: type });
                 if (result.success) {
                     showNotification(`เพิ่มข้อมูลทดสอบ ${type} สำเร็จ`, 'success');
-                    // โหลดข้อมูลหน้านั้นใหม่
                     switch (type) {
                         case 'behavior': await loadAllData(); break;
                         case 'camp': await loadCampData(true, true); break;
@@ -2915,7 +3001,6 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // ฟังก์ชัน POST ข้อมูลหลัก
         async function postToGoogleScript(data) {
             const params = new URLSearchParams();
             params.append('data', JSON.stringify(data));
@@ -2928,7 +3013,6 @@
             return response.json();
         }
 
-        // ฟังก์ชัน Download CSV
         function downloadCSV(csvContent, filename) {
              const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -2964,6 +3048,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             checkConnection();
             
+            // (ใหม่) เริ่มต้น Canvas ลายเซ็น
+            initSignaturePad(); 
+            
             // ตั้งค่าหน้าแรก
             showPage('home');
             
@@ -2984,5 +3071,3 @@
     </script>
 </body>
 </html>
-
-
