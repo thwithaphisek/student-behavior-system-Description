@@ -6,7 +6,7 @@
     <title>ระบบบริหารจัดการนักเรียน</title>
     <style>
         /* ==================================
-           ==  CSS เดิม (ไม่มีการแก้ไข)  ==
+           ==  CSS (เหมือนเดิมทุกประการ)  ==
            ================================== */
         * {
             margin: 0;
@@ -161,16 +161,14 @@
             font-family: inherit;
         }
         
-        /* === CSS ที่เพิ่มสำหรับลายเซ็น === */
         .signature-canvas {
             border: 2px dashed #ccc;
             border-radius: 8px;
             width: 100%;
             height: 150px;
             cursor: crosshair;
-            touch-action: none; /* สำหรับมือถือ */
+            touch-action: none; 
         }
-        /* === จบส่วน CSS ลายเซ็น === */
 
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
@@ -505,11 +503,6 @@
             to { opacity: 0; transform: translateX(100%); }
         }
 
-        /* ==================================
-           ==      CSS ที่เพิ่มเข้ามาใหม่      ==
-           ================================== */
-
-        /* 1. หน้า Home Menu */
         .home-menu {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -544,7 +537,6 @@
             font-weight: 600;
         }
 
-        /* 2. หน้า Admin Panel (Tabs) */
         .admin-nav {
             display: flex;
             flex-wrap: wrap;
@@ -601,7 +593,6 @@
              color: #2c3e50;
         }
 
-        /* 3. หน้า Document Tracking */
         .sig-status {
             display: inline-block;
             padding: 4px 10px;
@@ -633,7 +624,6 @@
         .doc-status-ส่งแล้ว { background-color: #17a2b8; }
         .doc-status-เสร็จสิ้นแล้ว { background-color: #28a745; }
         
-        /* 4. Modal (ใช้ Modal เดิม ปรับขนาด) */
         .modal {
             display: none; 
             position: fixed; 
@@ -651,7 +641,7 @@
             background: white; 
             padding: 30px; 
             border-radius: 15px; 
-            max-width: 600px; /* ขยายขนาด Modal */
+            max-width: 600px; 
             width: 90%; 
             max-height: 90vh; 
             overflow-y: auto;
@@ -673,7 +663,6 @@
             border-top: 1px solid #e9ecef;
         }
 
-        /* 5. Media Queries (ปรับปุ่ม Nav) */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -682,11 +671,11 @@
                 font-size: 2rem;
             }
             .nav {
-                gap: 5px; /* ลด gap ในมือถือ */
+                gap: 5px; 
             }
             .nav-btn {
-                font-size: 12px; /* ลดขนาด font */
-                padding: 10px 12px; /* ลด padding */
+                font-size: 12px; 
+                padding: 10px 12px; 
             }
             .table {
                 font-size: 14px;
@@ -701,7 +690,7 @@
                 flex-direction: column;
             }
             .home-menu {
-                grid-template-columns: 1fr 1fr; /* 2 คอลัมน์ในมือถือ */
+                grid-template-columns: 1fr 1fr; 
                 gap: 15px;
             }
             .home-card {
@@ -1064,20 +1053,22 @@
                 <div id="admin-page-config" class="admin-page">
                     <h3>🔧 ตั้งค่าระบบ (เช่น ประเภทเอกสาร)</h3>
                     <div class="form-row">
+                        
                         <div class="form-group">
-                            <label>จัดการประเภทเอกสาร</label>
+                            <label>รายการประเภทเอกสารที่มีอยู่</label>
                             <div id="docTypesContainer">
                                 <div class="alert alert-info">กำลังโหลด...</div>
                             </div>
-                            <div class="search-container" style="margin-top: 15px;">
-                                <input type="text" id="newDocType" placeholder="เพิ่มประเภทเอกสารใหม่...">
-                                <button class="btn btn-success" onclick="addDocType()">➕ เพิ่ม</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newDocType">เพิ่มประเภทเอกสารใหม่</label> <div class="search-container" style="margin-top: 0;"> <input type="text" id="newDocType" placeholder="เช่น ใบลาออก, ใบรับรอง..."> <button class="btn btn-success" onclick="addDocType()">➕ เพิ่ม</button>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
-            </div>
+                </div>
         </div>
     </div>
 
@@ -1291,37 +1282,51 @@
 
         let currentGradeFilter = 'all';
 
-        // --- (ใหม่) Global Variables for Signature Pad ---
+        // --- (แก้ไข) Global Variables for Signature Pad ---
         let signaturePad;
         let signatureCtx;
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
 
+        // =======================================================
+        // === ‼️‼️ 1. สร้างฟังก์ชันใหม่สำหรับตั้งค่าพู่กัน ‼️‼️ ===
+        // =======================================================
+        function setupCanvasContext() {
+            if (!signaturePad) return;
+            
+            // 1. ปรับขนาด Canvas (ซึ่งจะรีเซ็ต "พู่กัน")
+            signaturePad.width = signaturePad.offsetWidth;
+            signaturePad.height = signaturePad.offsetHeight;
+            
+            // 2. ตั้งค่า "พู่กัน" (Context) ใหม่ทุกครั้ง
+            signatureCtx.strokeStyle = '#000'; // ตั้งค่าสีเส้นเป็นสีดำ
+            signatureCtx.lineWidth = 2;
+            signatureCtx.lineCap = 'round';
+            signatureCtx.fillStyle = '#000'; // ตั้งค่าสีเติม (สำหรับเทส)
+        }
+        
+        // =======================================================
+        // === ‼️‼️ 2. แก้ไขฟังก์ชัน initSignaturePad ‼️‼️ ===
+        // =======================================================
         function initSignaturePad() {
             signaturePad = document.getElementById('lateSignatureCanvas');
             if (!signaturePad) return; 
 
-            signatureCtx = signaturePad.getContext('2d');
+            signatureCtx = signaturePad.getContext('2d'); // 1. ดึง "พู่กัน" (Context) มาเก็บไว้
             
-            // ตั้งค่าขนาด Canvas ให้คมชัด
-            signaturePad.width = signaturePad.offsetWidth;
-            signaturePad.height = signaturePad.offsetHeight;
-            
-            signatureCtx.strokeStyle = '#000';
-            signatureCtx.lineWidth = 2;
-            signatureCtx.lineCap = 'round';
-            
-            // --- Event Listeners (Mouse) ---
+            // 2. ตั้งค่า Event Listeners (ตัวจับเมาส์/นิ้ว)
             signaturePad.addEventListener('mousedown', startDrawing);
             signaturePad.addEventListener('mousemove', draw);
             signaturePad.addEventListener('mouseup', stopDrawing);
             signaturePad.addEventListener('mouseout', stopDrawing);
             
-            // --- Event Listeners (Touch) ---
             signaturePad.addEventListener('touchstart', startDrawing);
             signaturePad.addEventListener('touchmove', draw);
             signaturePad.addEventListener('touchend', stopDrawing);
+            
+            // 3. ตั้งค่า Canvas ครั้งแรก (จะได้ขนาด 0x0 เพราะยังซ่อนอยู่)
+            setupCanvasContext(); 
         }
 
         function startDrawing(e) {
@@ -1346,15 +1351,15 @@
 
         function getCoords(e) {
             const rect = signaturePad.getBoundingClientRect();
-            if (e.touches) { // สำหรับมือถือ
+            if (e.touches) { 
                 return [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
             }
-            // สำหรับเมาส์
             return [e.clientX - rect.left, e.clientY - rect.top];
         }
 
         function clearSignature() {
             if (signatureCtx) {
+                // ล้างแค่ Canvas ไม่ต้องตั้งค่าใหม่
                 signatureCtx.clearRect(0, 0, signaturePad.width, signaturePad.height);
             }
         }
@@ -1370,7 +1375,6 @@
 
         // --- Utility Functions ---
 
-        // ฟังก์ชันแสดงการแจ้งเตือน (เดิม)
         function showNotification(message, type = 'success') {
             const existingNotifications = document.querySelectorAll('.notification');
             existingNotifications.forEach(notification => {
@@ -1392,7 +1396,6 @@
             }, 5000);
         }
 
-        // ฟังก์ชันตรวจสอบการเชื่อมต่อ (เดิม)
         async function checkConnection() {
             if (!SCRIPT_URL || SCRIPT_URL.includes('AKfy...')) {
                 showNotification(`
@@ -1415,15 +1418,16 @@
         }
 
         // --- Page Navigation ---
-
-        // ฟังก์ชันเปลี่ยนหน้า (แก้ไข)
+        
+        // =======================================================
+        // === ‼️‼️ 3. แก้ไขฟังก์ชัน showPage ‼️‼️ ===
+        // =======================================================
         function showPage(pageId, fromHomeCard = false) {
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
             document.getElementById(pageId).classList.add('active');
             
-            // อัปเดต navigation buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.getAttribute('onclick').includes(`'${pageId}'`)) {
@@ -1441,10 +1445,10 @@
             switch (pageId) {
                 case 'late':
                     if (lateData.length === 0) loadLateData();
-                    // (ใหม่) ปรับขนาด Canvas เมื่อแสดงหน้านี้
-                    if (signaturePad) {
-                         signaturePad.width = signaturePad.offsetWidth;
-                    }
+                    
+                    // (สำคัญ!) เรียกฟังก์ชันตั้งค่าพู่กัน "หลังจาก" ที่หน้าถูกแสดง
+                    setupCanvasContext(); 
+                    
                     break;
                 case 'lending':
                     if (lendingData.length === 0) loadLendingData();
@@ -1485,19 +1489,16 @@
             loading.style.display = 'inline-block';
             text.textContent = 'กำลังบันทึก...';
 
-            // === เริ่มส่วนที่แก้ไข ===
             const canvas = document.getElementById('lateSignatureCanvas');
             
-            // 1. ตรวจสอบว่าวาดลายเซ็นหรือยัง
             if (isCanvasEmpty(canvas)) {
                 showNotification('กรุณาวาดลายเซ็น', 'warning');
                 btn.disabled = false;
                 loading.style.display = 'none';
                 text.textContent = 'บันทึกข้อมูล';
-                return; // หยุดการส่ง
+                return; 
             }
             
-            // 2. แปลงลายเซ็นเป็น Text (Base64)
             const signatureData = canvas.toDataURL('image/png');
 
             const formData = {
@@ -1505,10 +1506,9 @@
                 studentId: document.getElementById('lateStudentId').value.trim(),
                 fullName: document.getElementById('lateFullName').value.trim(),
                 classroom: document.getElementById('lateClassroom').value.trim(),
-                signature: signatureData, // <-- อัปเดตบรรทัดนี้
+                signature: signatureData, 
                 timestamp: new Date().toLocaleString('th-TH', {timeZone: 'Asia/Bangkok'})
             };
-            // === จบส่วนที่แก้ไข ===
 
             try {
                 const result = await postToGoogleScript(formData);
@@ -1516,9 +1516,9 @@
                     showNotification('บันทึกข้อมูลมาสายเรียบร้อย', 'success');
                     document.getElementById('lateForm').reset();
                     
-                    clearSignature(); // <-- เพิ่ม: ล้างลายเซ็นหลังส่งสำเร็จ
+                    clearSignature(); 
                     
-                    await loadLateData(); // โหลดข้อมูลใหม่
+                    await loadLateData(); 
                 } else {
                     showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
                 }
@@ -1577,7 +1577,7 @@
                         </thead>
                         <tbody>
             `;
-            [...data].reverse().forEach(record => { // แสดงล่าสุดก่อน
+            [...data].reverse().forEach(record => { 
                 html += `
                     <tr>
                         <td>${new Date(record.timestamp).toLocaleTimeString('th-TH')}</td>
@@ -1592,6 +1592,7 @@
             container.innerHTML = html;
         }
 
+        // --- (โค้ดส่วนที่เหลือเหมือนเดิมทุกประการ) ---
         // --- ฟังก์ชันหน้ายืมของ (ใหม่) ---
         document.getElementById('lendingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1951,7 +1952,6 @@
             loading.style.display = 'inline-block';
             loginText.textContent = 'กำลังตรวจสอบ...';
             
-            // !!! รหัสผ่านสำหรับดูบัญชีดำ !!!
             if (password === 'blacklist123') { 
                 isBlacklistLoggedIn = true;
                 document.getElementById('blacklistLogin').style.display = 'none';
@@ -2058,7 +2058,6 @@
             loading.style.display = 'inline-block';
             loginText.textContent = 'กำลังตรวจสอบ...';
             
-            // !!! รหัสผ่าน Admin หลัก !!!
             if (password === 'admin1234') { 
                 isAdminLoggedIn = true;
                 document.getElementById('loginSection').style.display = 'none';
@@ -2343,7 +2342,6 @@
             document.getElementById('campCreatedAt').value = '';
 
             if (rowIndex) {
-                // Edit
                 const student = campData.find(s => s.rowIndex === rowIndex);
                 if (student) {
                     document.getElementById('campModalTitle').textContent = 'แก้ไขข้อมูลนักเรียน';
@@ -2357,7 +2355,6 @@
                     document.getElementById('campNote').value = student.note || '';
                 }
             } else {
-                // Add
                 document.getElementById('campModalTitle').textContent = '➕ เพิ่มนักเรียนเข้าค่าย';
             }
             document.getElementById('campModal').style.display = 'flex';
@@ -2731,7 +2728,7 @@
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
                         await loadLendingData(true); 
                     } else {
-                        showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
+                        showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
                     }
                 } catch (error) {
                     showNotification('เกิดข้อผิดพลาด: ' + error.message, 'danger');
@@ -2836,7 +2833,7 @@
                         showNotification('ลบข้อมูลเรียบร้อย', 'success');
                         await loadDocumentData(true); 
                     } else {
-                        showNotification('เกิดข้อผิดพลาด: ' + result.message, 'danger');
+                        showNotification('เกิดข้อผิดพลาดในการลบ: ' + result.message, 'danger');
                     }
                 } catch (error) {
                     showNotification('เกิดข้อผิดพลาด: ' + error.message, 'danger');
@@ -3048,13 +3045,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             checkConnection();
             
-            // (ใหม่) เริ่มต้น Canvas ลายเซ็น
             initSignaturePad(); 
             
-            // ตั้งค่าหน้าแรก
             showPage('home');
             
-            // ปิด Modal เมื่อคลิกนอกพื้นที่
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === this) {
@@ -3063,7 +3057,6 @@
                 });
             });
 
-            // Enter key support
             document.getElementById('adminPassword').addEventListener('keypress', e => (e.key === 'Enter') && adminLogin());
             document.getElementById('blacklistPassword').addEventListener('keypress', e => (e.key === 'Enter') && blacklistLogin());
         });
@@ -3071,4 +3064,3 @@
     </script>
 </body>
 </html>
-
