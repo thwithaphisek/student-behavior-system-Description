@@ -463,6 +463,21 @@
             background-color: #6c757d;
             color: white;
         }
+        
+        /* (ใหม่) CSS สำหรับสถานะ "ลืมสแกน" */
+        .status-scan-รอดำเนินการ {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .status-scan-อนุมัติ {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-scan-ไม่อนุมัติ {
+            background-color: #dc3545;
+            color: white;
+        }
+        
         .grade-filter-container {
             display: flex;
             gap: 10px;
@@ -663,8 +678,28 @@
             border-top: 1px solid #e9ecef;
         }
         
+        /* (ใหม่) CSS สำหรับกลุ่มฟอร์มความผิด */
+        .offense-group {
+            border: 1px solid #e0e0e0;
+            background: #fdfdfd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .offense-group label {
+            font-size: 1.1rem;
+            color: #667eea;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .offense-group input, .offense-group textarea {
+            margin-top: 10px;
+        }
+        
+        
         /* ==================================
-           ==  CSS ใหม่ (Profile & Dash)  ==
+           ==  CSS (Profile & Dash)  ==
            ================================== */
         .profile-card {
             background: white;
@@ -755,10 +790,11 @@
             <div class="nav">
                 <button class="nav-btn active" onclick="showPage('home')">🏠 หน้าแรก</button>
                 <button class="nav-btn" onclick="showPage('late')">🏃 มาสาย</button>
+                <button class="nav-btn" onclick="showPage('forgot_scan')">🙋 ลืมสแกนหน้า</button>
                 <button class="nav-btn" onclick="showPage('lending')">📦 ยืมของ</button>
                 <button class="nav-btn" onclick="showPage('documents')">📑 ติดตามเอกสาร</button>
                 <button class="nav-btn" onclick="showPage('camp')">🏕️ เข้าค่าย</button>
-                <button class="nav-btn" onclick="showPage('blacklist')">🚫 บัญชีดำ</button>
+                <button class="nav-btn" onclick="showPage('specific_data')">🚫 ข้อมูลนักเรียนเฉพาะ</button>
                 <button class="nav-btn" onclick="showPage('profile')">👤 ค้นหานักเรียน</button>
                 <button class="nav-btn" onclick="showPage('admin')">⚙️ ผู้ดูแลระบบ</button>
             </div>
@@ -774,6 +810,10 @@
                     <div class="home-card-icon">🏃</div>
                     <h3>บันทึกมาสาย</h3>
                 </div>
+                <div class="home-card" onclick="showPage('forgot_scan', true)">
+                    <div class="home-card-icon">🙋</div>
+                    <h3>แจ้งลืมสแกนหน้า</h3>
+                </div>
                 <div class="home-card" onclick="showPage('lending', true)">
                     <div class="home-card-icon">📦</div>
                     <h3>ยืม-คืนของ</h3>
@@ -786,9 +826,9 @@
                     <div class="home-card-icon">🏕️</div>
                     <h3>นักเรียนเข้าค่าย</h3>
                 </div>
-                <div class="home-card" onclick="showPage('blacklist', true)">
+                <div class="home-card" onclick="showPage('specific_data', true)">
                     <div class="home-card-icon">🚫</div>
-                    <h3>บัญชีดำ</h3>
+                    <h3>ข้อมูลนักเรียนเฉพาะ</h3>
                 </div>
                 <div class="home-card" onclick="showPage('profile', true)">
                     <div class="home-card-icon">👤</div>
@@ -835,6 +875,41 @@
             <hr style="margin: 30px 0; border: 1px solid #e9ecef;">
             <h3>📋 รายการนักเรียนมาสาย (วันนี้)</h3>
             <div id="lateData">
+                <div class="alert alert-info">กำลังโหลดข้อมูล...</div>
+            </div>
+        </div>
+        
+        <div id="forgot_scan" class="page">
+            <h2>🙋 แจ้งลืมสแกนหน้า</h2>
+            <form id="forgotScanForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="forgotStudentId">รหัสนักเรียน *</label>
+                        <input type="text" id="forgotStudentId" required placeholder="S001234">
+                    </div>
+                    <div class="form-group">
+                        <label for="forgotFullName">ชื่อ-นามสกุล *</label>
+                        <input type="text" id="forgotFullName" required placeholder="นายสมชาย ใจดี">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="forgotClassroom">ห้องเรียน *</label>
+                        <input type="text" id="forgotClassroom" required placeholder="เช่น 6/1">
+                    </div>
+                    <div class="form-group">
+                        <label for="forgotDate">วันที่ลืมสแกน *</label>
+                        <input type="date" id="forgotDate" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn">
+                    <span id="forgotScanSubmitLoading" style="display: none;" class="loading"></span>
+                    <span id="forgotScanSubmitText">บันทึกข้อมูล</span>
+                </button>
+            </form>
+            <hr style="margin: 30px 0; border: 1px solid #e9ecef;">
+            <h3>📋 รายการแจ้งลืมสแกน (วันนี้)</h3>
+            <div id="forgotScanData">
                 <div class="alert alert-info">กำลังโหลดข้อมูล...</div>
             </div>
         </div>
@@ -939,31 +1014,31 @@
             </div>
         </div>
 
-        <div id="blacklist" class="page">
-            <div id="blacklistLogin">
-                <h2>🚫 บัญชีดำ (ต้องเข้ารหัส)</h2>
+        <div id="specific_data" class="page">
+            <div id="specificDataLogin">
+                <h2>🚫 ข้อมูลนักเรียนเฉพาะ (ต้องเข้ารหัส)</h2>
                 <p style="text-align: center; margin-bottom: 20px; color: #dc3545;">
                     ส่วนนี้สำหรับบุคลากรที่ได้รับอนุญาตเท่านั้น
                 </p>
                 <div class="login-form">
                     <div class="form-group">
-                        <label for="blacklistPassword">รหัสผ่านสำหรับดูข้อมูล</label>
-                        <input type="password" id="blacklistPassword" placeholder="กรอกรหัสผ่าน">
+                        <label for="specificDataPassword">รหัสผ่านสำหรับดูข้อมูล</label>
+                        <input type="password" id="specificDataPassword" placeholder="กรอกรหัสผ่าน">
                     </div>
-                    <button onclick="blacklistLogin()" class="btn btn-danger" style="width: 100%;">
-                        <span id="blacklistLoginLoading" style="display: none;" class="loading"></span>
-                        <span id="blacklistLoginText">🔓 ปลดล็อค</span>
+                    <button onclick="specificDataLogin()" class="btn btn-danger" style="width: 100%;">
+                        <span id="specificDataLoginLoading" style="display: none;" class="loading"></span>
+                        <span id="specificDataLoginText">🔓 ปลดล็อค</span>
                     </button>
                 </div>
-                <div id="blacklistLoginMessage"></div>
+                <div id="specificDataLoginMessage"></div>
             </div>
 
-            <div id="blacklistData" style="display: none;">
-                 <h2>🚫 บัญชีดำนักเรียน</h2>
+            <div id="specificDataView" style="display: none;">
+                 <h2>🚫 ข้อมูลนักเรียนเฉพาะ</h2>
                  <div class="search-container">
-                    <input type="text" id="blacklistSearch" placeholder="ค้นหาตามชื่อ หรือ รหัสนักเรียน" onkeyup="filterBlacklistData()">
+                    <input type="text" id="specificDataSearch" placeholder="ค้นหาตามชื่อ หรือ รหัสนักเรียน" onkeyup="filterSpecificData()">
                  </div>
-                 <div id="blacklistTableContainer" style="overflow-x: auto;">
+                 <div id="specificDataTableContainer" style="overflow-x: auto;">
                     <div class="alert alert-info">กำลังโหลดข้อมูล...</div>
                  </div>
             </div>
@@ -1009,8 +1084,9 @@
                     <button id="nav-dashboard" class="admin-nav-btn active" onclick="showAdminPage('dashboard')">📈 Dashboard</button>
                     <button id="nav-behavior" class="admin-nav-btn" onclick="showAdminPage('behavior')">👍 พฤติกรรม</button>
                     <button id="nav-camp" class="admin-nav-btn" onclick="showAdminPage('camp')">🏕️ เข้าค่าย</button>
-                    <button id="nav-blacklist" class="admin-nav-btn" onclick="showAdminPage('blacklist')">🚫 บัญชีดำ</button>
+                    <button id="nav-specific_data" class="admin-nav-btn" onclick="showAdminPage('specific_data')">🚫 ข้อมูลเฉพาะ</button>
                     <button id="nav-late" class="admin-nav-btn" onclick="showAdminPage('late')">🏃 มาสาย</button>
+                    <button id="nav-forgot_scan" class="admin-nav-btn" onclick="showAdminPage('forgot_scan')">🙋 ลืมสแกน</button>
                     <button id="nav-lending" class="admin-nav-btn" onclick="showAdminPage('lending')">📦 ยืมของ</button>
                     <button id="nav-documents" class="admin-nav-btn" onclick="showAdminPage('documents')">📑 เอกสาร</button>
                     <button id="nav-config" class="admin-nav-btn" onclick="showAdminPage('config')">🔧 ตั้งค่า</button>
@@ -1086,16 +1162,16 @@
                     </div>
                 </div>
 
-                <div id="admin-page-blacklist" class="admin-page">
+                <div id="admin-page-specific_data" class="admin-page">
                     <div class="admin-section-header">
-                        <h3>🚫 จัดการบัญชีดำ</h3>
+                        <h3>🚫 จัดการข้อมูลนักเรียนเฉพาะ</h3>
                         <div class="action-buttons">
-                            <button onclick="openBlacklistModal()" class="btn btn-success">➕ เพิ่มรายชื่อ</button>
-                            <button onclick="testData('blacklist')" class="btn btn-warning">🧪 เพิ่มข้อมูลทดสอบ</button>
+                            <button onclick="openSpecificDataModal()" class="btn btn-success">➕ เพิ่มรายชื่อ</button>
+                            <button onclick="testData('specific_data')" class="btn btn-warning">🧪 เพิ่มข้อมูลทดสอบ</button>
                         </div>
                     </div>
-                     <p>หน้านี้สำหรับ เพิ่ม, ลบ, แก้ไข ข้อมูลบัญชีดำ (ข้อมูลจะแสดงในหน้า 🚫 บัญชีดำ หลังจากใส่รหัสผ่าน)</p>
-                     <div id="adminBlacklistData">
+                     <p>หน้านี้สำหรับ เพิ่ม, ลบ, แก้ไข ข้อมูลนักเรียนเฉพาะ (ข้อมูลจะแสดงในหน้า 🚫 ข้อมูลนักเรียนเฉพาะ หลังจากใส่รหัสผ่าน)</p>
+                     <div id="adminSpecificData">
                          <div class="alert alert-info">กำลังโหลดข้อมูล...</div>
                     </div>
                 </div>
@@ -1110,6 +1186,19 @@
                     </div>
                     <p>หน้านี้สำหรับ ลบ หรือ แก้ไข ข้อมูลนักเรียนมาสาย (ข้อมูลจะถูกเพิ่มจากหน้า 🏃 มาสาย โดยอัตโนมัติ)</p>
                     <div id="adminLateData">
+                         <div class="alert alert-info">กำลังโหลดข้อมูล...</div>
+                    </div>
+                </div>
+                
+                <div id="admin-page-forgot_scan" class="admin-page">
+                    <div class="admin-section-header">
+                        <h3>🙋 จัดการข้อมูลลืมสแกนหน้า</h3>
+                         <div class="action-buttons">
+                             <button onclick="testData('forgot_scan')" class="btn btn-warning">🧪 เพิ่มข้อมูลทดสอบ</button>
+                        </div>
+                    </div>
+                    <p>หน้านี้สำหรับ อนุมัติ หรือ ไม่อนุมัติ รายการที่นักเรียนแจ้งลืมสแกนหน้า</p>
+                    <div id="adminForgotScanData">
                          <div class="alert alert-info">กำลังโหลดข้อมูล...</div>
                     </div>
                 </div>
@@ -1239,34 +1328,53 @@
         </div>
     </div>
 
-    <div id="blacklistModal" class="modal">
-        <div class="modal-content">
-            <h3 id="blacklistModalTitle">➕ เพิ่มรายชื่อบัญชีดำ</h3>
-            <form id="blacklistForm">
-                <input type="hidden" id="blacklistRowIndex">
+    <div id="specificDataModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <h3 id="specificDataModalTitle">➕ เพิ่ม/แก้ไข ข้อมูลนักเรียนเฉพาะ</h3>
+            <form id="specificDataForm">
+                <input type="hidden" id="specificDataRowIndex">
+                
+                <h4>ข้อมูลส่วนตัวนักเรียน</h4>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="blacklistStudentId">รหัสนักเรียน *</label>
-                        <input type="text" id="blacklistStudentId" required>
+                        <label for="specificDataStudentId">รหัสนักเรียน *</label>
+                        <input type="text" id="specificDataStudentId" required>
                     </div>
                     <div class="form-group">
-                        <label for="blacklistFullName">ชื่อ-นามสกุล *</label>
-                        <input type="text" id="blacklistFullName" required>
+                        <label for="specificDataFullName">ชื่อ-นามสกุล *</label>
+                        <input type="text" id="specificDataFullName" required>
                     </div>
                 </div>
-                <div id="offensesContainer">
+                <div class="form-group">
+                    <label for="specificDataAddress">ที่อยู่</label>
+                    <textarea id="specificDataAddress" placeholder="รายละเอียดที่อยู่"></textarea>
+                </div>
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="blacklistOffense1">ฐานความผิด ครั้งที่ 1</label>
-                        <input type="text" id="blacklistOffense1" class="offense-input">
+                        <label for="specificDataParentName">ชื่อผู้ปกครอง</label>
+                        <input type="text" id="specificDataParentName" placeholder="ชื่อ-นามสกุล ผู้ปกครอง">
+                    </div>
+                    <div class="form-group">
+                        <label for="specificDataParentPhone">เบอร์โทรผู้ปกครอง</label>
+                        <input type="tel" id="specificDataParentPhone" placeholder="08xxxxxxxx">
                     </div>
                 </div>
-                <button type="button" onclick="addOffenseField()" class="btn btn-info" style="font-size: 14px; padding: 8px 16px;">+ เพิ่มฐานความผิด</button>
+
+                <hr style="margin: 20px 0;">
+                
+                <h4>รายการความผิด</h4>
+                <div id="specificOffensesContainer">
+                    </div>
+                
+                <button type="button" onclick="addSpecificOffenseField()" class="btn btn-info" style="font-size: 14px; padding: 8px 16px;">
+                    + เพิ่มรายการความผิด
+                </button>
                 
                 <div class="modal-footer">
-                    <button type="button" onclick="closeModal('blacklistModal')" class="btn" style="background: #6c757d;">ยกเลิก</button>
+                    <button type="button" onclick="closeModal('specificDataModal')" class="btn" style="background: #6c757d;">ยกเลิก</button>
                     <button type="submit" class="btn btn-success">
-                        <span id="blacklistSubmitLoading" style="display: none;" class="loading"></span>
-                        <span id="blacklistSubmitText">บันทึก</span>
+                        <span id="specificDataSubmitLoading" style="display: none;" class="loading"></span>
+                        <span id="specificDataSubmitText">บันทึก</span>
                     </button>
                 </div>
             </form>
@@ -1358,19 +1466,26 @@
         // --- Global Variables ---
         let currentPage = 'home';
         let isAdminLoggedIn = false;
-        let isBlacklistLoggedIn = false; 
         
-        // === (ใหม่) ตั้งค่าหน้าเริ่มต้น Admin ===
+        // (แก้ไข) เปลี่ยนชื่อตัวแปร
+        let isSpecificDataLoggedIn = false; 
+        
         let currentAdminPage = 'dashboard'; 
         
         let allAdminData = []; 
         let campData = []; 
-        let blacklistData = []; 
+        
+        // (แก้ไข) เปลี่ยนชื่อตัวแปร
+        let specificData = []; 
+        
         let lateData = []; 
         let lendingData = []; 
         let documentData = []; 
         let docTypes = []; 
-        let dashboardData = {}; // (ใหม่)
+        let dashboardData = {};
+        
+        // (ใหม่) เพิ่มตัวแปรสำหรับ "ลืมสแกนหน้า"
+        let forgotScanData = []; 
 
         let currentGradeFilter = 'all';
 
@@ -1381,29 +1496,24 @@
         let lastX = 0;
         let lastY = 0;
 
-        // (ใหม่) ฟังก์ชันสำหรับตั้งค่าพู่กัน
         function setupCanvasContext() {
             if (!signaturePad) return;
             
-            // 1. ปรับขนาด Canvas (ซึ่งจะรีเซ็ต "พู่กัน")
             signaturePad.width = signaturePad.offsetWidth;
             signaturePad.height = signaturePad.offsetHeight;
             
-            // 2. ตั้งค่า "พู่กัน" (Context) ใหม่ทุกครั้ง
-            signatureCtx.strokeStyle = '#000'; // ตั้งค่าสีเส้นเป็นสีดำ
+            signatureCtx.strokeStyle = '#000'; 
             signatureCtx.lineWidth = 2;
             signatureCtx.lineCap = 'round';
-            signatureCtx.fillStyle = '#000'; // ตั้งค่าสีเติม (สำหรับเทส)
+            signatureCtx.fillStyle = '#000'; 
         }
         
-        // (แก้ไข) ฟังก์ชัน initSignaturePad
         function initSignaturePad() {
             signaturePad = document.getElementById('lateSignatureCanvas');
             if (!signaturePad) return; 
 
-            signatureCtx = signaturePad.getContext('2d'); // 1. ดึง "พู่กัน" (Context) มาเก็บไว้
+            signatureCtx = signaturePad.getContext('2d'); 
             
-            // 2. ตั้งค่า Event Listeners (ตัวจับเมาส์/นิ้ว)
             signaturePad.addEventListener('mousedown', startDrawing);
             signaturePad.addEventListener('mousemove', draw);
             signaturePad.addEventListener('mouseup', stopDrawing);
@@ -1413,7 +1523,6 @@
             signaturePad.addEventListener('touchmove', draw);
             signaturePad.addEventListener('touchend', stopDrawing);
             
-            // 3. ตั้งค่า Canvas ครั้งแรก
             setupCanvasContext(); 
         }
 
@@ -1530,7 +1639,14 @@
             switch (pageId) {
                 case 'late':
                     if (lateData.length === 0) loadLateData();
-                    setupCanvasContext(); // (สำคัญ!) เรียกฟังก์ชันตั้งค่าพู่กัน
+                    setupCanvasContext(); 
+                    break;
+                // (ใหม่) เพิ่ม case สำหรับ "ลืมสแกนหน้า"
+                case 'forgot_scan':
+                    if (forgotScanData.length === 0) loadForgotScanData();
+                    // ตั้งค่าวันที่เริ่มต้นเป็นวันนี้
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('forgotDate').value = today;
                     break;
                 case 'lending':
                     if (lendingData.length === 0) loadLendingData();
@@ -1541,16 +1657,16 @@
                 case 'camp':
                     if (campData.length === 0) loadCampData(false); 
                     break;
-                case 'blacklist':
-                    if (!isBlacklistLoggedIn) {
-                        document.getElementById('blacklistLogin').style.display = 'block';
-                        document.getElementById('blacklistData').style.display = 'none';
+                // (แก้ไข) เปลี่ยน case "บัญชีดำ"
+                case 'specific_data':
+                    if (!isSpecificDataLoggedIn) {
+                        document.getElementById('specificDataLogin').style.display = 'block';
+                        document.getElementById('specificDataView').style.display = 'none';
                     } else {
-                        if (blacklistData.length === 0) loadBlacklistData();
+                        if (specificData.length === 0) loadSpecificData();
                     }
                     break;
                 case 'profile':
-                    // ไม่ต้องโหลดอะไรล่วงหน้า รอค้นหา
                     break;
                 case 'admin':
                     if (!isAdminLoggedIn) {
@@ -1563,7 +1679,7 @@
             }
         }
 
-        // --- ฟังก์ชันหน้ามาสาย (แก้ไข-ลายเซ็น) ---
+        // --- ฟังก์ชันหน้ามาสาย (Late) ---
         document.getElementById('lateForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -1600,9 +1716,7 @@
                 if (result.success) {
                     showNotification('บันทึกข้อมูลมาสายเรียบร้อย', 'success');
                     document.getElementById('lateForm').reset();
-                    
                     clearSignature(); 
-                    
                     await loadLateData(); 
                 } else {
                     showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
@@ -1643,7 +1757,12 @@
         function displayLateData(data) {
             if (currentPage !== 'late') return;
             const container = document.getElementById('lateData');
-            if (data.length === 0) {
+            
+            // กรองข้อมูลเฉพาะวันนี้
+            const todayStr = new Date().toLocaleDateString('th-TH');
+            const todayData = data.filter(record => new Date(record.timestamp).toLocaleDateString('th-TH') === todayStr);
+
+            if (todayData.length === 0) {
                 container.innerHTML = '<div class="alert alert-warning">ยังไม่มีข้อมูลนักเรียนมาสายวันนี้</div>';
                 return;
             }
@@ -1662,7 +1781,7 @@
                         </thead>
                         <tbody>
             `;
-            [...data].reverse().forEach(record => { 
+            [...todayData].reverse().forEach(record => { 
                 html += `
                     <tr>
                         <td>${new Date(record.timestamp).toLocaleTimeString('th-TH')}</td>
@@ -1677,8 +1796,202 @@
             container.innerHTML = html;
         }
 
-        // --- (โค้ดส่วน Late, Lending, Documents, Camp, Blacklist เหมือนเดิม) ---
-        // (ขอย่อส่วนนี้เพื่อไม่ให้ข้อความยาวเกินไป - โค้ดส่วนนี้ไม่มีการเปลี่ยนแปลง)
+
+        // ==================================
+        // === (ใหม่) ฟังก์ชันหน้า "ลืมสแกนหน้า" ===
+        // ==================================
+        
+        document.getElementById('forgotScanForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const loading = document.getElementById('forgotScanSubmitLoading');
+            const text = document.getElementById('forgotScanSubmitText');
+            
+            btn.disabled = true;
+            loading.style.display = 'inline-block';
+            text.textContent = 'กำลังบันทึก...';
+
+            const formData = {
+                action: 'addForgotScan',
+                studentId: document.getElementById('forgotStudentId').value.trim(),
+                fullName: document.getElementById('forgotFullName').value.trim(),
+                classroom: document.getElementById('forgotClassroom').value.trim(),
+                forgotDate: document.getElementById('forgotDate').value,
+                status: 'รอดำเนินการ', // สถานะเริ่มต้น
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const result = await postToGoogleScript(formData);
+                if (result.success) {
+                    showNotification('บันทึกข้อมูลลืมสแกนเรียบร้อย', 'success');
+                    document.getElementById('forgotScanForm').reset();
+                    // ตั้งค่าวันที่เป็นวันนี้อีกครั้ง
+                    document.getElementById('forgotDate').value = new Date().toISOString().split('T')[0];
+                    await loadForgotScanData(true); // โหลดข้อมูลใหม่
+                } else {
+                    showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'danger');
+            }
+
+            btn.disabled = false;
+            loading.style.display = 'none';
+            text.textContent = 'บันทึกข้อมูล';
+        });
+
+        async function loadForgotScanData(force = false) {
+            if (forgotScanData.length > 0 && !force && (currentPage === 'forgot_scan' || currentAdminPage === 'forgot_scan')) {
+                 displayForgotScanData(forgotScanData);
+                 if(isAdminLoggedIn) displayAdminForgotScanData(forgotScanData);
+                 return;
+            }
+            
+            if (currentPage === 'forgot_scan') document.getElementById('forgotScanData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+            if (isAdminLoggedIn && currentAdminPage === 'forgot_scan') document.getElementById('adminForgotScanData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+
+            try {
+                // คุณต้องสร้าง action "getForgotScanData" ใน Google Apps Script
+                const result = await fetch(`${SCRIPT_URL}?action=getForgotScanData`).then(res => res.json());
+                if (result.success) {
+                    forgotScanData = result.data || [];
+                    displayForgotScanData(forgotScanData); 
+                    if(isAdminLoggedIn) displayAdminForgotScanData(forgotScanData); 
+                } else {
+                    showNotification('โหลดข้อมูลลืมสแกนไม่สำเร็จ', 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลลืมสแกน', 'danger');
+            }
+        }
+
+        // (ใหม่) แสดงผลหน้า "ลืมสแกน" (สำหรับนักเรียน)
+        function displayForgotScanData(data) {
+            if (currentPage !== 'forgot_scan') return;
+            const container = document.getElementById('forgotScanData');
+            
+            // กรองข้อมูลเฉพาะวันนี้
+            const todayStr = new Date().toLocaleDateString('th-TH');
+            const todayData = data.filter(record => new Date(record.timestamp).toLocaleDateString('th-TH') === todayStr);
+
+            if (todayData.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ยังไม่มีข้อมูลแจ้งลืมสแกนวันนี้</div>';
+                return;
+            }
+
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>เวลาแจ้ง</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>วันที่ลืม</th>
+                                <th>สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            [...todayData].reverse().forEach(record => { 
+                html += `
+                    <tr>
+                        <td>${new Date(record.timestamp).toLocaleTimeString('th-TH')}</td>
+                        <td>${record.fullName}</td>
+                        <td>${record.classroom}</td>
+                        <td>${new Date(record.forgotDate).toLocaleDateString('th-TH')}</td>
+                        <td><span class="status-badge status-scan-${record.status}">${record.status}</span></td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+        
+        // (ใหม่) แสดงผลหน้า "ลืมสแกน" (สำหรับผู้ดูแล)
+        function displayAdminForgotScanData(data) {
+            if (!isAdminLoggedIn || currentAdminPage !== 'forgot_scan') return;
+            
+            const container = document.getElementById('adminForgotScanData');
+            if (data.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ไม่มีข้อมูล</div>';
+                return;
+            }
+
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>วันที่แจ้ง</th>
+                                <th>วันที่ลืม</th>
+                                <th>รหัสนักเรียน</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>สถานะ</th>
+                                <th>ดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            [...data].reverse().forEach((record, index) => {
+                const originalIndex = data.length - 1 - index; // หา index จริงใน array
+                html += `
+                    <tr>
+                        <td>${new Date(record.timestamp).toLocaleString('th-TH')}</td>
+                        <td>${new Date(record.forgotDate).toLocaleDateString('th-TH')}</td>
+                        <td>${record.studentId}</td>
+                        <td>${record.fullName}</td>
+                        <td>${record.classroom}</td>
+                        <td><span class="status-badge status-scan-${record.status}">${record.status}</span></td>
+                        <td>
+                `;
+                if (record.status === 'รอดำเนินการ') {
+                    html += `
+                        <div class="action-buttons">
+                            <button onclick="updateForgotScanStatus(${originalIndex}, 'อนุมัติ')" class="btn btn-success" style="padding: 5px 10px; font-size: 12px;">✅ อนุมัติ</button>
+                            <button onclick="updateForgotScanStatus(${originalIndex}, 'ไม่อนุมัติ')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">❌ ไม่อนุมัติ</button>
+                        </div>
+                    `;
+                } else {
+                    html += 'ดำเนินการแล้ว';
+                }
+                html += '</td></tr>';
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        // (ใหม่) ฟังก์ชันอัปเดตสถานะ "ลืมสแกน"
+        async function updateForgotScanStatus(rowIndex, newStatus) {
+            if (!confirm(`คุณต้องการ ${newStatus} รายการนี้ใช่หรือไม่?`)) return;
+
+            const record = forgotScanData[rowIndex];
+            showNotification(`กำลังอัปเดตสถานะ...`, 'info');
+
+            try {
+                // คุณต้องสร้าง action "updateForgotScanStatus" ใน Google Apps Script
+                const result = await postToGoogleScript({
+                    action: 'updateForgotScanStatus',
+                    rowIndex: record.rowIndex, // สมมติว่า GAS ส่ง rowIndex มาให้
+                    newStatus: newStatus
+                });
+
+                if (result.success) {
+                    showNotification('อัปเดตสถานะเรียบร้อย', 'success');
+                    await loadForgotScanData(true); // โหลดข้อมูลใหม่
+                } else {
+                    showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'danger');
+            }
+        }
+
+
+        // --- (โค้ดส่วน Lending, Documents, Camp เหมือนเดิม) ---
+        // (ขอย่อส่วนนี้เพื่อไม่ให้ข้อความยาวเกินไป)
         
         // ... (โค้ด Lending) ...
         document.getElementById('lendingForm').addEventListener('submit', async function(e) { /*...*/ });
@@ -1695,11 +2008,116 @@
         function filterCampData() { /*...*/ }
         function generateCampStats(data) { /*...*/ }
         function displayCampData(data, isAdminView) { /*...*/ }
-        // ... (โค้ด Blacklist) ...
-        async function blacklistLogin() { /*...*/ }
-        async function loadBlacklistData(force = false) { /*...*/ }
-        function displayBlacklistData(data) { /*...*/ }
-        function filterBlacklistData() { /*...*/ }
+        
+
+        // ==================================
+        // === (แก้ไข) ฟังก์ชันหน้า "ข้อมูลนักเรียนเฉพาะ" (บัญชีดำเดิม) ===
+        // ==================================
+        
+        async function specificDataLogin() {
+            const password = document.getElementById('specificDataPassword').value;
+            const messageDiv = document.getElementById('specificDataLoginMessage');
+            const loading = document.getElementById('specificDataLoginLoading');
+            const loginText = document.getElementById('specificDataLoginText');
+            
+            loading.style.display = 'inline-block';
+            loginText.textContent = 'กำลังตรวจสอบ...';
+            
+            // (แก้ไข) เปลี่ยนรหัสผ่าน
+            if (password === 'tp12345') { 
+                isSpecificDataLoggedIn = true;
+                document.getElementById('specificDataLogin').style.display = 'none';
+                document.getElementById('specificDataView').style.display = 'block';
+                messageDiv.innerHTML = '';
+                showNotification('เข้าสู่ระบบสำเร็จ', 'success');
+                if (specificData.length === 0) {
+                    loadSpecificData();
+                }
+            } else {
+                messageDiv.innerHTML = '<div class="alert alert-danger">รหัสผ่านไม่ถูกต้อง</div>';
+            }
+            
+            loading.style.display = 'none';
+            loginText.textContent = '🔓 ปลดล็อค';
+        }
+
+        async function loadSpecificData(force = false) {
+            if (specificData.length > 0 && !force) {
+                 displaySpecificData(specificData);
+                 if(isAdminLoggedIn) displayAdminSpecificData(specificData);
+                 return;
+            }
+            
+            if (currentPage === 'specific_data') document.getElementById('specificDataTableContainer').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+            if (isAdminLoggedIn && currentAdminPage === 'specific_data') document.getElementById('adminSpecificData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+
+            try {
+                // (แก้ไข) เปลี่ยนชื่อ action
+                const result = await fetch(`${SCRIPT_URL}?action=getSpecificData`).then(res => res.json());
+                if (result.success) {
+                    specificData = result.data || [];
+                    displaySpecificData(specificData); 
+                    if(isAdminLoggedIn) displayAdminSpecificData(specificData); 
+                } else {
+                    showNotification('โหลดข้อมูลนักเรียนเฉพาะไม่สำเร็จ', 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลนักเรียนเฉพาะ', 'danger');
+            }
+        }
+
+        function displaySpecificData(data) {
+            if (currentPage !== 'specific_data' || !isSpecificDataLoggedIn) return;
+            
+            const container = document.getElementById('specificDataTableContainer');
+            const query = document.getElementById('specificDataSearch').value.toLowerCase();
+            const filteredData = data.filter(r => 
+                (r.fullName && r.fullName.toLowerCase().includes(query)) ||
+                (r.studentId && r.studentId.toLowerCase().includes(query))
+            );
+
+            if (filteredData.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ไม่พบข้อมูล</div>';
+                return;
+            }
+
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัสนักเรียน</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ผู้ปกครอง</th>
+                                <th>เบอร์ผู้ปกครอง</th>
+                                <th>รายการความผิด (ล่าสุด)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            filteredData.forEach(record => {
+                let lastOffense = 'ไม่มี';
+                if (record.offenses && record.offenses.length > 0) {
+                    lastOffense = record.offenses[record.offenses.length - 1].detail || 'N/A';
+                }
+                
+                html += `
+                    <tr>
+                        <td>${record.studentId || ''}</td>
+                        <td>${record.fullName || ''}</td>
+                        <td>${record.parentName || '-'}</td>
+                        <td>${record.parentPhone || '-'}</td>
+                        <td>${lastOffense}</td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+        
+        function filterSpecificData() {
+            displaySpecificData(specificData);
+        }
 
         
         // ==================================
@@ -1818,19 +2236,26 @@
                 </div>
                 
                 <div class="profile-card">
-                    <h3>🚫 ข้อมูลบัญชีดำ</h3>
+                    <h3>🚫 ข้อมูลนักเรียนเฉพาะ</h3>
                     ${data.blacklist.length > 0 ? `
                         <div class="alert alert-danger" style="text-align: center; font-weight: bold; font-size: 1.2rem;">
-                            พบประวัติในบัญชีดำ
+                            พบประวัติข้อมูลนักเรียนเฉพาะ
                         </div>
-                        ${data.blacklist.map(item => `
-                            <div style="margin-bottom: 10px;">
-                                <strong>ฐานความผิด 1:</strong> ${item.offense1 || '-'}<br>
-                                <strong>ฐานความผิด 2:</strong> ${item.offense2 || '-'}<br>
-                                <strong>ฐานความผิด 3:</strong> ${item.offense3 || '-'}
-                            </div>
-                        `).join('')}
-                    ` : '<div class="alert alert-success">ไม่พบประวัติในบัญชีดำ</div>'}
+                        ${data.blacklist.map(item => {
+                            let offensesHtml = '<ul>';
+                            if (item.offenses && item.offenses.length > 0) {
+                                item.offenses.forEach((off, i) => {
+                                    offensesHtml += `<li><b>ครั้งที่ ${i+1}:</b> ${off.detail || '-'} (สถานที่: ${off.location || '-'}, ดำเนินการ: ${off.action || '-'})</li>`;
+                                });
+                            } else {
+                                // รองรับโครงสร้างเก่า (ถ้ามี)
+                                if(item.offense1) offensesHtml += `<li><b>ครั้งที่ 1:</b> ${item.offense1}</li>`;
+                                if(item.offense2) offensesHtml += `<li><b>ครั้งที่ 2:</b> ${item.offense2}</li>`;
+                            }
+                            offensesHtml += '</ul>';
+                            return offensesHtml;
+                        }).join('')}
+                    ` : '<div class="alert alert-success">ไม่พบประวัติข้อมูลนักเรียนเฉพาะ</div>'}
                 </div>
             `;
             container.innerHTML = html;
@@ -1854,7 +2279,6 @@
                 messageDiv.innerHTML = '';
                 showNotification('เข้าสู่ระบบผู้ดูแลสำเร็จ', 'success');
                 
-                // (ใหม่) โหลด Dashboard เป็นหน้าแรก
                 showAdminPage('dashboard'); 
             } else {
                 messageDiv.innerHTML = '<div class="alert alert-danger">รหัสผ่านไม่ถูกต้อง</div>';
@@ -1866,12 +2290,14 @@
 
         function adminLogout() {
             isAdminLoggedIn = false;
-            isBlacklistLoggedIn = false; 
+            // (แก้ไข) รีเซ็ตสถานะล็อกอิน
+            isSpecificDataLoggedIn = false; 
             document.getElementById('loginSection').style.display = 'block';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminPassword').value = '';
             
-            allAdminData = []; campData = []; blacklistData = []; lateData = []; lendingData = []; documentData = []; dashboardData = {};
+            // (แก้ไข) รีเซ็ตข้อมูล
+            allAdminData = []; campData = []; specificData = []; lateData = []; lendingData = []; documentData = []; dashboardData = {}; forgotScanData = [];
 
             showNotification('ออกจากระบบแล้ว', 'info');
             showPage('home'); 
@@ -1888,11 +2314,10 @@
             loadDataForAdminPage(pageId);
         }
         
-        // (ใหม่) อัปเดตฟังก์ชันโหลดข้อมูล Admin
         function loadDataForAdminPage(pageId) {
              switch (pageId) {
                 case 'dashboard':
-                    if (!dashboardData.stats) loadDashboardData(); // โหลดถ้ายังไม่มี
+                    if (!dashboardData.stats) loadDashboardData(); 
                     else displayDashboard(dashboardData);
                     break;
                 case 'behavior':
@@ -1903,13 +2328,19 @@
                     if (campData.length === 0) loadCampData(true); 
                     else displayAdminCampData(campData);
                     break;
-                case 'blacklist':
-                    if (blacklistData.length === 0) loadBlacklistData();
-                    else displayAdminBlacklistData(blacklistData);
+                // (แก้ไข) เปลี่ยน case "บัญชีดำ"
+                case 'specific_data':
+                    if (specificData.length === 0) loadSpecificData();
+                    else displayAdminSpecificData(specificData);
                     break;
                 case 'late':
                     if (lateData.length === 0) loadLateData();
                     else displayAdminLateData(lateData);
+                    break;
+                // (ใหม่) เพิ่ม case "ลืมสแกนหน้า"
+                case 'forgot_scan':
+                    if (forgotScanData.length === 0) loadForgotScanData();
+                    else displayAdminForgotScanData(forgotScanData);
                     break;
                 case 'lending':
                     if (lendingData.length === 0) loadLendingData();
@@ -1936,7 +2367,6 @@
                 text.textContent = 'กรอง...';
             }
             
-            // ตั้งค่า Default วันที่ (ถ้ายังไม่มี)
             const startDateInput = document.getElementById('dashStartDate');
             const endDateInput = document.getElementById('dashEndDate');
             
@@ -1976,7 +2406,7 @@
             const stats = data.stats;
             const details = data.details;
 
-            // 1. แสดงผล Stats Cards
+            // (แก้ไข) อัปเดตการนับ "บัญชีดำ" เป็น "ข้อมูลเฉพาะ"
             const statsContainer = document.getElementById('dashboardStats');
             statsContainer.innerHTML = `
                 <div class="stats-card">
@@ -1997,11 +2427,10 @@
                 <div class="stats-card">
                     <div class="stats-icon" style="color: #2c3e50;">🚫</div>
                     <div class="stats-number" style="color: #2c3e50;">${stats.blacklistCount}</div>
-                    <div class="stats-label">บัญชีดำ (ทั้งหมด)</div>
+                    <div class="stats-label">ข้อมูลนักเรียนเฉพาะ (ทั้งหมด)</div>
                 </div>
             `;
             
-            // 2. แสดงผลตารางสรุป "มาสาย"
             const lateDetailContainer = document.getElementById('dashboardLateDetail');
             let lateHtml = '<h4>🏃 สรุปมาสาย (ตามช่วงวันที่)</h4>';
             if (details.lateSummary && details.lateSummary.length > 0) {
@@ -2015,7 +2444,6 @@
             }
             lateDetailContainer.innerHTML = lateHtml;
             
-            // 3. แสดงผลตารางสรุป "ยืมค้าง"
             const lendingDetailContainer = document.getElementById('dashboardLendingDetail');
             let lendingHtml = '<h4>📦 รายการยืมค้าง (ทั้งหมด)</h4>';
             if (details.lendingItems && details.lendingItems.length > 0) {
@@ -2040,7 +2468,6 @@
                 rejected: data.filter(r => r.status === 'ไม่อนุมัติ').length,
                 reviewing: data.filter(r => r.status === 'อยู่ระหว่างตรวจสอบ').length
             };
-            // (ใหม่) เปลี่ยน ID ที่แสดงผล
             const statsHtml = `
                 <div class="stats-card"><div class="stats-icon">📊</div><div class="stats-number">${stats.total}</div><div class="stats-label">ทั้งหมด</div></div>
                 <div class="stats-card"><div class="stats-icon">⏳</div><div class="stats-number" style="color: #ffa500;">${stats.pending}</div><div class="stats-label">รอดำเนินการ</div></div>
@@ -2048,16 +2475,16 @@
                 <div class="stats-card"><div class="stats-icon">✅</div><div class="stats-number" style="color: #28a745;">${stats.approved}</div><div class="stats-label">อนุมัติ</div></div>
                 <div class="stats-card"><div class="stats-icon">❌</div><div class="stats-number" style="color: #dc3545;">${stats.rejected}</div><div class="stats-label">ไม่อนุมัติ</div></div>
             `;
-            document.getElementById('adminStats').innerHTML = statsHtml; // ใช้ ID เดิม
+            document.getElementById('adminStats').innerHTML = statsHtml; 
         }
         function displayAdminData(data) { /*...*/ }
         function filterByStatus() { /*...*/ }
         async function updateStatus(rowIndex, newStatus, rejectReason = '') { /*...*/ }
         function rejectRecord(rowIndex) { /*...*/ }
         function exportData() { /*...*/ }
-
-        // --- (โค้ดส่วน Admin: Camp, Blacklist, Late, Lending, Documents, Config เหมือนเดิม) ---
-        // (ขอย่อส่วนนี้เพื่อไม่ให้ข้อความยาวเกินไป - โค้ดส่วนนี้ไม่มีการเปลี่ยนแปลง)
+        
+        
+        // --- (โค้ดส่วน Admin: Camp, Late, Lending, Documents, Config (ส่วนใหญ่เหมือนเดิม)) ---
         
         // ... (โค้ด Admin Camp) ...
         function displayAdminCampData(data) { /*...*/ }
@@ -2065,13 +2492,258 @@
         function editCampStudent(rowIndex) { /*...*/ }
         async function deleteCampStudent(rowIndex) { /*...*/ }
         document.getElementById('campForm').addEventListener('submit', async function(e) { /*...*/ });
-        // ... (โค้ด Admin Blacklist) ...
-        function displayAdminBlacklistData(data) { /*...*/ }
-        function openBlacklistModal(rowIndex = null) { /*...*/ }
-        function addOffenseField(value = '') { /*...*/ }
-        function editBlacklistStudent(rowIndex) { /*...*/ }
-        async function deleteBlacklistStudent(rowIndex) { /*...*/ }
-        document.getElementById('blacklistForm').addEventListener('submit', async function(e) { /*...*/ });
+        
+        
+        // ==================================
+        // === (แก้ไข) ฟังก์ชัน Admin "ข้อมูลนักเรียนเฉพาะ" ===
+        // ==================================
+        
+        function displayAdminSpecificData(data) {
+            if (!isAdminLoggedIn || currentAdminPage !== 'specific_data') return;
+            
+            const container = document.getElementById('adminSpecificData');
+            if (data.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ไม่มีข้อมูล</div>';
+                return;
+            }
+
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>รหัสนักเรียน</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ผู้ปกครอง</th>
+                                <th>เบอร์ผู้ปกครอง</th>
+                                <th>จำนวนความผิด</th>
+                                <th>ดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            [...data].reverse().forEach((record, index) => {
+                const originalIndex = data.length - 1 - index;
+                const offenseCount = (record.offenses && record.offenses.length) ? record.offenses.length : 0;
+                
+                html += `
+                    <tr>
+                        <td>${record.studentId || ''}</td>
+                        <td>${record.fullName || ''}</td>
+                        <td>${record.parentName || '-'}</td>
+                        <td>${record.parentPhone || '-'}</td>
+                        <td>${offenseCount} ครั้ง</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button onclick="printSpecificDataReport(${originalIndex})" class="btn btn-info" style="padding: 5px 10px; font-size: 12px;">🖨️ พิมพ์</button>
+                                <button onclick="editSpecificData(${originalIndex})" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">✏️ แก้ไข</button>
+                                <button onclick="deleteSpecificData(${originalIndex})" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">🗑️ ลบ</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        function openSpecificDataModal(rowIndex = null) {
+            const modal = document.getElementById('specificDataModal');
+            const form = document.getElementById('specificDataForm');
+            const title = document.getElementById('specificDataModalTitle');
+            
+            form.reset();
+            document.getElementById('specificOffensesContainer').innerHTML = ''; // ล้างรายการความผิดเก่า
+            
+            if (rowIndex !== null) {
+                // โหมดแก้ไข
+                title.textContent = '✏️ แก้ไขข้อมูลนักเรียนเฉพาะ';
+                const record = specificData[rowIndex];
+                
+                document.getElementById('specificDataRowIndex').value = record.rowIndex; // หรือ index
+                document.getElementById('specificDataStudentId').value = record.studentId || '';
+                document.getElementById('specificDataFullName').value = record.fullName || '';
+                // (ใหม่) เติมข้อมูลใหม่
+                document.getElementById('specificDataAddress').value = record.address || '';
+                document.getElementById('specificDataParentName').value = record.parentName || '';
+                document.getElementById('specificDataParentPhone').value = record.parentPhone || '';
+
+                // (ใหม่) วนลูปเติมรายการความผิด
+                if (record.offenses && record.offenses.length > 0) {
+                    record.offenses.forEach(offense => {
+                        addSpecificOffenseField(offense);
+                    });
+                } else {
+                    // รองรับโครงสร้างเก่า (ถ้ามี)
+                    if (record.offense1) addSpecificOffenseField({ detail: record.offense1 });
+                    if (record.offense2) addSpecificOffenseField({ detail: record.offense2 });
+                    if (record.offense3) addSpecificOffenseField({ detail: record.offense3 });
+                    // ถ้าไม่มีเลย ก็เพิ่มช่องว่าง 1 ช่อง
+                    if (!record.offense1) addSpecificOffenseField();
+                }
+
+            } else {
+                // โหมดเพิ่มใหม่
+                title.textContent = '➕ เพิ่มข้อมูลนักเรียนเฉพาะ';
+                document.getElementById('specificDataRowIndex').value = '';
+                addSpecificOffenseField(); // เพิ่มช่องความผิดว่าง 1 ช่อง
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // (แก้ไข) ฟังก์ชันเพิ่มช่องความผิด
+        function addSpecificOffenseField(offense = { detail: '', location: '', action: '' }) {
+            const container = document.getElementById('specificOffensesContainer');
+            const offenseCount = container.querySelectorAll('.offense-group').length + 1;
+            
+            const div = document.createElement('div');
+            div.className = 'form-group offense-group';
+            div.innerHTML = `
+                <label>รายการความผิด ครั้งที่ ${offenseCount}</label>
+                <input type="text" id="offenseDetail${offenseCount}" placeholder="รายละเอียดความผิด" value="${offense.detail || ''}">
+                <input type="text" id="offenseLocation${offenseCount}" placeholder="สถานที่" style="margin-top: 10px;" value="${offense.location || ''}">
+                <textarea id="offenseAction${offenseCount}" placeholder="การดำเนินการ" style="margin-top: 10px;">${offense.action || ''}</textarea>
+            `;
+            container.appendChild(div);
+        }
+
+        function editSpecificData(rowIndex) {
+            openSpecificDataModal(rowIndex);
+        }
+
+        async function deleteSpecificData(rowIndex) {
+            const record = specificData[rowIndex];
+            if (!confirm(`คุณต้องการลบข้อมูลของ ${record.fullName} ใช่หรือไม่?`)) return;
+
+            showNotification('กำลังลบข้อมูล...', 'info');
+            try {
+                const result = await postToGoogleScript({ 
+                    action: 'deleteSpecificData', // (แก้ไข) ชื่อ action
+                    rowIndex: record.rowIndex // หรือ ID
+                });
+                if (result.success) {
+                    showNotification('ลบข้อมูลสำเร็จ', 'success');
+                    await loadSpecificData(true);
+                } else {
+                    showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'danger');
+            }
+        }
+
+        // (แก้ไข) ฟังก์ชัน Submit ฟอร์ม "ข้อมูลนักเรียนเฉพาะ"
+        document.getElementById('specificDataForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const loading = document.getElementById('specificDataSubmitLoading');
+            const text = document.getElementById('specificDataSubmitText');
+            
+            loading.style.display = 'inline-block';
+            text.textContent = 'กำลังบันทึก...';
+            
+            // (ใหม่) รวบรวมรายการความผิด
+            const offenses = [];
+            const offenseGroups = document.querySelectorAll('#specificOffensesContainer .offense-group');
+            offenseGroups.forEach((group, index) => {
+                const i = index + 1;
+                const detail = document.getElementById(`offenseDetail${i}`).value.trim();
+                const location = document.getElementById(`offenseLocation${i}`).value.trim();
+                const action = document.getElementById(`offenseAction${i}`).value.trim();
+                
+                if (detail) { // บันทึกเฉพาะที่มีรายละเอียด
+                    offenses.push({ detail, location, action });
+                }
+            });
+
+            const formData = {
+                action: 'addOrUpdateSpecificData', // (แก้ไข) ชื่อ action
+                rowIndex: document.getElementById('specificDataRowIndex').value,
+                studentId: document.getElementById('specificDataStudentId').value.trim(),
+                fullName: document.getElementById('specificDataFullName').value.trim(),
+                // (ใหม่) เพิ่มข้อมูล
+                address: document.getElementById('specificDataAddress').value.trim(),
+                parentName: document.getElementById('specificDataParentName').value.trim(),
+                parentPhone: document.getElementById('specificDataParentPhone').value.trim(),
+                offenses: offenses // (ใหม่) ส่งเป็น array
+            };
+
+            try {
+                const result = await postToGoogleScript(formData);
+                if (result.success) {
+                    showNotification('บันทึกข้อมูลสำเร็จ', 'success');
+                    closeModal('specificDataModal');
+                    await loadSpecificData(true);
+                } else {
+                    showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'danger');
+            }
+            
+            loading.style.display = 'none';
+            text.textContent = 'บันทึก';
+        });
+
+        // (ใหม่) ฟังก์ชันพิมพ์รายงาน
+        function printSpecificDataReport(rowIndex) {
+            const record = specificData[rowIndex];
+            if (!record) return;
+
+            const printWindow = window.open('', '', 'height=800,width=600');
+            printWindow.document.write('<html><head><title>รายงานข้อมูลนักเรียนเฉพาะ</title>');
+            printWindow.document.write(`
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 20px; }
+                    h1 { color: #764ba2; border-bottom: 2px solid #667eea; padding-bottom: 5px;}
+                    h2 { color: #2c3e50; margin-top: 25px; border-bottom: 1px solid #ccc; padding-bottom: 5px;}
+                    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                    .info-item { margin-bottom: 10px; }
+                    .info-item strong { color: #333; }
+                    .offense-item { 
+                        border: 1px solid #ddd; 
+                        border-radius: 8px; 
+                        padding: 15px; 
+                        margin-bottom: 15px; 
+                        background: #fdfdfd; 
+                    }
+                    .offense-item h3 { margin-top: 0; color: #667eea; }
+                </style>
+            `);
+            printWindow.document.write('</head><body>');
+            
+            printWindow.document.write('<h1>รายงานข้อมูลนักเรียนเฉพาะ</h1>');
+
+            printWindow.document.write('<h2>ข้อมูลนักเรียน</h2>');
+            printWindow.document.write('<div class="info-grid">');
+            printWindow.document.write(`<div class="info-item"><strong>ชื่อ-นามสกุล:</strong> ${record.fullName || '-'}</div>`);
+            printWindow.document.write(`<div class="info-item"><strong>รหัสนักเรียน:</strong> ${record.studentId || '-'}</div>`);
+            printWindow.document.write(`<div class="info-item"><strong>ชื่อผู้ปกครอง:</strong> ${record.parentName || '-'}</div>`);
+            printWindow.document.write(`<div class="info-item"><strong>เบอร์โทรผู้ปกครอง:</strong> ${record.parentPhone || '-'}</div>`);
+            printWindow.document.write('</div>');
+            printWindow.document.write(`<div class="info-item"><strong>ที่อยู่:</strong> ${record.address || '-'}</div>`);
+
+            printWindow.document.write('<h2>รายการความผิด</h2>');
+            if (record.offenses && record.offenses.length > 0) {
+                record.offenses.forEach((offense, index) => {
+                    printWindow.document.write('<div class="offense-item">');
+                    printWindow.document.write(`<h3>รายการความผิด ครั้งที่ ${index + 1}</h3>`);
+                    printWindow.document.write(`<div><strong>รายละเอียด:</strong> ${offense.detail || '-'}</div>`);
+                    printWindow.document.write(`<div><strong>สถานที่:</strong> ${offense.location || '-'}</div>`);
+                    printWindow.document.write(`<div><strong>การดำเนินการ:</strong> ${offense.action || '-'}</div>`);
+                    printWindow.document.write('</div>');
+                });
+            } else {
+                printWindow.document.write('<p>ไม่พบรายการความผิด</p>');
+            }
+
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => { printWindow.print(); }, 500); // หน่วงเวลาเล็กน้อยเพื่อให้โหลดทัน
+        }
+
+        
         // ... (โค้ด Admin Late) ...
         function displayAdminLateData(data) { /*...*/ }
         async function deleteLateStudent(rowIndex) { /*...*/ }
@@ -2093,7 +2765,7 @@
         async function deleteDocType(docType) { /*...*/ }
         
 
-        // --- Admin: Test Data (ใหม่) ---
+        // --- Admin: Test Data (แก้ไข) ---
         async function testData(type) {
             if (!confirm(`คุณต้องการเพิ่มข้อมูลทดสอบสำหรับ '${type}' หรือไม่?`)) return;
             
@@ -2105,8 +2777,11 @@
                     switch (type) {
                         case 'behavior': await loadAllData(); break;
                         case 'camp': await loadCampData(true, true); break;
-                        case 'blacklist': await loadBlacklistData(true); break;
+                        // (แก้ไข) เปลี่ยนชื่อ
+                        case 'specific_data': await loadSpecificData(true); break;
                         case 'late': await loadLateData(true); break;
+                        // (ใหม่) เพิ่ม
+                        case 'forgot_scan': await loadForgotScanData(true); break;
                         case 'lending': await loadLendingData(true); break;
                         case 'documents': await loadDocumentData(true); break;
                     }
@@ -2185,10 +2860,10 @@
             });
 
             document.getElementById('adminPassword').addEventListener('keypress', e => (e.key === 'Enter') && adminLogin());
-            document.getElementById('blacklistPassword').addEventListener('keypress', e => (e.key === 'Enter') && blacklistLogin());
+            // (แก้ไข) เปลี่ยน ID
+            document.getElementById('specificDataPassword').addEventListener('keypress', e => (e.key === 'Enter') && specificDataLogin());
         });
 
     </script>
 </body>
 </html>
-
