@@ -1966,21 +1966,363 @@
         // --- (โค้ดส่วน Lending, Documents, Camp เหมือนเดิม) ---
         // (ขอย่อส่วนนี้เพื่อไม่ให้ข้อความยาวเกินไป)
         
-        // ... (โค้ด Lending) ...
-        document.getElementById('lendingForm').addEventListener('submit', async function(e) { /*...*/ });
-        async function loadLendingData(force = false) { /*...*/ }
-        function displayLendingData(data) { /*...*/ }
-        // ... (โค้ด Documents) ...
-        async function loadDocumentData(force = false) { /*...*/ }
-        function displayDocumentData(data) { /*...*/ }
-        function createSignatureBadge(label, status) { /*...*/ }
-        function filterDocumentData() { /*...*/ }
-        // ... (โค้ด Camp) ...
-        async function loadCampData(isAdminView = false, force = false) { /*...*/ }
-        function filterByGrade(grade, event) { /*...*/ }
-        function filterCampData() { /*...*/ }
-        function generateCampStats(data) { /*...*/ }
-        function displayCampData(data, isAdminView) { /*...*/ }
+// --- ส่วน Lending (ยืมของ) ---
+
+        document.getElementById('lendingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const loading = document.getElementById('lendingSubmitLoading');
+            const text = document.getElementById('lendingSubmitText');
+            
+            btn.disabled = true;
+            loading.style.display = 'inline-block';
+            text.textContent = 'กำลังบันทึก...';
+
+            const formData = {
+                action: 'addLending',
+                studentId: document.getElementById('lendingStudentId').value.trim(),
+                fullName: document.getElementById('lendingFullName').value.trim(),
+                classroom: document.getElementById('lendingClassroom').value.trim(),
+                phone: document.getElementById('lendingPhone').value.trim(),
+                item: document.getElementById('lendingItem').value.trim(),
+                status: 'ยืม', // สถานะเริ่มต้น
+                timestamp: new Date().toLocaleString('th-TH', {timeZone: 'Asia/Bangkok'})
+            };
+
+            try {
+                const result = await postToGoogleScript(formData);
+                if (result.success) {
+                    showNotification('บันทึกการยืมสำเร็จ', 'success');
+                    document.getElementById('lendingForm').reset();
+                    await loadLendingData(true); // โหลดข้อมูลใหม่
+                } else {
+                    showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'danger');
+            }
+
+            btn.disabled = false;
+            loading.style.display = 'none';
+            text.textContent = 'บันทึกการยืม';
+        });
+
+        async function loadLendingData(force = false) {
+            if (lendingData.length > 0 && !force && (currentPage === 'lending' || currentAdminPage === 'lending')) {
+                 displayLendingData(lendingData);
+                 if(isAdminLoggedIn) displayAdminLendingData(lendingData);
+                 return;
+            }
+            
+            if (currentPage === 'lending') document.getElementById('lendingData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+            if (isAdminLoggedIn && currentAdminPage === 'lending') document.getElementById('adminLendingData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+
+            try {
+                const result = await fetch(`${SCRIPT_URL}?action=getLendingData`).then(res => res.json());
+                if (result.success) {
+                    lendingData = result.data || [];
+                    displayLendingData(lendingData); 
+                    if(isAdminLoggedIn) displayAdminLendingData(lendingData); 
+                } else {
+                    showNotification('โหลดข้อมูลยืมของไม่สำเร็จ', 'danger');
+                }
+            } catch (error) {
+                // console.error(error); // Debug
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลยืมของ', 'danger');
+            }
+        }
+
+        function displayLendingData(data) {
+            if (currentPage !== 'lending') return;
+            const container = document.getElementById('lendingData');
+            
+            // กรองแสดงเฉพาะรายการที่ยังไม่คืน (status == 'ยืม') สำหรับหน้าสาธารณะ
+            const activeLoans = data.filter(r => r.status === 'ยืม');
+
+            if (activeLoans.length === 0) {
+                container.innerHTML = '<div class="alert alert-success">ไม่มีรายการค้างส่งคืน</div>';
+                return;
+            }
+
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>วันที่ยืม</th>
+                                <th>ผู้ยืม</th>
+                                <th>ห้อง</th>
+                                <th>สิ่งที่ยืม</th>
+                                <th>สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            // แสดงรายการล่าสุดขึ้นก่อน
+            [...activeLoans].reverse().forEach(record => { 
+                html += `
+                    <tr>
+                        <td>${new Date(record.timestamp).toLocaleDateString('th-TH')}</td>
+                        <td>${record.fullName}</td>
+                        <td>${record.classroom}</td>
+                        <td>${record.item}</td>
+                        <td><span class="status-badge" style="background-color: #dc3545; color: white;">${record.status}</span></td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+        // --- ส่วน Documents (เอกสาร) ---
+
+        async function loadDocumentData(force = false) {
+            if (documentData.length > 0 && !force && (currentPage === 'documents' || currentAdminPage === 'documents')) {
+                 displayDocumentData(documentData);
+                 if(isAdminLoggedIn) displayAdminDocumentData(documentData);
+                 return;
+            }
+            
+            if (currentPage === 'documents') document.getElementById('documentData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+            if (isAdminLoggedIn && currentAdminPage === 'documents') document.getElementById('adminDocumentData').innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+
+            try {
+                const result = await fetch(`${SCRIPT_URL}?action=getDocumentData`).then(res => res.json());
+                if (result.success) {
+                    documentData = result.data || [];
+                    displayDocumentData(documentData);
+                    if(isAdminLoggedIn) displayAdminDocumentData(documentData);
+                } else {
+                    showNotification('โหลดข้อมูลเอกสารไม่สำเร็จ', 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลเอกสาร', 'danger');
+            }
+        }
+
+        function createSignatureBadge(label, status) {
+            const statusClass = (status == 1 || status == '1') ? 'sig-status-signed' : 'sig-status-pending';
+            const icon = (status == 1 || status == '1') ? '✅' : '⏳';
+            return `<span class="sig-status ${statusClass}">${icon} ${label}</span>`;
+        }
+
+        function displayDocumentData(data) {
+            if (currentPage !== 'documents') return;
+            const container = document.getElementById('documentData');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ยังไม่มีรายการเอกสาร</div>';
+                return;
+            }
+
+            let html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>นักเรียน</th>
+                            <th>ประเภทเอกสาร</th>
+                            <th>สถานะรวม</th>
+                            <th>สถานะลายเซ็น</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            // Reverse เพื่อให้ข้อมูลใหม่อยู่บน
+            [...data].reverse().forEach(record => {
+                html += `
+                    <tr>
+                        <td>
+                            <div>${record.fullName}</div>
+                            <small style="color: #6c757d;">${record.studentId} (${record.classroom})</small>
+                        </td>
+                        <td>${record.docType}</td>
+                        <td><span class="doc-status-badge doc-status-${record.status}">${record.status}</span></td>
+                        <td>
+                            <div style="display: flex; flex-wrap: wrap; max-width: 300px;">
+                                ${createSignatureBadge("ผปค.", record.sigParent)}
+                                ${createSignatureBadge("ครูที่ปรึกษา", record.sigAdvisor)}
+                                ${createSignatureBadge("การเงิน", record.sigFinance)}
+                                ${createSignatureBadge("วัดผลฯ", record.sigAcademics)}
+                                ${createSignatureBadge("ทะเบียน", record.sigRegistrar)}
+                                ${createSignatureBadge("รองฯ", record.sigVP)}
+                                ${createSignatureBadge("ผอ.", record.sigDirector)}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function filterDocumentData() {
+            const query = document.getElementById('docSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('docStatusFilter').value;
+            
+            const filtered = documentData.filter(item => {
+                const matchText = item.fullName.toLowerCase().includes(query) || item.studentId.toLowerCase().includes(query);
+                const matchStatus = statusFilter === '' || item.status === statusFilter;
+                return matchText && matchStatus;
+            });
+            
+            // ใช้ฟังก์ชัน display ซ้ำ แต่ส่ง data ที่กรองแล้วไป
+            // หมายเหตุ: เราต้องสร้างฟังก์ชัน display ย่อย หรือเขียน Logic render ตรงนี้ใหม่
+            // เพื่อความง่าย ผมขอเขียน render ทับ div ไปเลย โดยใช้ Logic เดียวกับ displayDocumentData
+            
+            const container = document.getElementById('documentData');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ไม่พบข้อมูลที่ค้นหา</div>';
+                return;
+            }
+            
+            // (Copy Logic Render จาก displayDocumentData มาใช้อย่างย่อ)
+             let html = `<table class="table"><thead><tr><th>นักเรียน</th><th>ประเภท</th><th>สถานะ</th><th>ลายเซ็น</th></tr></thead><tbody>`;
+            [...filtered].reverse().forEach(record => {
+                html += `<tr>
+                        <td>${record.fullName}<br><small>${record.studentId} (${record.classroom})</small></td>
+                        <td>${record.docType}</td>
+                        <td><span class="doc-status-badge doc-status-${record.status}">${record.status}</span></td>
+                        <td>
+                            <div style="display: flex; flex-wrap: wrap; max-width: 300px;">
+                                ${createSignatureBadge("ผปค.", record.sigParent)}
+                                ${createSignatureBadge("ที่ปรึกษา", record.sigAdvisor)}
+                                ${createSignatureBadge("การเงิน", record.sigFinance)}
+                                ${createSignatureBadge("วัดผลฯ", record.sigAcademics)}
+                                ${createSignatureBadge("ทะเบียน", record.sigRegistrar)}
+                                ${createSignatureBadge("รองฯ", record.sigVP)}
+                                ${createSignatureBadge("ผอ.", record.sigDirector)}
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        // --- ส่วน Camp (เข้าค่าย) ---
+
+        async function loadCampData(isAdminView = false, force = false) {
+             if (campData.length > 0 && !force) {
+                 if(isAdminView) displayAdminCampData(campData);
+                 else {
+                     generateCampStats(campData);
+                     displayCampData(campData);
+                 }
+                 return;
+            }
+            
+            const containerId = isAdminView ? 'adminCampData' : 'campData';
+            document.getElementById(containerId).innerHTML = '<div class="alert alert-info">กำลังโหลดข้อมูล...</div>';
+
+            try {
+                const result = await fetch(`${SCRIPT_URL}?action=getCampStudents`).then(res => res.json());
+                if (result.success) {
+                    campData = result.data || [];
+                    if(isAdminView) displayAdminCampData(campData);
+                    else {
+                        generateCampStats(campData);
+                        displayCampData(campData);
+                    }
+                } else {
+                    showNotification('โหลดข้อมูลเข้าค่ายไม่สำเร็จ', 'danger');
+                }
+            } catch (error) {
+                showNotification('เกิดข้อผิดพลาดในการโหลดข้อมูลเข้าค่าย', 'danger');
+            }
+        }
+
+        function filterByGrade(grade, event) {
+            currentGradeFilter = grade;
+            
+            // Update active button class
+            document.querySelectorAll('.grade-filter-btn').forEach(btn => btn.classList.remove('active'));
+            if(event && event.target) event.target.classList.add('active');
+            
+            filterCampData(); // เรียกใช้ฟังก์ชันกรองรวม
+        }
+
+        function filterCampData() {
+            const statusFilter = document.getElementById('campStatusFilter').value;
+            const followFilter = document.getElementById('campFollowFilter').value;
+            
+            let filtered = campData.filter(item => {
+                // กรองตามระดับชั้น
+                let matchGrade = true;
+                if (currentGradeFilter !== 'all') {
+                    matchGrade = item.classroom.startsWith(`ม.${currentGradeFilter}`);
+                }
+                
+                // กรองตามสถานะ
+                const matchStatus = statusFilter === '' || item.status === statusFilter;
+                const matchFollow = followFilter === '' || item.follow === followFilter;
+                
+                return matchGrade && matchStatus && matchFollow;
+            });
+            
+            displayCampData(filtered);
+        }
+
+        function generateCampStats(data) {
+            // นับสถิติเบื้องต้น
+            const total = data.length;
+            const campCount = data.filter(i => i.status === 'เข้าค่าย').length;
+            const volCount = data.filter(i => i.status === 'จิตอาสา').length;
+            const paidCount = data.filter(i => i.follow === 'ชำระเงินแล้ว' || i.follow === 'ดำเนินการแล้ว').length;
+            
+            document.getElementById('campStats').innerHTML = `
+                <div class="status-card" style="text-align: center;">
+                    <h3>${total}</h3><small>ทั้งหมด</small>
+                </div>
+                <div class="status-card" style="text-align: center; border-left-color: #dc3545;">
+                    <h3 style="color: #dc3545;">${campCount}</h3><small>เข้าค่าย</small>
+                </div>
+                <div class="status-card" style="text-align: center; border-left-color: #28a745;">
+                    <h3 style="color: #28a745;">${volCount}</h3><small>จิตอาสา</small>
+                </div>
+                <div class="status-card" style="text-align: center; border-left-color: #17a2b8;">
+                    <h3 style="color: #17a2b8;">${paidCount}</h3><small>เรียบร้อยแล้ว</small>
+                </div>
+            `;
+        }
+
+        function displayCampData(data, isAdminView = false) {
+            // ฟังก์ชันนี้สำหรับหน้า Public (ถ้าเป็น Admin จะใช้ displayAdminCampData แยกต่างหาก)
+            if (currentPage !== 'camp') return;
+            
+            const container = document.getElementById('campData');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">ไม่พบข้อมูล</div>';
+                return;
+            }
+
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>สถานะ</th>
+                                <th>การติดตาม</th>
+                                <th>หมายเหตุ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            data.forEach(record => {
+                html += `
+                    <tr>
+                        <td>${record.fullName}</td>
+                        <td>${record.classroom}</td>
+                        <td><span class="status-badge status-${record.status}">${record.status}</span></td>
+                        <td><span class="status-badge follow-${record.follow}">${record.follow}</span></td>
+                        <td>${record.note || '-'}</td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
         
 
         // ==================================
@@ -2836,4 +3178,5 @@
     </script>
 </body>
 </html>
+
 
