@@ -1082,7 +1082,6 @@
                 
                 <div class="admin-nav">
                     <button id="nav-dashboard" class="admin-nav-btn active" onclick="showAdminPage('dashboard')">📈 Dashboard</button>
-                    <button id="nav-behavior" class="admin-nav-btn" onclick="showAdminPage('behavior')">👍 พฤติกรรม</button>
                     <button id="nav-camp" class="admin-nav-btn" onclick="showAdminPage('camp')">🏕️ เข้าค่าย</button>
                     <button id="nav-specific_data" class="admin-nav-btn" onclick="showAdminPage('specific_data')">🚫 ข้อมูลเฉพาะ</button>
                     <button id="nav-late" class="admin-nav-btn" onclick="showAdminPage('late')">🏃 มาสาย</button>
@@ -1122,32 +1121,6 @@
                         <div id="dashboardLendingDetail"></div>
                     </div>
                 </div>
-
-                <div id="admin-page-behavior" class="admin-page">
-                    <div class="admin-section-header">
-                        <h3>👍 จัดการพฤติกรรมความดี</h3>
-                        <div class="action-buttons">
-                            <button onclick="testData('behavior')" class="btn btn-warning">🧪 เพิ่มข้อมูลทดสอบ</button>
-                            <button onclick="exportData()" class="btn btn-info">📤 ส่งออกข้อมูล</button>
-                        </div>
-                    </div>
-                    <div id="adminStats" class="dashboard-grid"></div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                        <button onclick="loadAllData()" class="btn">
-                            <span id="loadLoading" style="display: none;" class="loading"></span>
-                            <span id="loadText">📋 โหลดข้อมูลทั้งหมด</span>
-                        </button>
-                        <select id="statusFilter" onchange="filterByStatus()" class="form-group" style="padding: 8px; border-radius: 20px; border: 2px solid #e9ecef; margin:0;">
-                            <option value="">📋 ทุกสถานะ</option>
-                            <option value="รอดำเนินการ">⏳ รอดำเนินการ</option>
-                            <option value="อยู่ระหว่างตรวจสอบ">🔍 อยู่ระหว่างตรวจสอบ</option>
-                            <option value="อนุมัติ">✅ อนุมัติ</option>
-                            <option value="ไม่อนุมัติ">❌ ไม่อนุมัติ</option>
-                        </select>
-                    </div>
-                    <div id="adminData"></div>
-                </div>
-
                 <div id="admin-page-camp" class="admin-page">
                     <div class="admin-section-header">
                         <h3>🏕️ จัดการนักเรียนเข้าค่าย</h3>
@@ -2320,10 +2293,6 @@
                     if (!dashboardData.stats) loadDashboardData(); 
                     else displayDashboard(dashboardData);
                     break;
-                case 'behavior':
-                    if (allAdminData.length === 0) loadAllData();
-                    else displayAdminData(allAdminData); 
-                    break;
                 case 'camp':
                     if (campData.length === 0) loadCampData(true); 
                     else displayAdminCampData(campData);
@@ -2867,3 +2836,4 @@
     </script>
 </body>
 </html>
+
