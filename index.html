@@ -302,7 +302,28 @@
         </div>
     </div>
 
-    <div id="campModal" class="modal"><div class="modal-content"><h3 id="campModalTitle">➕ เพิ่มนักเรียนเข้าค่าย</h3><form id="campForm"><input type="hidden" id="campRowIndex"><div class="form-row"><div class="form-group"><label>รหัสนักเรียน</label><input type="text" id="campStudentId" required></div><div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" id="campFullName" required></div></div><div class="form-group"><label>ห้องเรียน</label><select id="campClassroom" required><option value="">เลือกห้องเรียน</option><option value="ม.1/1">ม.1/1</option><option value="ม.2/1">ม.2/1</option><option value="ม.3/1">ม.3/1</option><option value="ม.4/1">ม.4/1</option><option value="ม.5/1">ม.5/1</option><option value="ม.6/1">ม.6/1</option></select></div><div class="form-row"><div class="form-group"><label>สถานะ</label><select id="campStatus"><option value="เข้าค่าย">เข้าค่าย</option><option value="จิตอาสา">จิตอาสา</option><option value="อื่นๆ">อื่นๆ</option></select></div><div class="form-group"><label>ติดตาม</label><select id="campFollow"><option value="รอดำเนินการ">รอดำเนินการ</option><option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option><option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option></select></div></div><div class="modal-footer"><button type="button" onclick="closeModal('campModal')" class="btn" style="background:#6c757d;">ยกเลิก</button><button type="submit" class="btn btn-success">บันทึก</button></div></form></div></div>
+    <div id="campModal" class="modal">
+        <div class="modal-content">
+            <h3 id="campModalTitle">➕ เพิ่มนักเรียนเข้าค่าย</h3>
+            <form id="campForm">
+                <input type="hidden" id="campRowIndex">
+                <div class="form-row">
+                    <div class="form-group"><label>รหัสนักเรียน</label><input type="text" id="campStudentId" required></div>
+                    <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" id="campFullName" required></div>
+                </div>
+                <div class="form-group"><label>ห้องเรียน</label><select id="campClassroom" required><option value="">เลือกห้องเรียน</option><option value="ม.1/1">ม.1/1</option><option value="ม.2/1">ม.2/1</option><option value="ม.3/1">ม.3/1</option><option value="ม.4/1">ม.4/1</option><option value="ม.5/1">ม.5/1</option><option value="ม.6/1">ม.6/1</option></select></div>
+                <div class="form-row">
+                    <div class="form-group"><label>สถานะ</label><select id="campStatus"><option value="เข้าค่าย">เข้าค่าย</option><option value="จิตอาสา">จิตอาสา</option><option value="อื่นๆ">อื่นๆ</option></select></div>
+                    <div class="form-group"><label>ติดตาม</label><select id="campFollow"><option value="รอดำเนินการ">รอดำเนินการ</option><option value="ชำระเงินแล้ว">ชำระเงินแล้ว</option><option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option></select></div>
+                </div>
+                <div class="form-group">
+                    <label for="campNote">หมายเหตุ</label>
+                    <textarea id="campNote" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)" maxlength="300"></textarea>
+                </div>
+                <div class="modal-footer"><button type="button" onclick="closeModal('campModal')" class="btn" style="background:#6c757d;">ยกเลิก</button><button type="submit" class="btn btn-success">บันทึก</button></div>
+            </form>
+        </div>
+    </div>
 
     <div id="specificDataModal" class="modal"><div class="modal-content"><h3 id="specificDataModalTitle">➕ เพิ่มข้อมูล</h3><form id="specificDataForm"><input type="hidden" id="specificDataRowIndex"><div class="form-row"><div class="form-group"><label>รหัส</label><input type="text" id="specificDataStudentId" required></div><div class="form-group"><label>ชื่อ</label><input type="text" id="specificDataFullName" required></div></div><div class="form-group"><label>ที่อยู่</label><textarea id="specificDataAddress"></textarea></div><div class="form-row"><div class="form-group"><label>ผู้ปกครอง</label><input type="text" id="specificDataParentName"></div><div class="form-group"><label>เบอร์โทร</label><input type="text" id="specificDataParentPhone"></div></div><div id="specificOffensesContainer"></div><button type="button" onclick="addSpecificOffenseField()" class="btn btn-info">+ เพิ่มความผิด</button><div class="modal-footer"><button type="button" onclick="closeModal('specificDataModal')" class="btn" style="background:#6c757d;">ยกเลิก</button><button type="submit" class="btn btn-success">บันทึก</button></div></form></div></div>
 
@@ -395,19 +416,65 @@
                 else loadDataForAdminPage(currentAdminPage);
             }
         }
+        
+        // 🎯 แก้ไข: เพิ่ม showAdminPage และ loadDataForAdminPage (พร้อม Logic แก้ไข)
+        function showAdminPage(pageId) {
+            currentAdminPage = pageId;
+            document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`admin-page-${pageId}`).classList.add('active');
+            
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+            const navBtn = document.getElementById(`nav-${pageId}`);
+            if (navBtn) navBtn.classList.add('active');
+
+            loadDataForAdminPage(currentAdminPage);
+        }
 
         function loadDataForAdminPage(pageId) {
             currentAdminPage = pageId;
             document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
             document.getElementById(`admin-page-${pageId}`).classList.add('active');
-            if(pageId === 'dashboard' && !dashboardData.stats) loadDashboardData();
-            else if(pageId === 'camp' && !campData.length) loadCampData(true);
-            else if(pageId === 'specific_data' && !specificData.length) loadSpecificData();
-            else if(pageId === 'late' && !lateData.length) loadLateData();
-            else if(pageId === 'forgot_scan' && !forgotScanData.length) loadForgotScanData();
-            else if(pageId === 'lending' && !lendingData.length) loadLendingData();
-            else if(pageId === 'documents' && !documentData.length) loadDocumentData();
+            
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+            const navBtn = document.getElementById(`nav-${pageId}`);
+            if (navBtn) navBtn.classList.add('active');
+
+            switch (pageId) {
+                case 'dashboard':
+                    if (!dashboardData.stats) loadDashboardData(); 
+                    else displayDashboard(dashboardData);
+                    break;
+                case 'camp':
+                    if (campData.length === 0) loadCampData(true); 
+                    else displayAdminCampData(campData);
+                    break;
+                case 'specific_data':
+                    if (specificData.length === 0) loadSpecificData(true);
+                    else displayAdminSpecificData(specificData);
+                    break;
+                case 'late':
+                    if (lateData.length === 0) loadLateData(true);
+                    else displayAdminLateData(lateData);
+                    break;
+                case 'forgot_scan':
+                    if (forgotScanData.length === 0) loadForgotScanData(true);
+                    else displayAdminForgotScanData(forgotScanData);
+                    break;
+                case 'lending':
+                    if (lendingData.length === 0) loadLendingData(true);
+                    else displayAdminLendingData(lendingData);
+                    break;
+                case 'documents':
+                    if (documentData.length === 0) loadDocumentData(true);
+                    else displayAdminDocumentData(documentData);
+                    break;
+                case 'config':
+                    // loadDocTypes();
+                    break;
+            }
         }
+        // --- END OF CORE NAVIGATION FIX ---
+
 
         // --- LENDING (ยืมของ) ---
         document.getElementById('lendingForm').addEventListener('submit', async (e) => {
@@ -461,13 +528,53 @@
 
         function displayAdminLendingData(data) {
              if(!isAdminLoggedIn || currentAdminPage !== 'lending') return;
-             let html = '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>วันที่</th><th>ผู้ยืม</th><th>ของ</th><th>สถานะ</th></tr></thead><tbody>';
-             [...data].reverse().forEach(r => html += `<tr><td>${r.timestamp}</td><td>${r.fullName}</td><td>${r.item}</td><td>${r.status}</td></tr>`);
+             let html = '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>วันที่</th><th>ผู้ยืม</th><th>ของ</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody>';
+             [...data].reverse().forEach(r => html += `<tr>
+                <td>${r.timestamp}</td>
+                <td>${r.fullName} (${r.classroom})</td>
+                <td>${r.item}</td>
+                <td><span class="status-badge" style="background-color: ${r.status === 'ยืม' ? '#dc3545' : '#6c757d'}; color: white;">${r.status}</span></td>
+                <td>${r.status === 'ยืม' ? `<button onclick="updateLendingStatus('${r.rowIndex}', 'คืนแล้ว')" class="btn btn-success" style="padding: 5px 10px; font-size: 12px;">✅ คืนแล้ว</button>` : `<button onclick="deleteLendingItem('${r.rowIndex}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">🗑️ ลบ</button>`}</td>
+                </tr>`);
              html += '</tbody></table></div>';
              document.getElementById('adminLendingData').innerHTML = html;
         }
 
         // --- CAMP (เข้าค่าย) ---
+        document.getElementById('campForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button'); btn.disabled = true;
+            
+            const rowIndex = document.getElementById('campRowIndex').value;
+            const actionName = rowIndex ? 'updateCampStudent' : 'addCampStudent';
+            
+            const formData = {
+                action: actionName,
+                rowIndex: rowIndex,
+                studentId: document.getElementById('campStudentId').value,
+                fullName: document.getElementById('campFullName').value,
+                classroom: document.getElementById('campClassroom').value,
+                status: document.getElementById('campStatus').value,
+                follow: document.getElementById('campFollow').value,
+                note: document.getElementById('campNote').value, // 🎯 แก้ไข: ดึงค่าหมายเหตุ
+                createdAt: new Date().toLocaleString('th-TH')
+            };
+            
+            try {
+                const res = await postToGoogleScript(formData);
+                if(res.success) {
+                    showNotification('บันทึกข้อมูลเรียบร้อย', 'success');
+                    closeModal('campModal');
+                    await loadCampData(true, true); // โหลดข้อมูลใหม่
+                } else {
+                    showNotification('เกิดข้อผิดพลาด: ' + res.message, 'danger');
+                }
+            } catch(err) {
+                showNotification('เชื่อมต่อไม่ได้', 'danger');
+            }
+            btn.disabled = false;
+        });
+
         async function loadCampData(isAdminView = false, force = false) {
             if((campData.length > 0 && !force) || isCampLoading) {
                 if(campData.length > 0) {
@@ -490,7 +597,6 @@
             finally { isCampLoading = false; }
         }
 
-        // ฟังก์ชันที่เคยหายไป ใส่กลับมาแล้วครับ 👇
         function filterByGrade(grade, event) {
             currentGradeFilter = grade;
             document.querySelectorAll('.grade-filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -518,20 +624,53 @@
             document.getElementById('campStats').innerHTML = `<div class="stats-card"><h3>${total}</h3><small>ทั้งหมด</small></div><div class="stats-card"><h3>${camp}</h3><small>เข้าค่าย</small></div><div class="stats-card"><h3>${vol}</h3><small>จิตอาสา</small></div>`;
         }
 
+        // 🎯 แก้ไข: เพิ่มคอลัมน์ หมายเหตุ ในหน้าหลัก
         function displayCampData(data) {
-            let html = data.length ? '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>ชื่อ</th><th>ห้อง</th><th>สถานะ</th><th>ติดตาม</th></tr></thead><tbody>' : '<div class="alert alert-warning">ไม่พบข้อมูล</div>';
+            let html = data.length ? '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>ชื่อ</th><th>ห้อง</th><th>สถานะ</th><th>ติดตาม</th><th>หมายเหตุ</th></tr></thead><tbody>' : '<div class="alert alert-warning">ไม่พบข้อมูล</div>';
             if(data.length) {
-                data.forEach(r => html += `<tr><td>${r.fullName}</td><td>${r.classroom}</td><td><span class="status-badge status-${r.status}">${r.status}</span></td><td>${r.follow}</td></tr>`);
+                data.forEach(r => html += `<tr><td>${r.fullName}</td><td>${r.classroom}</td><td><span class="status-badge status-${r.status}">${r.status}</span></td><td>${r.follow}</td><td>${r.note || '-'}</td></tr>`);
                 html += '</tbody></table></div>';
             }
             document.getElementById('campData').innerHTML = html;
         }
 
+        // 🎯 แก้ไข: เพิ่มคอลัมน์ หมายเหตุ และปุ่มแก้ไขในหน้า Admin
         function displayAdminCampData(data) {
-             let html = '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>ชื่อ</th><th>ห้อง</th><th>สถานะ</th><th>Actions</th></tr></thead><tbody>';
-             data.forEach((r, idx) => html += `<tr><td>${r.fullName}</td><td>${r.classroom}</td><td>${r.status}</td><td><button class="btn btn-danger" onclick="deleteCampData(${idx})">ลบ</button></td></tr>`);
+             if(!isAdminLoggedIn) return;
+             let html = '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>ชื่อ</th><th>ห้อง</th><th>สถานะ</th><th>หมายเหตุ</th><th>จัดการ</th></tr></thead><tbody>';
+             data.forEach((r, idx) => {
+                 html += `<tr>
+                    <td>${r.fullName}</td>
+                    <td>${r.classroom}</td>
+                    <td>${r.status}</td>
+                    <td>${r.note || '-'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button onclick="editCampStudent(${idx})" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">✏️ แก้ไข</button>
+                            <button onclick="deleteCampData('${r.rowIndex}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">🗑️ ลบ</button>
+                        </div>
+                    </td>
+                 </tr>`;
+             });
              html += '</tbody></table></div>';
              document.getElementById('adminCampData').innerHTML = html;
+        }
+
+        // 🎯 แก้ไข: ฟังก์ชัน Edit Camp Student (เรียก Modal พร้อมข้อมูลเก่า)
+        function editCampStudent(index) {
+            const data = campData[index];
+            const modal = document.getElementById('campModal');
+            document.getElementById('campModalTitle').textContent = '✏️ แก้ไขข้อมูลนักเรียน';
+            
+            document.getElementById('campRowIndex').value = data.rowIndex; // สำคัญ! เก็บ rowIndex ไว้
+            document.getElementById('campStudentId').value = data.studentId;
+            document.getElementById('campFullName').value = data.fullName;
+            document.getElementById('campClassroom').value = data.classroom;
+            document.getElementById('campStatus').value = data.status;
+            document.getElementById('campFollow').value = data.follow;
+            document.getElementById('campNote').value = data.note || '';
+
+            modal.style.display = 'flex';
         }
         
         // --- OTHER MODULES (Late, Forgot, Docs, Specific, Admin) ---
@@ -551,11 +690,14 @@
              btn.disabled = false;
         });
         async function loadLateData(force=false) {
-             if((lateData.length > 0 && !force) || isLateLoading) return;
+             if((lateData.length > 0 && !force) || isLateLoading) {
+                 if(lateData.length > 0) { displayLateData(lateData); if(isAdminLoggedIn) displayAdminLateData(lateData); }
+                 return;
+             }
              isLateLoading = true;
              try {
                  const res = await fetch(`${SCRIPT_URL}?action=getLateStudents`).then(r=>r.json());
-                 if(res.success) { lateData = res.data; displayLateData(lateData); }
+                 if(res.success) { lateData = res.data; displayLateData(lateData); if(isAdminLoggedIn) displayAdminLateData(lateData); }
              } catch(e){} finally { isLateLoading = false; }
         }
         function displayLateData(data) {
@@ -564,6 +706,24 @@
              let html = todayData.length ? '<table class="table"><thead><tr><th>เวลา</th><th>ชื่อ</th><th>ลายเซ็น</th></tr></thead><tbody>' : '<div class="alert alert-warning">วันนี้ไม่มีสาย</div>';
              if(todayData.length) { [...todayData].reverse().forEach(r => html += `<tr><td>${new Date(r.timestamp).toLocaleTimeString('th-TH')}</td><td>${r.fullName}</td><td><img src="${r.signature}" height="30"></td></tr>`); html += '</tbody></table>'; }
              if(currentPage==='late') document.getElementById('lateData').innerHTML = html;
+        }
+
+        function displayAdminLateData(data) {
+            if (!isAdminLoggedIn || currentAdminPage !== 'late') return;
+            const container = document.getElementById('adminLateData');
+            if (data.length === 0) { container.innerHTML = '<div class="alert alert-warning">ไม่มีข้อมูลมาสายในระบบ</div>'; return; }
+            let html = '<div style="overflow-x: auto;"><table class="table"><thead><tr><th>วันที่/เวลา</th><th>รหัสนักเรียน</th><th>ชื่อ-นามสกุล</th><th>ห้องเรียน</th><th>ลบ</th></tr></thead><tbody>';
+            [...data].reverse().forEach(record => { 
+                html += `<tr>
+                            <td>${new Date(record.timestamp).toLocaleString('th-TH')}</td>
+                            <td>${record.studentId}</td>
+                            <td>${record.fullName}</td>
+                            <td>${record.classroom}</td>
+                            <td><button onclick="deleteLateStudent('${record.rowIndex}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">🗑️ ลบ</button></td>
+                        </tr>`;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
         }
 
         // Forgot Scan
@@ -581,17 +741,47 @@
              btn.disabled = false;
         });
         async function loadForgotScanData(force=false) {
-             if((forgotScanData.length > 0 && !force) || isForgotLoading) return;
+             if((forgotScanData.length > 0 && !force) || isForgotLoading) {
+                if(forgotScanData.length > 0) { displayForgotScanData(forgotScanData); if(isAdminLoggedIn) displayAdminForgotScanData(forgotScanData); }
+                return;
+             }
              isForgotLoading = true;
              try {
                  const res = await fetch(`${SCRIPT_URL}?action=getForgotScanData`).then(r=>r.json());
-                 if(res.success) { forgotScanData = res.data; displayForgotScanData(forgotScanData); }
+                 if(res.success) { forgotScanData = res.data; displayForgotScanData(forgotScanData); if(isAdminLoggedIn) displayAdminForgotScanData(forgotScanData); }
              } catch(e){} finally { isForgotLoading = false; }
         }
         function displayForgotScanData(data) {
              let html = data.length ? '<table class="table"><thead><tr><th>วันที่ลืม</th><th>ชื่อ</th><th>สถานะ</th></tr></thead><tbody>' : '<div class="alert alert-warning">ไม่มีข้อมูล</div>';
              if(data.length) { [...data].reverse().forEach(r => html += `<tr><td>${r.forgotDate}</td><td>${r.fullName}</td><td>${r.status}</td></tr>`); html += '</tbody></table>'; }
              if(currentPage==='forgot_scan') document.getElementById('forgotScanData').innerHTML = html;
+        }
+
+        function displayAdminForgotScanData(data) {
+            if (!isAdminLoggedIn || currentAdminPage !== 'forgot_scan') return;
+            const container = document.getElementById('adminForgotScanData');
+            if (data.length === 0) { container.innerHTML = '<div class="alert alert-warning">ไม่มีข้อมูลแจ้งลืมสแกนในระบบ</div>'; return; }
+            let html = '<div style="overflow-x: auto;"><table class="table"><thead><tr><th>วันที่แจ้ง</th><th>วันที่ลืม</th><th>ชื่อ-นามสกุล</th><th>สถานะ</th><th>ดำเนินการ</th></tr></thead><tbody>';
+            data.forEach(record => {
+                const originalIndex = record.rowIndex; // ใช้ rowIndex จาก GAS
+                html += `<tr>
+                            <td>${new Date(record.timestamp).toLocaleString('th-TH')}</td>
+                            <td>${record.forgotDate}</td>
+                            <td>${record.fullName} (${record.classroom})</td>
+                            <td><span class="status-badge status-scan-${record.status}">${record.status}</span></td>
+                            <td>`;
+                if (record.status === 'รอดำเนินการ') {
+                    html += `<div class="action-buttons">
+                            <button onclick="updateForgotScanStatus('${originalIndex}', 'อนุมัติ')" class="btn btn-success" style="padding: 5px 10px; font-size: 12px;">✅ อนุมัติ</button>
+                            <button onclick="updateForgotScanStatus('${originalIndex}', 'ไม่อนุมัติ')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">❌ ไม่อนุมัติ</button>
+                            </div>`;
+                } else {
+                    html += 'ดำเนินการแล้ว';
+                }
+                html += `</td></tr>`;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
         }
 
         // Documents
@@ -617,12 +807,29 @@
              const filtered = documentData.filter(d => d.fullName.toLowerCase().includes(q) || d.studentId.includes(q));
              displayDocumentData(filtered);
         }
+
         function displayAdminDocumentData(data) {
-             let html = '<table class="table"><thead><tr><th>ชื่อ</th><th>เอกสาร</th><th>สถานะ</th></tr></thead><tbody>';
-             data.forEach(r => html += `<tr><td>${r.fullName}</td><td>${r.docType}</td><td>${r.status}</td></tr>`);
-             html += '</tbody></table>';
-             document.getElementById('adminDocumentData').innerHTML = html;
+            if (!isAdminLoggedIn || currentAdminPage !== 'documents') return;
+            const container = document.getElementById('adminDocumentData');
+            if (data.length === 0) { container.innerHTML = '<div class="alert alert-warning">ไม่มีข้อมูลเอกสารในระบบ</div>'; return; }
+            let html = '<div style="overflow-x: auto;"><table class="table"><thead><tr><th>รหัสนักเรียน</th><th>ชื่อ-นามสกุล</th><th>ประเภทเอกสาร</th><th>สถานะรวม</th><th>จัดการ</th></tr></thead><tbody>';
+            [...data].reverse().forEach((record, index) => {
+                html += `<tr>
+                            <td>${record.studentId}</td>
+                            <td>${record.fullName}</td>
+                            <td>${record.docType}</td>
+                            <td><span class="doc-status-badge doc-status-${record.status}">${record.status}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button onclick="editDocument(${index})" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">✏️ แก้ไข</button>
+                                    <button onclick="deleteDocument('${record.rowIndex}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">🗑️ ลบ</button>
+                                </div>
+                            </td>
+                        </tr>`;
+            });
+            container.innerHTML = html + '</tbody></table></div>';
         }
+
 
         // Specific Data
         async function specificDataLogin() {
@@ -634,7 +841,10 @@
              } else alert('รหัสผิด');
         }
         async function loadSpecificData(force=false) {
-             if((specificData.length > 0 && !force) || isSpecificLoading) return;
+             if((specificData.length > 0 && !force) || isSpecificLoading) {
+                if(specificData.length > 0) { displaySpecificData(specificData); if(isAdminLoggedIn) displayAdminSpecificData(specificData); }
+                return;
+             }
              isSpecificLoading = true;
              try {
                  const res = await fetch(`${SCRIPT_URL}?action=getSpecificData`).then(r=>r.json());
@@ -653,18 +863,62 @@
              }
              document.getElementById('specificDataTableContainer').innerHTML = html;
         }
+
+        // 🎯 แก้ไข: เพิ่มปุ่มแก้ไขในหน้า Admin
         function displayAdminSpecificData(data) {
-             let html = '<table class="table"><thead><tr><th>รหัส</th><th>ชื่อ</th><th>จำนวนครั้ง</th></tr></thead><tbody>';
-             data.forEach(r => html += `<tr><td>${r.studentId}</td><td>${r.fullName}</td><td>${r.offenses ? r.offenses.length : 0}</td></tr>`);
-             html += '</tbody></table>';
+             if(!isAdminLoggedIn || currentAdminPage !== 'specific_data') return;
+             let html = '<div style="overflow-x: auto;"><table class="table"><thead><tr><th>รหัส</th><th>ชื่อ</th><th>จำนวนครั้ง</th><th>จัดการ</th></tr></thead><tbody>';
+             data.forEach((r, idx) => html += `<tr>
+                <td>${r.studentId}</td>
+                <td>${r.fullName}</td>
+                <td>${r.offenses ? r.offenses.length : 0} ครั้ง</td>
+                <td><button onclick="editSpecificData(${idx})" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">✏️ แก้ไข</button></td>
+             </tr>`);
+             html += '</tbody></table></div>';
              document.getElementById('adminSpecificData').innerHTML = html;
         }
-        function addSpecificOffenseField() {
+
+        // 🎯 แก้ไข: ฟังก์ชัน Edit Specific Data (เรียก Modal พร้อมข้อมูลเก่า)
+        function editSpecificData(index) {
+            const data = specificData[index];
+            const modal = document.getElementById('specificDataModal');
+            const container = document.getElementById('specificOffensesContainer');
+            
+            document.getElementById('specificDataModalTitle').textContent = '✏️ แก้ไขข้อมูลนักเรียนเฉพาะ';
+            
+            document.getElementById('specificDataRowIndex').value = data.rowIndex;
+            document.getElementById('specificDataStudentId').value = data.studentId;
+            document.getElementById('specificDataFullName').value = data.fullName;
+            document.getElementById('specificDataAddress').value = data.address || '';
+            document.getElementById('specificDataParentName').value = data.parentName || '';
+            document.getElementById('specificDataParentPhone').value = data.parentPhone || '';
+
+            container.innerHTML = ''; 
+            if(data.offenses && data.offenses.length > 0) {
+                data.offenses.forEach(off => addSpecificOffenseField(off));
+            } else {
+                addSpecificOffenseField();
+            }
+
+            modal.style.display = 'flex';
+        }
+        
+        function addSpecificOffenseField(data = null) {
              const c = document.getElementById('specificOffensesContainer');
              const i = c.children.length + 1;
              const div = document.createElement('div');
              div.className = 'offense-group';
-             div.innerHTML = `<label>ครั้งที่ ${i}</label><input type="text" id="offenseDetail${i}" placeholder="รายละเอียด"><input type="text" id="offenseLocation${i}" placeholder="สถานที่"><input type="text" id="offenseAction${i}" placeholder="การดำเนินการ">`;
+             
+             const detailVal = data ? data.detail : '';
+             const locVal = data ? data.location : '';
+             const actionVal = data ? data.action : '';
+             
+             div.innerHTML = `
+                <label>ความผิดครั้งที่ ${i}</label>
+                <input type="text" id="offenseDetail${i}" placeholder="รายละเอียด" value="${detailVal}">
+                <input type="text" id="offenseLocation${i}" placeholder="สถานที่" value="${locVal}" style="margin-top:5px;">
+                <input type="text" id="offenseAction${i}" placeholder="การดำเนินการ" value="${actionVal}" style="margin-top:5px;">
+             `;
              c.appendChild(div);
         }
         document.getElementById('specificDataForm').addEventListener('submit', async (e) => {
@@ -677,6 +931,7 @@
              });
              const data = {
                  action: 'addOrUpdateSpecificData', // Correct
+                 rowIndex: document.getElementById('specificDataRowIndex').value, // 🎯 แก้ไข: ส่ง rowIndex
                  studentId: document.getElementById('specificDataStudentId').value,
                  fullName: document.getElementById('specificDataFullName').value,
                  address: document.getElementById('specificDataAddress').value,
@@ -711,6 +966,12 @@
              } catch(ex){}
         }
 
+        function displayDashboard(data) {
+             if(!isAdminLoggedIn) return;
+             const stats = data.stats;
+             document.getElementById('dashboardStats').innerHTML = `<div class="stats-card"><h3>${stats.lateCount}</h3><small>มาสาย</small></div><div class="stats-card"><h3>${stats.lendingCount}</h3><small>ยืมค้าง</small></div>`;
+        }
+
         // Profile Search
         async function searchStudentProfile() {
              const id = document.getElementById('profileSearchId').value;
@@ -738,6 +999,69 @@
                  await postToGoogleScript({action:'addTestData', type:type});
                  showNotification('เพิ่มข้อมูลทดสอบแล้ว รีโหลดหน้าเว็บเพื่อดูผล');
              }
+        }
+        
+        // --- ฟังก์ชันช่วยเหลือสำหรับการจัดการในหน้า Admin ---
+        
+        async function deleteLateStudent(rowIndex) {
+            if (!confirm('ยืนยันการลบ?')) return;
+            showNotification('กำลังลบ...', 'info');
+            try {
+                const res = await postToGoogleScript({ action: 'deleteLateStudent', rowIndex: rowIndex });
+                if (res.success) { showNotification('ลบสำเร็จ'); await loadLateData(true); } else { showNotification('ลบไม่สำเร็จ: ' + res.message, 'danger'); }
+            } catch(e) { showNotification('Error', 'danger'); }
+        }
+
+        async function updateLendingStatus(rowIndex, newStatus) {
+            if (!confirm('ยืนยันการอัปเดตสถานะ?')) return;
+            showNotification('กำลังอัปเดต...', 'info');
+            try {
+                const res = await postToGoogleScript({ action: 'updateLendingStatus', rowIndex: rowIndex, status: newStatus });
+                if (res.success) { showNotification('อัปเดตสำเร็จ'); await loadLendingData(true); } else { showNotification('อัปเดตไม่สำเร็จ: ' + res.message, 'danger'); }
+            } catch(e) { showNotification('Error', 'danger'); }
+        }
+
+        async function deleteLendingItem(rowIndex) {
+            if (!confirm('ยืนยันการลบ?')) return;
+            showNotification('กำลังลบ...', 'info');
+            try {
+                const res = await postToGoogleScript({ action: 'deleteLendingItem', rowIndex: rowIndex });
+                if (res.success) { showNotification('ลบสำเร็จ'); await loadLendingData(true); } else { showNotification('ลบไม่สำเร็จ: ' + res.message, 'danger'); }
+            } catch(e) { showNotification('Error', 'danger'); }
+        }
+
+        async function deleteCampData(rowIndex) {
+            if (!confirm('ยืนยันการลบ?')) return;
+            showNotification('กำลังลบ...', 'info');
+            try {
+                const res = await postToGoogleScript({ action: 'deleteCampStudent', rowIndex: rowIndex });
+                if (res.success) { showNotification('ลบสำเร็จ'); await loadCampData(true); } else { showNotification('ลบไม่สำเร็จ: ' + res.message, 'danger'); }
+            } catch(e) { showNotification('Error', 'danger'); }
+        }
+
+        async function updateForgotScanStatus(rowIndex, newStatus) {
+            if (!confirm(`คุณต้องการ ${newStatus} รายการนี้ใช่หรือไม่?`)) return;
+            showNotification(`กำลังอัปเดตสถานะ...`, 'info');
+            try {
+                const result = await postToGoogleScript({ action: 'updateForgotScanStatus', rowIndex: rowIndex, newStatus: newStatus });
+                if (result.success) { showNotification('อัปเดตสถานะเรียบร้อย', 'success'); await loadForgotScanData(true); } 
+                else { showNotification(`เกิดข้อผิดพลาด: ${result.message}`, 'danger'); }
+            } catch (error) { showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'danger'); }
+        }
+
+        function editDocument(index) {
+            // ฟังก์ชันที่จำเป็นต้องมีการเรียก Modal สำหรับแก้ไขเอกสาร
+            showNotification('ฟังก์ชันแก้ไขเอกสารยังไม่สมบูรณ์', 'warning');
+            // โค้ดที่ควรมี: openDocumentModal(index);
+        }
+
+        async function deleteDocument(rowIndex) {
+             if (!confirm('ยืนยันการลบรายการเอกสาร?')) return;
+            showNotification('กำลังลบ...', 'info');
+            try {
+                const res = await postToGoogleScript({ action: 'deleteDocument', rowIndex: rowIndex });
+                if (res.success) { showNotification('ลบสำเร็จ'); await loadDocumentData(true); } else { showNotification('ลบไม่สำเร็จ: ' + res.message, 'danger'); }
+            } catch(e) { showNotification('Error', 'danger'); }
         }
         
         // Initial Load
