@@ -256,7 +256,7 @@
                     <button id="nav-camp" class="admin-nav-btn" onclick="showAdminPage('camp')">🏕️ เข้าค่าย</button>
                     <button id="nav-specific_data" class="admin-nav-btn" onclick="showAdminPage('specific_data')">🚫 ข้อมูลเฉพาะ</button>
                     <button id="nav-late" class="admin-nav-btn" onclick="showAdminPage('late')">🏃 มาสาย</button>
-                    <button id="nav-forgot_scan" class="admin-nav-btn" onclick="showAdminPage('forgot_scan')">🙋 ลืมสแกน</button>
+                    <button class="nav-btn" onclick="showPage('forgot_scan')">🙋 ลืมสแกน</button>
                     <button id="nav-lending" class="admin-nav-btn" onclick="showAdminPage('lending')">📦 ยืมของ</button>
                     <button id="nav-documents" class="admin-nav-btn" onclick="showAdminPage('documents')">📑 เอกสาร</button>
                 </div>
@@ -417,7 +417,7 @@
             }
         }
         
-        // 🎯 แก้ไข: เพิ่ม showAdminPage และ loadDataForAdminPage (พร้อม Logic แก้ไข)
+        // 🎯 แก้ไข: ฟังก์ชัน showAdminPage (ต้องอยู่ Global Scope)
         function showAdminPage(pageId) {
             currentAdminPage = pageId;
             document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
@@ -430,6 +430,7 @@
             loadDataForAdminPage(currentAdminPage);
         }
 
+        // 🎯 แก้ไข: ฟังก์ชัน loadDataForAdminPage (ต้องอยู่ Global Scope)
         function loadDataForAdminPage(pageId) {
             currentAdminPage = pageId;
             document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
@@ -864,7 +865,6 @@
              document.getElementById('specificDataTableContainer').innerHTML = html;
         }
 
-        // 🎯 แก้ไข: เพิ่มปุ่มแก้ไขในหน้า Admin
         function displayAdminSpecificData(data) {
              if(!isAdminLoggedIn || currentAdminPage !== 'specific_data') return;
              let html = '<div style="overflow-x: auto;"><table class="table"><thead><tr><th>รหัส</th><th>ชื่อ</th><th>จำนวนครั้ง</th><th>จัดการ</th></tr></thead><tbody>';
@@ -872,13 +872,17 @@
                 <td>${r.studentId}</td>
                 <td>${r.fullName}</td>
                 <td>${r.offenses ? r.offenses.length : 0} ครั้ง</td>
-                <td><button onclick="editSpecificData(${idx})" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">✏️ แก้ไข</button></td>
+                <td>
+                    <div class="action-buttons">
+                        <button onclick="editSpecificData(${idx})" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">✏️ แก้ไข</button>
+                        <button onclick="deleteSpecificData('${r.rowIndex}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">🗑️ ลบ</button>
+                    </div>
+                </td>
              </tr>`);
              html += '</tbody></table></div>';
              document.getElementById('adminSpecificData').innerHTML = html;
         }
 
-        // 🎯 แก้ไข: ฟังก์ชัน Edit Specific Data (เรียก Modal พร้อมข้อมูลเก่า)
         function editSpecificData(index) {
             const data = specificData[index];
             const modal = document.getElementById('specificDataModal');
