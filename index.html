@@ -1,204 +1,240 @@
-function displayDashboard(data) {
-            [cite_start]const stats = data.stats; [cite: 118]
-            const statsContainer = document.getElementById('dashboardStats');
-            
-            // แสดงการ์ดสถิติภาพรวม
-            statsContainer.innerHTML = `
-                <div class="stats-card">
-                    <div class="stats-icon" style="color:#2e7d32;">🏃</div>
-                    <div class="stats-number">${stats.lateCount}</div>
-                    <div class="stats-label">มาสาย (ช่วงที่เลือก)</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-icon" style="color:#ffc107;">📦</div>
-                    <div class="stats-number">${stats.lendingCount}</div>
-                    <div class="stats-label">รายการยืมค้าง (ทั้งหมด)</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-icon" style="color:#17a2b8;">📑</div>
-                    <div class="stats-number">${stats.docCount}</div>
-                    <div class="stats-label">เอกสารรอจัดการ</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-icon" style="color:#dc3545;">🚫</div>
-                    <div class="stats-number">${stats.blacklistCount}</div>
-                    <div class="stats-label">นักเรียนเฉพาะกลุ่ม</div>
-                </div>
-            [cite_start]`; [cite: 118-119]
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบบริหารจัดการนักเรียน</title>
+    <style>
+        /* ==================================
+           ==  CSS (โครงสร้างและสีต้นฉบับ)  ==
+           ================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; color: #333;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-radius: 15px; padding: 20px; margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .header h1 {
+            text-align: center; color: #2c3e50; margin-bottom: 20px; font-size: 2.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white; border: none; padding: 12px 20px; border-radius: 25px;
+            cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .nav-btn.active { background: linear-gradient(45deg, #764ba2, #667eea); transform: translateY(-2px); }
+        .page {
+            display: none; background: rgba(255, 255, 255, 0.95); border-radius: 15px;
+            padding: 30px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            animation: fadeIn 0.5s ease-in;
+        }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .page h2 { margin-bottom: 25px; color: #2c3e50; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 16px;
+        }
+        .signature-canvas { border: 2px dashed #ccc; border-radius: 8px; width: 100%; height: 150px; cursor: crosshair; touch-action: none; }
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none;
+            padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6); }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; }
+        .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef; }
+        .table th { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: white; }
+        .home-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; }
+        .home-card { background: white; border-radius: 15px; padding: 30px 20px; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2); }
+        .home-card:hover { transform: translateY(-10px); }
+        .home-card-icon { font-size: 4rem; margin-bottom: 15px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s infinite linear; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 ระบบบริหารจัดการนักเรียน</h1>
+            <div class="nav">
+                <button class="nav-btn active" onclick="showPage('home')">🏠 หน้าแรก</button>
+                <button class="nav-btn" onclick="showPage('late')">🏃 มาสาย</button>
+                <button class="nav-btn" onclick="showPage('forgot_scan')">🙋 ลืมสแกนหน้า</button>
+                <button class="nav-btn" onclick="showPage('lending')">📦 ยืมของ</button>
+                <button class="nav-btn" onclick="showPage('documents')">📑 ติดตามเอกสาร</button>
+                <button class="nav-btn" onclick="showPage('camp')">🏕️ เข้าค่าย</button>
+                <button class="nav-btn" onclick="showPage('specific_data')">🚫 ข้อมูลเฉพาะ</button>
+                <button class="nav-btn" onclick="showPage('profile')">👤 โปรไฟล์</button>
+                <button class="nav-btn" onclick="showPage('admin')">⚙️ แอดมิน</button>
+            </div>
+        </div>
 
-            // แสดงรายละเอียดมาสายแยกตามห้อง
-            const lateDetail = document.getElementById('dashboardLateDetail');
-            let lateHtml = '<h4>🏃 สรุปมาสายรายห้อง</h4>';
-            if (data.details.lateSummary && data.details.lateSummary.length > 0) {
-                lateHtml += '<table class="table"><thead><tr><th>ห้อง</th><th>จำนวน (ครั้ง)</th></tr></thead><tbody>';
-                data.details.lateSummary.forEach(item => {
-                    lateHtml += `<tr><td>${item.classroom}</td><td>${item.count}</td></tr>`;
-                });
-                lateHtml += '</tbody></table>';
-            } else {
-                lateHtml += '<p>ไม่พบข้อมูลมาสาย</p>';
-            }
-            [cite_start]lateDetail.innerHTML = lateHtml; [cite: 114-115, 119]
+        <div id="home" class="page active">
+            <h2>🏠 เมนูหลัก</h2>
+            <div class="home-menu">
+                <div class="home-card" onclick="showPage('late')"><div class="home-card-icon">🏃</div><h3>มาสาย</h3></div>
+                <div class="home-card" onclick="showPage('forgot_scan')"><div class="home-card-icon">🙋</div><h3>ลืมสแกน</h3></div>
+                <div class="home-card" onclick="showPage('lending')"><div class="home-card-icon">📦</div><h3>ยืม-คืนของ</h3></div>
+                <div class="home-card" onclick="showPage('documents')"><div class="home-card-icon">📑</div><h3>เอกสาร</h3></div>
+                <div class="home-card" onclick="showPage('camp')"><div class="home-card-icon">🏕️</div><h3>เข้าค่าย</h3></div>
+                <div class="home-card" onclick="showPage('specific_data')"><div class="home-card-icon">🚫</div><h3>ข้อมูลเฉพาะ</h3></div>
+            </div>
+        </div>
+
+        <div id="late" class="page">
+            <h2>🏃 บันทึกมาสาย</h2>
+            <form id="lateForm">
+                <div class="form-group"><label>รหัส/ชื่อ</label><input type="text" id="lateStudentId" required placeholder="รหัสนักเรียน"></div>
+                <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" id="lateFullName" required></div>
+                <div class="form-group"><label>ห้อง</label><input type="text" id="lateClassroom" required></div>
+                <canvas id="lateSignatureCanvas" class="signature-canvas"></canvas>
+                <button type="button" onclick="clearSignature()" class="btn btn-warning">ล้างลายเซ็น</button>
+                <button type="submit" class="btn">บันทึก</button>
+            </form>
+            <div id="lateData"></div>
+        </div>
+
+        <div id="forgot_scan" class="page">
+            <h2>🙋 ลืมสแกนหน้า</h2>
+            <form id="forgotScanForm">
+                <div class="form-group"><label>รหัสนักเรียน</label><input type="text" id="forgotStudentId" required></div>
+                <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" id="forgotFullName" required></div>
+                <div class="form-group"><label>วันที่ลืม</label><input type="date" id="forgotDate" required></div>
+                <button type="submit" class="btn">ส่งข้อมูล</button>
+            </form>
+            <div id="forgotScanData"></div>
+        </div>
+
+        <div id="lending" class="page">
+            <h2>📦 ยืม-คืนของ</h2>
+            <form id="lendingForm">
+                <div class="form-group"><label>รหัสนักเรียน</label><input type="text" id="lendingStudentId" required></div>
+                <div class="form-group"><label>ชื่อของที่ยืม</label><input type="text" id="lendingItem" required></div>
+                <button type="submit" class="btn">บันทึกยืม</button>
+            </form>
+            <div id="lendingData"></div>
+        </div>
+
+        <div id="documents" class="page">
+            <h2>📑 ติดตามเอกสาร</h2>
+            <div id="documentData"></div>
+        </div>
+
+        <div id="camp" class="page">
+            <h2>🏕️ ข้อมูลเข้าค่าย</h2>
+            <div id="campData"></div>
+        </div>
+
+        <div id="specific_data" class="page">
+            <div id="specificLogin">
+                <h2>🚫 ข้อมูลเฉพาะ (ใส่รหัส)</h2>
+                <input type="password" id="specPass" class="form-group">
+                <button onclick="checkSpecPass()" class="btn">ปลดล็อค</button>
+            </div>
+            <div id="specView" style="display:none;">
+                <h2>🚫 รายชื่อเฝ้าระวัง</h2>
+                <div id="specData"></div>
+            </div>
+        </div>
+
+        <div id="profile" class="page">
+            <h2>👤 ค้นหาโปรไฟล์</h2>
+            <input type="text" id="profId" placeholder="ป้อนรหัสนักเรียน">
+            <button onclick="searchProfile()" class="btn">ค้นหา</button>
+            <div id="profileResult"></div>
+        </div>
+
+        <div id="admin" class="page">
+            <div id="adminLogin">
+                <h2>🔐 แอดมิน (ใส่รหัส)</h2>
+                <input type="password" id="adminPass" class="form-group">
+                <button onclick="checkAdminPass()" class="btn">เข้าสู่ระบบ</button>
+            </div>
+            <div id="adminPanel" style="display:none;">
+                <button onclick="adminLogout()" class="btn btn-danger">ออก</button>
+                <div id="adminContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="campModal" class="modal"><div class="modal-content"><h3 id="campTitle"></h3><form id="campForm">...</form></div></div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzusGiKKkr5kLSS5-bD8MES-Sr_xnw6YK8Nxxj5bEUalttIrEL3j_xM-yuUZCAaUm6dFQ/exec';
+        let signaturePad, ctx, isDrawing = false;
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            if(id === 'late') initCanvas();
+            loadData(id);
         }
 
-        // --- ฟังก์ชันจัดการข้อมูลเข้าค่าย (Admin Camp) ---
-        function displayAdminCampData(data) {
-            const container = document.getElementById('adminCampData');
-            let html = '<table class="table"><thead><tr><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>สถานะ</th><th>ดำเนินการ</th></tr></thead><tbody>';
-            data.reverse().forEach(row => {
-                html += `<tr>
-                    <td>${row.fullName}</td>
-                    <td>${row.classroom}</td>
-                    <td><span class="status-badge status-${row.status}">${row.status}</span></td>
-                    <td>
-                        <button onclick="editCampStudent(${row.rowIndex})" class="btn btn-warning" style="padding:5px 10px;">✏️</button>
-                        <button onclick="deleteCampStudent(${row.rowIndex})" class="btn btn-danger" style="padding:5px 10px;">🗑️</button>
-                    </td>
-                </tr>`;
-            });
-            html += '</tbody></table>';
-            [cite_start]container.innerHTML = html; [cite: 51-52, 64]
+        function initCanvas() {
+            signaturePad = document.getElementById('lateSignatureCanvas');
+            ctx = signaturePad.getContext('2d');
+            signaturePad.width = signaturePad.offsetWidth;
+            signaturePad.height = 150;
+            signaturePad.addEventListener('mousedown', start);
+            signaturePad.addEventListener('mousemove', draw);
+            signaturePad.addEventListener('mouseup', stop);
+        }
+        function start(e) { isDrawing = true; draw(e); }
+        function stop() { isDrawing = false; ctx.beginPath(); }
+        function draw(e) {
+            if(!isDrawing) return;
+            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY);
+        }
+        function clearSignature() { ctx.clearRect(0,0,signaturePad.width, signaturePad.height); }
+
+        async function postData(data) {
+            const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+            return res.json();
         }
 
-        function openCampModal(rowIndex = null) {
-            const modal = document.getElementById('campModal');
-            const form = document.getElementById('campForm');
-            form.reset();
-            if (rowIndex) {
-                const record = campData.find(d => d.rowIndex == rowIndex);
-                document.getElementById('campRowIndex').value = record.rowIndex;
-                document.getElementById('campStudentId').value = record.studentId;
-                document.getElementById('campFullName').value = record.fullName;
-                document.getElementById('campClassroom').value = record.classroom;
-                document.getElementById('campStatus').value = record.status;
-                document.getElementById('campFollow').value = record.follow;
-                document.getElementById('campNote').value = record.note;
-            } else {
-                document.getElementById('campRowIndex').value = '';
-            }
-            modal.style.display = 'flex';
-        }
-
-        document.getElementById('campForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const formData = {
-                action: document.getElementById('campRowIndex').value ? 'updateCampStudent' : 'addCampStudent',
-                rowIndex: document.getElementById('campRowIndex').value,
-                studentId: document.getElementById('campStudentId').value,
-                fullName: document.getElementById('campFullName').value,
-                classroom: document.getElementById('campClassroom').value,
-                status: document.getElementById('campStatus').value,
-                follow: document.getElementById('campFollow').value,
-                note: document.getElementById('campNote').value
-            };
-            [cite_start]const result = await postToGoogleScript(formData); [cite: 23-24, 53-61]
-            if (result.success) { showNotification('บันทึกข้อมูลเข้าค่ายสำเร็จ'); closeModal('campModal'); loadCampData(true); }
-        });
-
-        async function deleteCampStudent(rowIndex) {
-            if (!confirm('ยืนยันการลบข้อมูลนี้?')) return;
-            [cite_start]const result = await postToGoogleScript({ action: 'deleteCampStudent', rowIndex: rowIndex }); [cite: 25, 62-63]
-            if (result.success) { showNotification('ลบข้อมูลสำเร็จ'); loadCampData(true); }
-        }
-
-        // --- ฟังก์ชันจัดการยืมของ (Admin Lending) ---
-        async function updateLendingStatus(rowIndex, status) {
-            [cite_start]const result = await postToGoogleScript({ action: 'updateLendingStatus', rowIndex: rowIndex, status: status }); [cite: 30, 78-81]
-            if (result.success) { showNotification('อัปเดตสถานะการคืนสำเร็จ'); loadLendingData(true); }
-        }
-
-        function displayAdminLendingData(data) {
-            const container = document.getElementById('adminLendingData');
-            let html = '<table class="table"><thead><tr><th>ชื่อ</th><th>รายการ</th><th>สถานะ</th><th>ดำเนินการ</th></tr></thead><tbody>';
-            data.reverse().forEach(row => {
-                html += `<tr>
-                    <td>${row.fullName}</td>
-                    <td>${row.item}</td>
-                    <td>${row.status}</td>
-                    <td>
-                        ${row.status === 'ยืม' ? `<button onclick="updateLendingStatus(${row.rowIndex}, 'คืนแล้ว')" class="btn btn-success" style="padding:5px 10px;">✅ คืน</button>` : ''}
-                        <button onclick="deleteLendingItem(${row.rowIndex})" class="btn btn-danger" style="padding:5px 10px;">🗑️</button>
-                    </td>
-                </tr>`;
-            });
-            html += '</tbody></table>';
-            [cite_start]container.innerHTML = html; [cite: 51-52, 64]
-        }
-
-        // --- ฟังก์ชันจัดการมาสาย (Admin Late) ---
-        async function clearLateData() {
-            if (!confirm('คุณต้องการลบข้อมูลมาสายทั้งหมดใช่หรือไม่?')) return;
-            [cite_start]const result = await postToGoogleScript({ action: 'clearLateData' }); [cite: 28, 82]
-            if (result.success) { showNotification('ล้างข้อมูลทั้งหมดสำเร็จ'); loadLateData(true); }
-        }
-
-        // --- การตั้งค่าประเภทเอกสาร (Config) ---
-        async function loadDocTypes() {
-            [cite_start]const res = await fetch(`${SCRIPT_URL}?action=getDocTypes`); [cite: 13, 83]
+        async function loadData(page) {
+            const container = document.getElementById(page + 'Data') || document.getElementById(page + 'Content');
+            if(!container) return;
+            container.innerHTML = '<div class="loading"></div>';
+            const res = await fetch(`${SCRIPT_URL}?action=get${page.charAt(0).toUpperCase() + page.slice(1)}Data`);
             const result = await res.json();
-            if (result.success) {
-                docTypes = result.data;
-                const container = document.getElementById('docTypesContainer');
-                container.innerHTML = docTypes.map(t => `<div style="display:flex; justify-content:space-between; margin-bottom:5px; padding:8px; background:#f9f9f9; border-radius:5px;"><span>${t}</span><button onclick="deleteDocType('${t}')" class="btn btn-danger" style="padding:2px 8px; font-size:12px;">ลบ</button></div>`).join('');
-                
-                // อัปเดต Dropdown ใน Modal เอกสาร
-                const select = document.getElementById('docType');
-                [cite_start]select.innerHTML = docTypes.map(t => `<option value="${t}">${t}</option>`).join(''); [cite: 83-85]
-            }
+            renderTable(container, result.data, page);
         }
 
-        async function addDocType() {
-            const type = document.getElementById('newDocType').value.trim();
-            if (!type) return;
-            [cite_start]const result = await postToGoogleScript({ action: 'addDocType', docType: type }); [cite: 40, 86-87]
-            if (result.success) { showNotification('เพิ่มประเภทเอกสารสำเร็จ'); document.getElementById('newDocType').value = ''; loadDocTypes(); }
+        function renderTable(container, data, page) {
+            if(!data || data.length === 0) { container.innerHTML = 'ไม่มีข้อมูล'; return; }
+            let html = '<table class="table"><thead><tr>';
+            Object.keys(data[0]).forEach(key => { if(key !== 'signature') html += `<th>${key}</th>`; });
+            html += '</tr></thead><tbody>';
+            data.forEach(row => {
+                html += '<tr>';
+                Object.entries(row).forEach(([key, val]) => { if(key !== 'signature') html += `<td>${val}</td>`; });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
         }
 
-        async function deleteDocType(type) {
-            if (!confirm(`ต้องการลบประเภทเอกสาร "${type}"?`)) return;
-            [cite_start]const result = await postToGoogleScript({ action: 'deleteDocType', docType: type }); [cite: 41, 88-90]
-            if (result.success) { showNotification('ลบสำเร็จ'); loadDocTypes(); }
-        }
-
-        // --- ข้อมูลทดสอบ (Test Data) ---
-        async function testData(type) {
-            [cite_start]const result = await postToGoogleScript({ action: 'addTestData', type: type }); [cite: 42, 91-98]
-            if (result.success) { showNotification(`เพิ่มข้อมูลทดสอบ ${type} สำเร็จ`); loadDataForAdminPage(currentAdminPage); }
-        }
-
-        // --- Helper: ปิด Modal และ Export CSV ---
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function exportCampData() {
-            if (campData.length === 0) return;
-            const headers = ['Student ID', 'Full Name', 'Classroom', 'Status', 'Follow'];
-            const rows = campData.map(d => [d.studentId, d.fullName, d.classroom, d.status, d.follow]);
-            let csvContent = "data:text/csv;charset=utf-8,\ufeff" + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "camp_data.csv");
-            document.body.appendChild(link);
-            link.click();
-        }
-
-        // --- เริ่มต้นระบบเมื่อโหลดหน้าเสร็จ ---
-        document.addEventListener('DOMContentLoaded', () => {
-            initSignaturePad();
-            showPage('home');
-            
-            // ตั้งค่าวันที่เริ่มต้นของ Dashboard เป็นวันนี้
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('dashStartDate').value = today;
-            document.getElementById('dashEndDate').value = today;
-        });
-
-        // รองรับการทำงานร่วมกับ Modal เมื่อคลิกนอกพื้นที่
-        window.onclick = function(event) {
-            if (event.target.className === 'modal') {
-                event.target.style.display = 'none';
-            }
-        }
+        function checkSpecPass() { if(document.getElementById('specPass').value === 'tp12345') { document.getElementById('specificLogin').style.display='none'; document.getElementById('specView').style.display='block'; loadData('specific'); } }
+        function checkAdminPass() { if(document.getElementById('adminPass').value === 'admin1234') { document.getElementById('adminLogin').style.display='none'; document.getElementById('adminPanel').style.display='block'; } }
+        function adminLogout() { document.getElementById('adminLogin').style.display='block'; document.getElementById('adminPanel').style.display='none'; }
     </script>
 </body>
 </html>
